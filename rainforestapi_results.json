@@ -1,0 +1,2988 @@
+{
+    "request_info": {
+      "success": true,
+      "credits_used": 6,
+      "credits_remaining": 94,
+      "credits_used_this_request": 2
+    },
+    "request_parameters": {
+      "type": "search",
+      "amazon_domain": "amazon.com",
+      "search_term": "Apothecary",
+      "category_id": "1000",
+      "page": "1",
+      "max_page": "2",
+      "output": "json",
+      "exclude_sponsored": "true",
+      "refinements": "sort by BSR"
+    },
+    "request_metadata": {
+      "created_at": "2025-02-24T20:17:16.161Z",
+      "processed_at": "2025-02-24T20:17:23.303Z",
+      "total_time_taken": 7.14,
+      "pages": [
+        {
+          "created_at": "2025-02-24T20:17:16.161Z",
+          "processed_at": "2025-02-24T20:17:19.651Z",
+          "total_time_taken": 3.49,
+          "page": 1,
+          "amazon_url": "https://www.amazon.com/s/?k=Apothecary&ref=nb_sb_noss_2&node=283155&page=1"
+        },
+        {
+          "created_at": "2025-02-24T20:17:19.652Z",
+          "processed_at": "2025-02-24T20:17:23.303Z",
+          "total_time_taken": 3.65,
+          "page": 2,
+          "amazon_url": "https://www.amazon.com/s/?k=Apothecary&ref=nb_sb_noss_2&node=283155&page=2"
+        }
+      ]
+    },
+    "search_results": [
+      {
+        "position": 1,
+        "title": "Forgotten Home Apothecary : 250 Powerful Remedies at Your Fingertips",
+        "asin": "B0DJQVYV99",
+        "link": "https://www.amazon.com/Forgotten-Home-Apothecary-Powerful-Fingertips/dp/B0DJQVYV99/ref=sr_1_3?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-3",
+        "availability": {
+          "raw": null
+        },
+        "categories": [
+          {
+            "name": "Books",
+            "id": "stripbooks"
+          }
+        ],
+        "image": "https://m.media-amazon.com/images/I/91-E86oM2IL._AC_UY218_.jpg",
+        "bestseller": {
+          "link": "https://www.amazon.com/Forgotten-Home-Apothecary-Powerful-Fingertips/dp/B0DJQVYV99/ref=sr_1_3?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-3",
+          "category": "Alternative Medicine Reference"
+        },
+        "is_prime": false,
+        "is_amazon_fresh": false,
+        "is_whole_foods_market": false,
+        "rating": 4.6,
+        "ratings_total": 2174,
+        "prices": [
+          {
+            "symbol": "$",
+            "value": 37,
+            "currency": "USD",
+            "raw": "$37.00",
+            "name": "Paperback",
+            "asin": "B0DJQVYV99",
+            "link": "https://www.amazon.com/Forgotten-Home-Apothecary-Powerful-Fingertips/dp/B0DJQVYV99/ref=sr_1_3?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-3"
+          }
+        ],
+        "price": {
+          "symbol": "$",
+          "value": 37,
+          "currency": "USD",
+          "raw": "$37.00",
+          "name": "Paperback",
+          "asin": "B0DJQVYV99",
+          "link": "https://www.amazon.com/Forgotten-Home-Apothecary-Powerful-Fingertips/dp/B0DJQVYV99/ref=sr_1_3?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-3"
+        },
+        "page": 1,
+        "position_overall": 1
+      },
+      {
+        "position": 2,
+        "title": "The Ultimate Survival Apothecary: Unlock 600+ Proven Herbal Remedies & Foraging Secrets to Heal, Protect, and Thrive in Any Crisis | With Checklists, Dosages & Safety Tips",
+        "asin": "B0DVQ27W31",
+        "link": "https://www.amazon.com/Ultimate-Survival-Apothecary-Remedies-Checklists/dp/B0DVQ27W31/ref=sr_1_4?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-4",
+        "availability": {
+          "raw": null
+        },
+        "categories": [
+          {
+            "name": "Books",
+            "id": "stripbooks"
+          }
+        ],
+        "image": "https://m.media-amazon.com/images/I/71cfAtlaINL._AC_UY218_.jpg",
+        "bestseller": {
+          "link": "https://www.amazon.com/Ultimate-Survival-Apothecary-Remedies-Checklists/dp/B0DVQ27W31/ref=sr_1_4?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-4",
+          "category": "Safety & First Aid"
+        },
+        "other_formats": [
+          {
+            "title": "Hardcover",
+            "link": "https://www.amazon.com/Ultimate-Survival-Apothecary-Remedies-Checklists/dp/B0DXBS16X2/ref=sr_1_4?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-4",
+            "asin": "B0DXBS16X2"
+          }
+        ],
+        "is_prime": true,
+        "is_amazon_fresh": false,
+        "is_whole_foods_market": false,
+        "rating": 5,
+        "ratings_total": 59,
+        "prices": [
+          {
+            "symbol": "$",
+            "value": 25.17,
+            "currency": "USD",
+            "raw": "$25.17",
+            "name": "Paperback",
+            "list_price": "$27.97",
+            "asin": "B0DVQ27W31",
+            "link": "https://www.amazon.com/Ultimate-Survival-Apothecary-Remedies-Checklists/dp/B0DVQ27W31/ref=sr_1_4?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-4"
+          },
+          {
+            "symbol": "$",
+            "value": 0,
+            "currency": "USD",
+            "raw": "$0.00",
+            "name": "Kindle",
+            "list_price": "$9.99",
+            "asin": "B0DVNFSB98",
+            "link": "https://www.amazon.com/Ultimate-Survival-Apothecary-Remedies-Checklists-ebook/dp/B0DVNFSB98/ref=sr_1_4?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-4"
+          },
+          {
+            "symbol": "$",
+            "value": 34.97,
+            "currency": "USD",
+            "raw": "$34.97",
+            "name": "Hardcover",
+            "list_price": "$35",
+            "asin": "B0DXBS16X2",
+            "link": "https://www.amazon.com/Ultimate-Survival-Apothecary-Remedies-Checklists/dp/B0DXBS16X2/ref=sr_1_4?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-4"
+          }
+        ],
+        "price": {
+          "symbol": "$",
+          "value": 25.17,
+          "currency": "USD",
+          "raw": "$25.17",
+          "name": "Paperback",
+          "list_price": "$27.97",
+          "asin": "B0DVQ27W31",
+          "link": "https://www.amazon.com/Ultimate-Survival-Apothecary-Remedies-Checklists/dp/B0DVQ27W31/ref=sr_1_4?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-4"
+        },
+        "page": 1,
+        "position_overall": 2
+      },
+      {
+        "position": 3,
+        "title": "The Lost Apothecary: A Novel",
+        "asin": "B08BXB3JVY",
+        "link": "https://www.amazon.com/The-Lost-Apothecary-A-Novel/dp/B08BXB3JVY/ref=sr_1_5?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-5",
+        "availability": {
+          "raw": null
+        },
+        "categories": [
+          {
+            "name": "Books",
+            "id": "stripbooks"
+          }
+        ],
+        "image": "https://m.media-amazon.com/images/I/91zFlkK38xS._AC_UY218_.jpg",
+        "other_formats": [
+          {
+            "title": "Hardcover,",
+            "link": "https://www.amazon.com/Lost-Apothecary-Novel-Sarah-Penner/dp/0778311015/ref=sr_1_5?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-5",
+            "asin": "0778311015"
+          },
+          {
+            "title": "Audio CD",
+            "link": "https://www.amazon.com/Lost-Apothecary-Novel-Sarah-Penner/dp/1799959392/ref=sr_1_5?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-5",
+            "asin": "1799959392"
+          },
+          {
+            "title": "Paperback",
+            "link": "https://www.amazon.com/Lost-Apothecary-Novel-Sarah-Penner/dp/077831197X/ref=sr_1_5?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-5",
+            "asin": "077831197X"
+          },
+          {
+            "title": "$10.93$10.93 List: $18.99$18.99",
+            "link": "https://www.amazon.com/Lost-Apothecary-Novel-Sarah-Penner/dp/077831197X/ref=sr_1_5?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-5",
+            "asin": "077831197X"
+          },
+          {
+            "title": "Kindle",
+            "link": "https://www.amazon.com/Lost-Apothecary-Novel-Sarah-Penner-ebook/dp/B087JJ2K54/ref=sr_1_5?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-5",
+            "asin": "B087JJ2K54"
+          },
+          {
+            "title": "$0.00$0.00",
+            "link": "https://www.amazon.com/Lost-Apothecary-Novel-Sarah-Penner-ebook/dp/B087JJ2K54/ref=sr_1_5?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-5",
+            "asin": "B087JJ2K54"
+          }
+        ],
+        "is_prime": true,
+        "is_amazon_fresh": false,
+        "is_whole_foods_market": false,
+        "rating": 4.3,
+        "ratings_total": 52726,
+        "prices": [
+          {
+            "symbol": "$",
+            "value": 0,
+            "currency": "USD",
+            "raw": "$0.00",
+            "name": "Audible Audiobook",
+            "list_price": "$24.29",
+            "asin": "B08BXB3JVY",
+            "link": "https://www.amazon.com/The-Lost-Apothecary-A-Novel/dp/B08BXB3JVY/ref=sr_1_5?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-5"
+          },
+          {
+            "symbol": "$",
+            "value": 10.93,
+            "currency": "USD",
+            "raw": "$10.93",
+            "name": "Paperback",
+            "list_price": "$18.99",
+            "asin": "077831197X",
+            "link": "https://www.amazon.com/Lost-Apothecary-Novel-Sarah-Penner/dp/077831197X/ref=sr_1_5?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-5"
+          },
+          {
+            "symbol": "$",
+            "value": 0,
+            "currency": "USD",
+            "raw": "$0.00",
+            "name": "Kindle",
+            "list_price": "$13.99",
+            "asin": "B087JJ2K54",
+            "link": "https://www.amazon.com/Lost-Apothecary-Novel-Sarah-Penner-ebook/dp/B087JJ2K54/ref=sr_1_5?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-5"
+          }
+        ],
+        "price": {
+          "symbol": "$",
+          "value": 0,
+          "currency": "USD",
+          "raw": "$0.00",
+          "name": "Audible Audiobook",
+          "list_price": "$24.29",
+          "asin": "B08BXB3JVY",
+          "link": "https://www.amazon.com/The-Lost-Apothecary-A-Novel/dp/B08BXB3JVY/ref=sr_1_5?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-5"
+        },
+        "page": 1,
+        "position_overall": 3
+      },
+      {
+        "position": 4,
+        "title": "The Witch's Apothecary: Seasons of the Witch: Learn how to make magical potions around the wheel of the year to improve your physical and spiritual well-being. (Sacred Apothecary Series)",
+        "asin": "1925946797",
+        "link": "https://www.amazon.com/Witchs-Apothecary-Seasons-Witch/dp/1925946797/ref=sr_1_6?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-6",
+        "availability": {
+          "raw": null
+        },
+        "categories": [
+          {
+            "name": "Books",
+            "id": "stripbooks"
+          }
+        ],
+        "image": "https://m.media-amazon.com/images/I/71vEcHDJOOL._AC_UY218_.jpg",
+        "is_prime": true,
+        "is_amazon_fresh": false,
+        "is_whole_foods_market": false,
+        "rating": 4.8,
+        "ratings_total": 461,
+        "prices": [
+          {
+            "symbol": "$",
+            "value": 20.23,
+            "currency": "USD",
+            "raw": "$20.23",
+            "name": "Hardcover",
+            "list_price": "$22.95",
+            "asin": "1925946797",
+            "link": "https://www.amazon.com/Witchs-Apothecary-Seasons-Witch/dp/1925946797/ref=sr_1_6?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-6"
+          },
+          {
+            "symbol": "$",
+            "value": 14.99,
+            "currency": "USD",
+            "raw": "$14.99",
+            "name": "Kindle",
+            "list_price": "$22.95",
+            "asin": "B0BSRFCVWG",
+            "link": "https://www.amazon.com/Witchs-Apothecary-magical-potions-Wheel-ebook/dp/B0BSRFCVWG/ref=sr_1_6?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-6"
+          }
+        ],
+        "price": {
+          "symbol": "$",
+          "value": 20.23,
+          "currency": "USD",
+          "raw": "$20.23",
+          "name": "Hardcover",
+          "list_price": "$22.95",
+          "asin": "1925946797",
+          "link": "https://www.amazon.com/Witchs-Apothecary-Seasons-Witch/dp/1925946797/ref=sr_1_6?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-6"
+        },
+        "page": 1,
+        "position_overall": 4
+      },
+      {
+        "position": 5,
+        "title": "The Ultimate Survival Apothecary Bible: Unlock 500+ Ancient Remedies and Herbal Formulas to Heal, Thrive, and Stay Prepared for Any Emergency",
+        "asin": "B0DQQR4RDN",
+        "link": "https://www.amazon.com/Ultimate-Survival-Apothecary-Bible-Emergency/dp/B0DQQR4RDN/ref=sr_1_7?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-7",
+        "availability": {
+          "raw": null
+        },
+        "categories": [
+          {
+            "name": "Books",
+            "id": "stripbooks"
+          }
+        ],
+        "image": "https://m.media-amazon.com/images/I/71nJX-o9rrL._AC_UY218_.jpg",
+        "other_formats": [
+          {
+            "title": "Spiral-bound",
+            "link": "https://www.amazon.com/Ultimate-Survival-Apothecary-Bible-Emergency/dp/B0DWVJ7K96/ref=sr_1_7?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-7",
+            "asin": "B0DWVJ7K96"
+          },
+          {
+            "title": "Hardcover",
+            "link": "https://www.amazon.com/Ultimate-Survival-Apothecary-Bible-Emergency/dp/B0DQWHV9MP/ref=sr_1_7?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-7",
+            "asin": "B0DQWHV9MP"
+          }
+        ],
+        "is_prime": true,
+        "is_amazon_fresh": false,
+        "is_whole_foods_market": false,
+        "rating": 4.8,
+        "ratings_total": 41,
+        "prices": [
+          {
+            "symbol": "$",
+            "value": 25.89,
+            "currency": "USD",
+            "raw": "$25.89",
+            "name": "Paperback",
+            "list_price": "$28.77",
+            "asin": "B0DQQR4RDN",
+            "link": "https://www.amazon.com/Ultimate-Survival-Apothecary-Bible-Emergency/dp/B0DQQR4RDN/ref=sr_1_7?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-7"
+          },
+          {
+            "symbol": "$",
+            "value": 0,
+            "currency": "USD",
+            "raw": "$0.00",
+            "name": "Kindle",
+            "list_price": "$19.87",
+            "asin": "B0DPT6SDJF",
+            "link": "https://www.amazon.com/Ultimate-Survival-Apothecary-Bible-Emergency-ebook/dp/B0DPT6SDJF/ref=sr_1_7?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-7"
+          },
+          {
+            "symbol": "$",
+            "value": 49.78,
+            "currency": "USD",
+            "raw": "$49.78",
+            "name": "Hardcover",
+            "asin": "B0DQWHV9MP",
+            "link": "https://www.amazon.com/Ultimate-Survival-Apothecary-Bible-Emergency/dp/B0DQWHV9MP/ref=sr_1_7?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-7"
+          }
+        ],
+        "price": {
+          "symbol": "$",
+          "value": 25.89,
+          "currency": "USD",
+          "raw": "$25.89",
+          "name": "Paperback",
+          "list_price": "$28.77",
+          "asin": "B0DQQR4RDN",
+          "link": "https://www.amazon.com/Ultimate-Survival-Apothecary-Bible-Emergency/dp/B0DQQR4RDN/ref=sr_1_7?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-7"
+        },
+        "page": 1,
+        "position_overall": 5
+      },
+      {
+        "position": 6,
+        "title": "Family Apothecary Secrets Bible: 600+ Trusted Herbal Remedies and Step-by-Step Guides to Protect Your Loved Ones, and Restore Holistic Wellness to Your Home",
+        "asin": "B0DSSN44PJ",
+        "link": "https://www.amazon.com/Family-Apothecary-Secrets-Bible-Step/dp/B0DSSN44PJ/ref=sr_1_8?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-8",
+        "availability": {
+          "raw": null
+        },
+        "categories": [
+          {
+            "name": "Books",
+            "id": "stripbooks"
+          }
+        ],
+        "image": "https://m.media-amazon.com/images/I/71jG7KXLB-L._AC_UY218_.jpg",
+        "other_formats": [
+          {
+            "title": "Hardcover",
+            "link": "https://www.amazon.com/Family-Apothecary-Secrets-Bible-Step/dp/B0DSSM1SHL/ref=sr_1_8?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-8",
+            "asin": "B0DSSM1SHL"
+          }
+        ],
+        "is_prime": true,
+        "is_amazon_fresh": false,
+        "is_whole_foods_market": false,
+        "rating": 4.9,
+        "ratings_total": 61,
+        "prices": [
+          {
+            "symbol": "$",
+            "value": 22.47,
+            "currency": "USD",
+            "raw": "$22.47",
+            "name": "Paperback",
+            "list_price": "$24.97",
+            "asin": "B0DSSN44PJ",
+            "link": "https://www.amazon.com/Family-Apothecary-Secrets-Bible-Step/dp/B0DSSN44PJ/ref=sr_1_8?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-8"
+          },
+          {
+            "symbol": "$",
+            "value": 0,
+            "currency": "USD",
+            "raw": "$0.00",
+            "name": "Kindle",
+            "list_price": "$9.99",
+            "asin": "B0DSQ7QBVW",
+            "link": "https://www.amazon.com/Family-Apothecary-Secrets-Bible-Step-ebook/dp/B0DSQ7QBVW/ref=sr_1_8?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-8"
+          },
+          {
+            "symbol": "$",
+            "value": 34.97,
+            "currency": "USD",
+            "raw": "$34.97",
+            "name": "Hardcover",
+            "list_price": "$35",
+            "asin": "B0DSSM1SHL",
+            "link": "https://www.amazon.com/Family-Apothecary-Secrets-Bible-Step/dp/B0DSSM1SHL/ref=sr_1_8?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-8"
+          }
+        ],
+        "price": {
+          "symbol": "$",
+          "value": 22.47,
+          "currency": "USD",
+          "raw": "$22.47",
+          "name": "Paperback",
+          "list_price": "$24.97",
+          "asin": "B0DSSN44PJ",
+          "link": "https://www.amazon.com/Family-Apothecary-Secrets-Bible-Step/dp/B0DSSN44PJ/ref=sr_1_8?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-8"
+        },
+        "page": 1,
+        "position_overall": 6
+      },
+      {
+        "position": 7,
+        "title": "The Herbal Apothecary: 100 Medicinal Herbs and How to Use Them",
+        "asin": "1604695676",
+        "link": "https://www.amazon.com/Herbal-Apothecary-Medicinal-Herbs-Them/dp/1604695676/ref=sr_1_9?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-9",
+        "availability": {
+          "raw": null
+        },
+        "categories": [
+          {
+            "name": "Books",
+            "id": "stripbooks"
+          }
+        ],
+        "image": "https://m.media-amazon.com/images/I/A1poRw4rzsL._AC_UY218_.jpg",
+        "other_formats": [
+          {
+            "title": "Spiral-bound",
+            "link": "https://www.amazon.com/Herbal-Apothecary-Medicinal-Herbs-Them/dp/B09F74RMY1/ref=sr_1_9?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-9",
+            "asin": "B09F74RMY1"
+          },
+          {
+            "title": "Hardcover",
+            "link": "https://www.amazon.com/Herbal-Apothecary-Medicinal-Herbs-Them/dp/1604696621/ref=sr_1_9?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-9",
+            "asin": "1604696621"
+          }
+        ],
+        "is_prime": true,
+        "is_amazon_fresh": false,
+        "is_whole_foods_market": false,
+        "rating": 4.8,
+        "ratings_total": 2793,
+        "prices": [
+          {
+            "symbol": "$",
+            "value": 19.38,
+            "currency": "USD",
+            "raw": "$19.38",
+            "name": "Paperback",
+            "list_price": "$25.99",
+            "asin": "1604695676",
+            "link": "https://www.amazon.com/Herbal-Apothecary-Medicinal-Herbs-Them/dp/1604695676/ref=sr_1_9?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-9"
+          },
+          {
+            "symbol": "$",
+            "value": 0,
+            "currency": "USD",
+            "raw": "$0.00",
+            "name": "Kindle",
+            "list_price": "$11.99",
+            "asin": "B01B5E1VRA",
+            "link": "https://www.amazon.com/Herbal-Apothecary-Medicinal-Herbs-Them-ebook/dp/B01B5E1VRA/ref=sr_1_9?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-9"
+          }
+        ],
+        "price": {
+          "symbol": "$",
+          "value": 19.38,
+          "currency": "USD",
+          "raw": "$19.38",
+          "name": "Paperback",
+          "list_price": "$25.99",
+          "asin": "1604695676",
+          "link": "https://www.amazon.com/Herbal-Apothecary-Medicinal-Herbs-Them/dp/1604695676/ref=sr_1_9?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-9"
+        },
+        "page": 1,
+        "position_overall": 7
+      },
+      {
+        "position": 8,
+        "title": "Master Recipes from the Herbal Apothecary: 375 Tinctures, Salves, Teas, Capsules, Oils, and Washes for Whole-Body Health and Wellness",
+        "asin": "1604698527",
+        "link": "https://www.amazon.com/Master-Recipes-Herbal-Apothecary-Whole-Body/dp/1604698527/ref=sr_1_10?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-10",
+        "availability": {
+          "raw": "Only 3 left in stock - order soon."
+        },
+        "categories": [
+          {
+            "name": "Books",
+            "id": "stripbooks"
+          }
+        ],
+        "image": "https://m.media-amazon.com/images/I/916TfhT5cJL._AC_UY218_.jpg",
+        "other_formats": [
+          {
+            "title": "Spiral-bound",
+            "link": "https://www.amazon.com/Master-Recipes-Herbal-Apothecary-Whole-Body/dp/B09QTY3RT5/ref=sr_1_10?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-10",
+            "asin": "B09QTY3RT5"
+          }
+        ],
+        "is_prime": true,
+        "is_amazon_fresh": false,
+        "is_whole_foods_market": false,
+        "rating": 4.8,
+        "ratings_total": 1949,
+        "prices": [
+          {
+            "symbol": "$",
+            "value": 15.99,
+            "currency": "USD",
+            "raw": "$15.99",
+            "name": "Paperback",
+            "list_price": "$25.99",
+            "asin": "1604698527",
+            "link": "https://www.amazon.com/Master-Recipes-Herbal-Apothecary-Whole-Body/dp/1604698527/ref=sr_1_10?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-10"
+          },
+          {
+            "symbol": "$",
+            "value": 11.99,
+            "currency": "USD",
+            "raw": "$11.99",
+            "name": "Kindle",
+            "list_price": "$25.99",
+            "asin": "B079VWZX87",
+            "link": "https://www.amazon.com/Master-Recipes-Herbal-Apothecary-Whole-Body-ebook/dp/B079VWZX87/ref=sr_1_10?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-10"
+          },
+          {
+            "symbol": "$",
+            "value": 34.99,
+            "currency": "USD",
+            "raw": "$34.99",
+            "name": "Spiral-bound",
+            "list_price": "$59.99",
+            "asin": "B09QTY3RT5",
+            "link": "https://www.amazon.com/Master-Recipes-Herbal-Apothecary-Whole-Body/dp/B09QTY3RT5/ref=sr_1_10?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-10"
+          }
+        ],
+        "price": {
+          "symbol": "$",
+          "value": 15.99,
+          "currency": "USD",
+          "raw": "$15.99",
+          "name": "Paperback",
+          "list_price": "$25.99",
+          "asin": "1604698527",
+          "link": "https://www.amazon.com/Master-Recipes-Herbal-Apothecary-Whole-Body/dp/1604698527/ref=sr_1_10?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-10"
+        },
+        "page": 1,
+        "position_overall": 8
+      },
+      {
+        "position": 9,
+        "title": "The Moon Apothecary: Rituals and recipes for the lunar phases (Sacred Apothecary Series)",
+        "asin": "1925946800",
+        "link": "https://www.amazon.com/Moon-Apothecary-Rituals-recipes-phases/dp/1925946800/ref=sr_1_11?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-11",
+        "availability": {
+          "raw": null
+        },
+        "categories": [
+          {
+            "name": "Books",
+            "id": "stripbooks"
+          }
+        ],
+        "image": "https://m.media-amazon.com/images/I/716DWScqbHL._AC_UY218_.jpg",
+        "is_prime": true,
+        "is_amazon_fresh": false,
+        "is_whole_foods_market": false,
+        "rating": 5,
+        "ratings_total": 32,
+        "prices": [
+          {
+            "symbol": "$",
+            "value": 20.92,
+            "currency": "USD",
+            "raw": "$20.92",
+            "name": "Hardcover",
+            "is_primary": true,
+            "list_price": "$24.95",
+            "asin": "1925946800",
+            "link": "https://www.amazon.com/Moon-Apothecary-Rituals-recipes-phases/dp/1925946800/ref=sr_1_11?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-11"
+          },
+          {
+            "symbol": "$",
+            "value": 24.95,
+            "currency": "USD",
+            "raw": "$24.95",
+            "name": "Hardcover",
+            "is_rrp": true,
+            "link": "https://www.amazon.com/Moon-Apothecary-Rituals-recipes-phases/dp/1925946800/ref=sr_1_11?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-11",
+            "asin": "1925946800"
+          }
+        ],
+        "price": {
+          "symbol": "$",
+          "value": 20.92,
+          "currency": "USD",
+          "raw": "$20.92",
+          "name": "Hardcover",
+          "is_primary": true,
+          "list_price": "$24.95",
+          "asin": "1925946800",
+          "link": "https://www.amazon.com/Moon-Apothecary-Rituals-recipes-phases/dp/1925946800/ref=sr_1_11?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-11"
+        },
+        "page": 1,
+        "position_overall": 9
+      },
+      {
+        "position": 10,
+        "title": "The Lost Apothecary Collector's Edition: A Novel",
+        "asin": "0778387747",
+        "link": "https://www.amazon.com/Lost-Apothecary-Collectors-Novel/dp/0778387747/ref=sr_1_13?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-13",
+        "availability": {
+          "raw": null
+        },
+        "categories": [
+          {
+            "name": "Books",
+            "id": "stripbooks"
+          }
+        ],
+        "image": "https://m.media-amazon.com/images/I/81HvinyfSIL._AC_UY218_.jpg",
+        "is_prime": true,
+        "is_amazon_fresh": false,
+        "is_whole_foods_market": false,
+        "rating": 4.9,
+        "ratings_total": 21,
+        "prices": [
+          {
+            "symbol": "$",
+            "value": 24,
+            "currency": "USD",
+            "raw": "$24.00",
+            "name": "Hardcover",
+            "is_primary": true,
+            "list_price": "$30.00",
+            "asin": "0778387747",
+            "link": "https://www.amazon.com/Lost-Apothecary-Collectors-Novel/dp/0778387747/ref=sr_1_13?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-13"
+          },
+          {
+            "symbol": "$",
+            "value": 30,
+            "currency": "USD",
+            "raw": "$30.00",
+            "name": "Hardcover",
+            "is_rrp": true,
+            "link": "https://www.amazon.com/Lost-Apothecary-Collectors-Novel/dp/0778387747/ref=sr_1_13?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-13",
+            "asin": "0778387747"
+          }
+        ],
+        "price": {
+          "symbol": "$",
+          "value": 24,
+          "currency": "USD",
+          "raw": "$24.00",
+          "name": "Hardcover",
+          "is_primary": true,
+          "list_price": "$30.00",
+          "asin": "0778387747",
+          "link": "https://www.amazon.com/Lost-Apothecary-Collectors-Novel/dp/0778387747/ref=sr_1_13?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-13"
+        },
+        "page": 1,
+        "position_overall": 10
+      },
+      {
+        "position": 11,
+        "title": "Barbara O'Neill Ancient Home Apothecary: 250+ Complete Collection of Holistic Herbal & Natural Antibiotics for a Non-Toxic Lifestyle (the home apothecary book ancient remedies revived 1)",
+        "asin": "B0DQXNTS4C",
+        "link": "https://www.amazon.com/Barbara-ONeill-Ancient-Home-Apothecary-ebook/dp/B0DQXNTS4C/ref=sr_1_14?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-14",
+        "availability": {
+          "raw": null
+        },
+        "categories": [
+          {
+            "name": "Books",
+            "id": "stripbooks"
+          }
+        ],
+        "image": "https://m.media-amazon.com/images/I/8149aX5ntdL._AC_UY218_.jpg",
+        "bestseller": {
+          "link": "https://www.amazon.com/Barbara-ONeill-Ancient-Home-Apothecary-ebook/dp/B0DQXNTS4C/ref=sr_1_14?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-14",
+          "category": "Herbal Remedies"
+        },
+        "other_formats": [
+          {
+            "title": "Paperback",
+            "link": "https://www.amazon.com/Barbara-ONeill-Ancient-Home-Apothecary/dp/1965849237/ref=sr_1_14?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-14",
+            "asin": "1965849237"
+          },
+          {
+            "title": "$19.97$19.97",
+            "link": "https://www.amazon.com/Barbara-ONeill-Ancient-Home-Apothecary/dp/1965849237/ref=sr_1_14?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-14",
+            "asin": "1965849237"
+          }
+        ],
+        "is_prime": false,
+        "is_amazon_fresh": false,
+        "is_whole_foods_market": false,
+        "rating": 4.4,
+        "ratings_total": 200,
+        "prices": [
+          {
+            "symbol": "$",
+            "value": 0.99,
+            "currency": "USD",
+            "raw": "$0.99",
+            "name": "Kindle",
+            "list_price": "$29.99",
+            "asin": "B0DQXNTS4C",
+            "link": "https://www.amazon.com/Barbara-ONeill-Ancient-Home-Apothecary-ebook/dp/B0DQXNTS4C/ref=sr_1_14?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-14"
+          },
+          {
+            "symbol": "$",
+            "value": 19.97,
+            "currency": "USD",
+            "raw": "$19.97",
+            "name": "Paperback",
+            "list_price": "$18.38",
+            "asin": "1965849237",
+            "link": "https://www.amazon.com/Barbara-ONeill-Ancient-Home-Apothecary/dp/1965849237/ref=sr_1_14?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-14"
+          }
+        ],
+        "price": {
+          "symbol": "$",
+          "value": 0.99,
+          "currency": "USD",
+          "raw": "$0.99",
+          "name": "Kindle",
+          "list_price": "$29.99",
+          "asin": "B0DQXNTS4C",
+          "link": "https://www.amazon.com/Barbara-ONeill-Ancient-Home-Apothecary-ebook/dp/B0DQXNTS4C/ref=sr_1_14?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-14"
+        },
+        "page": 1,
+        "position_overall": 11
+      },
+      {
+        "position": 12,
+        "title": "The Woman's Herbal Apothecary: 200 Natural Remedies for Healing, Hormone Balance, Beauty and Longevity, and Creating Calm",
+        "asin": "1592338208",
+        "link": "https://www.amazon.com/Womans-Herbal-Apothecary-Remedies-Longevity/dp/1592338208/ref=sr_1_15?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-15",
+        "availability": {
+          "raw": null
+        },
+        "categories": [
+          {
+            "name": "Books",
+            "id": "stripbooks"
+          }
+        ],
+        "image": "https://m.media-amazon.com/images/I/91NX4R7SzJL._AC_UY218_.jpg",
+        "is_prime": true,
+        "is_amazon_fresh": false,
+        "is_whole_foods_market": false,
+        "rating": 4.8,
+        "ratings_total": 325,
+        "prices": [
+          {
+            "symbol": "$",
+            "value": 14.55,
+            "currency": "USD",
+            "raw": "$14.55",
+            "name": "Paperback",
+            "list_price": "$27.99",
+            "asin": "1592338208",
+            "link": "https://www.amazon.com/Womans-Herbal-Apothecary-Remedies-Longevity/dp/1592338208/ref=sr_1_15?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-15"
+          },
+          {
+            "symbol": "$",
+            "value": 13.82,
+            "currency": "USD",
+            "raw": "$13.82",
+            "name": "Kindle",
+            "list_price": "$27.99",
+            "asin": "B07DQ6LKPH",
+            "link": "https://www.amazon.com/Womans-Herbal-Apothecary-Remedies-Longevity-ebook/dp/B07DQ6LKPH/ref=sr_1_15?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-15"
+          }
+        ],
+        "price": {
+          "symbol": "$",
+          "value": 14.55,
+          "currency": "USD",
+          "raw": "$14.55",
+          "name": "Paperback",
+          "list_price": "$27.99",
+          "asin": "1592338208",
+          "link": "https://www.amazon.com/Womans-Herbal-Apothecary-Remedies-Longevity/dp/1592338208/ref=sr_1_15?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-15"
+        },
+        "page": 1,
+        "position_overall": 12
+      },
+      {
+        "position": 13,
+        "title": "Apothecary Flashcards",
+        "asin": "1922785776",
+        "link": "https://www.amazon.com/Apothecary-Flashcards-Reference-Explaining-Full-Color/dp/1922785776/ref=sr_1_16?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-16",
+        "availability": {
+          "raw": null
+        },
+        "categories": [
+          {
+            "name": "Books",
+            "id": "stripbooks"
+          }
+        ],
+        "image": "https://m.media-amazon.com/images/I/71qCS-ULUKL._AC_UY218_.jpg",
+        "is_prime": true,
+        "is_amazon_fresh": false,
+        "is_whole_foods_market": false,
+        "rating": 4.4,
+        "ratings_total": 27,
+        "prices": [
+          {
+            "symbol": "$",
+            "value": 16.39,
+            "currency": "USD",
+            "raw": "$16.39",
+            "name": "Cards",
+            "is_primary": true,
+            "list_price": "$19.95",
+            "asin": "1922785776",
+            "link": "https://www.amazon.com/Apothecary-Flashcards-Reference-Explaining-Full-Color/dp/1922785776/ref=sr_1_16?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-16"
+          },
+          {
+            "symbol": "$",
+            "value": 19.95,
+            "currency": "USD",
+            "raw": "$19.95",
+            "name": "Cards",
+            "is_rrp": true,
+            "link": "https://www.amazon.com/Apothecary-Flashcards-Reference-Explaining-Full-Color/dp/1922785776/ref=sr_1_16?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-16",
+            "asin": "1922785776"
+          }
+        ],
+        "price": {
+          "symbol": "$",
+          "value": 16.39,
+          "currency": "USD",
+          "raw": "$16.39",
+          "name": "Cards",
+          "is_primary": true,
+          "list_price": "$19.95",
+          "asin": "1922785776",
+          "link": "https://www.amazon.com/Apothecary-Flashcards-Reference-Explaining-Full-Color/dp/1922785776/ref=sr_1_16?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-16"
+        },
+        "page": 1,
+        "position_overall": 13
+      },
+      {
+        "position": 14,
+        "title": "The Apothecary (The Apothecary Series)",
+        "asin": "0142422061",
+        "link": "https://www.amazon.com/Apothecary-Maile-Meloy/dp/0142422061/ref=sr_1_18?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-18",
+        "availability": {
+          "raw": null
+        },
+        "categories": [
+          {
+            "name": "Books",
+            "id": "stripbooks"
+          }
+        ],
+        "image": "https://m.media-amazon.com/images/I/91+1gdifi6L._AC_UY218_.jpg",
+        "other_formats": [
+          {
+            "title": "Library Binding,",
+            "link": "https://www.amazon.com/Apothecary-Turtleback-School-Library-Binding/dp/0606357122/ref=sr_1_18?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-18",
+            "asin": "0606357122"
+          },
+          {
+            "title": "Audio CD",
+            "link": "https://www.amazon.com/Apothecary-Maile-Meloy/dp/1611760097/ref=sr_1_18?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-18",
+            "asin": "1611760097"
+          },
+          {
+            "title": "Kindle",
+            "link": "https://www.amazon.com/Apothecary-Book-1-ebook/dp/B004XFYS1A/ref=sr_1_18?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-18",
+            "asin": "B004XFYS1A"
+          }
+        ],
+        "is_prime": true,
+        "is_amazon_fresh": false,
+        "is_whole_foods_market": false,
+        "rating": 4.6,
+        "ratings_total": 882,
+        "prices": [
+          {
+            "symbol": "$",
+            "value": 8.29,
+            "currency": "USD",
+            "raw": "$8.29",
+            "name": "Paperback",
+            "list_price": "$9.99",
+            "asin": "0142422061",
+            "link": "https://www.amazon.com/Apothecary-Maile-Meloy/dp/0142422061/ref=sr_1_18?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-18"
+          },
+          {
+            "symbol": "$",
+            "value": 0,
+            "currency": "USD",
+            "raw": "$0.00",
+            "name": "Audible Audiobook",
+            "list_price": "$18.00",
+            "asin": "B005SA5NFO",
+            "link": "https://www.amazon.com/The-Apothecary-Maile-Meloy-audiobook/dp/B005SA5NFO/ref=sr_1_18?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-18"
+          },
+          {
+            "symbol": "$",
+            "value": 9.99,
+            "currency": "USD",
+            "raw": "$9.99",
+            "name": "Kindle",
+            "asin": "B004XFYS1A",
+            "link": "https://www.amazon.com/Apothecary-Book-1-ebook/dp/B004XFYS1A/ref=sr_1_18?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-18"
+          }
+        ],
+        "price": {
+          "symbol": "$",
+          "value": 8.29,
+          "currency": "USD",
+          "raw": "$8.29",
+          "name": "Paperback",
+          "list_price": "$9.99",
+          "asin": "0142422061",
+          "link": "https://www.amazon.com/Apothecary-Maile-Meloy/dp/0142422061/ref=sr_1_18?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-18"
+        },
+        "page": 1,
+        "position_overall": 14
+      },
+      {
+        "position": 15,
+        "title": "How to Craft Your Herbal Apothecary: 500+ Herbs and Natural Remedies for Everyday Health | Your A-Z Guide to Make DIY Healing Tinctures, Teas, Decoctions, Syrups, Essential Oils, and More",
+        "asin": "B0DV51MJGB",
+        "link": "https://www.amazon.com/How-Craft-Your-Herbal-Apothecary/dp/B0DV51MJGB/ref=sr_1_19?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-19",
+        "availability": {
+          "raw": null
+        },
+        "categories": [
+          {
+            "name": "Books",
+            "id": "stripbooks"
+          }
+        ],
+        "image": "https://m.media-amazon.com/images/I/717xjgAiYbL._AC_UY218_.jpg",
+        "bestseller": {
+          "link": "https://www.amazon.com/How-Craft-Your-Herbal-Apothecary/dp/B0DV51MJGB/ref=sr_1_19?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-19",
+          "category": "Canada Region Gardening"
+        },
+        "is_prime": true,
+        "is_amazon_fresh": false,
+        "is_whole_foods_market": false,
+        "rating": 4.4,
+        "ratings_total": 49,
+        "prices": [
+          {
+            "symbol": "$",
+            "value": 24.21,
+            "currency": "USD",
+            "raw": "$24.21",
+            "name": "Paperback",
+            "list_price": "$26.90",
+            "asin": "B0DV51MJGB",
+            "link": "https://www.amazon.com/How-Craft-Your-Herbal-Apothecary/dp/B0DV51MJGB/ref=sr_1_19?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-19"
+          },
+          {
+            "symbol": "$",
+            "value": 0,
+            "currency": "USD",
+            "raw": "$0.00",
+            "name": "Kindle",
+            "list_price": "$9.99",
+            "asin": "B0DN4L614V",
+            "link": "https://www.amazon.com/How-Craft-Your-Herbal-Apothecary-ebook/dp/B0DN4L614V/ref=sr_1_19?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-19"
+          }
+        ],
+        "price": {
+          "symbol": "$",
+          "value": 24.21,
+          "currency": "USD",
+          "raw": "$24.21",
+          "name": "Paperback",
+          "list_price": "$26.90",
+          "asin": "B0DV51MJGB",
+          "link": "https://www.amazon.com/How-Craft-Your-Herbal-Apothecary/dp/B0DV51MJGB/ref=sr_1_19?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-19"
+        },
+        "page": 1,
+        "position_overall": 15
+      },
+      {
+        "position": 16,
+        "title": "The Witch's Herbal Apothecary: Rituals & Recipes for a Year of Earth Magick and Sacred Medicine Making",
+        "asin": "1592339093",
+        "link": "https://www.amazon.com/Witchs-Herbal-Apothecary-Rituals-Medicine/dp/1592339093/ref=sr_1_20?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-20",
+        "availability": {
+          "raw": null
+        },
+        "categories": [
+          {
+            "name": "Books",
+            "id": "stripbooks"
+          }
+        ],
+        "image": "https://m.media-amazon.com/images/I/A1pY9L5pVKL._AC_UY218_.jpg",
+        "deal": {
+          "link": "https://www.amazon.com/gp/goldbox/",
+          "badge_text": "Limited time deal"
+        },
+        "is_prime": true,
+        "is_amazon_fresh": false,
+        "is_whole_foods_market": false,
+        "rating": 4.8,
+        "ratings_total": 1273,
+        "prices": [
+          {
+            "symbol": "$",
+            "value": 19.81,
+            "currency": "USD",
+            "raw": "$19.81",
+            "name": "Paperback",
+            "list_price": "$27.99",
+            "asin": "1592339093",
+            "link": "https://www.amazon.com/Witchs-Herbal-Apothecary-Rituals-Medicine/dp/1592339093/ref=sr_1_20?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-20"
+          },
+          {
+            "symbol": "$",
+            "value": 14.99,
+            "currency": "USD",
+            "raw": "$14.99",
+            "name": "Kindle",
+            "list_price": "$27.99",
+            "asin": "B083JSV77G",
+            "link": "https://www.amazon.com/Witchs-Herbal-Apothecary-Rituals-Medicine-ebook/dp/B083JSV77G/ref=sr_1_20?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-20"
+          }
+        ],
+        "price": {
+          "symbol": "$",
+          "value": 19.81,
+          "currency": "USD",
+          "raw": "$19.81",
+          "name": "Paperback",
+          "list_price": "$27.99",
+          "asin": "1592339093",
+          "link": "https://www.amazon.com/Witchs-Herbal-Apothecary-Rituals-Medicine/dp/1592339093/ref=sr_1_20?dib=eyJ2IjoiMSJ9.LpltFSlFPcsfRJJQ8EST1bx7MvkeG2w7uwFRl677zwcq2TD-IXaCKvRNll4hxEXrKvOsmafroUph_FOUm7T9UWY5usTMkB-n9zB2JVietKvzQ8O5hDVnEg_aaQ6ybDTAYA4UHZfRt4eBgIR1VOwyBbPGzXmubM7R8m2fCZdjLV9Y7rLQwkmPLbyoA-RlTTULDWctgx0qgqjRgfjMTeQLLC9RFtdChdHxuyRCAoOyA1Y.eQRG6cvC4Na8XMaS_3jNbAcI7zLVWVT5ZLXYJbIi224&dib_tag=se&keywords=Apothecary&qid=1740428236&s=books&sr=1-20"
+        },
+        "page": 1,
+        "position_overall": 16
+      },
+      {
+        "position": 1,
+        "title": "The Herbal Remedies Apothecary: Unlock the Secret to 21 Powerhouse Herbs and Create Natural Remedies to Boost Immunity and Daily Wellness",
+        "asin": "B0CZTZRYMX",
+        "link": "https://www.amazon.com/Herbal-Remedies-Apothecary-Powerhouse-Immunity/dp/B0CZTZRYMX/ref=sr_1_19?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-19",
+        "availability": {
+          "raw": null
+        },
+        "categories": [
+          {
+            "name": "Books",
+            "id": "stripbooks"
+          }
+        ],
+        "image": "https://m.media-amazon.com/images/I/91TzZLUrYhL._AC_UY218_.jpg",
+        "bestseller": {
+          "link": "https://www.amazon.com/Herbal-Remedies-Apothecary-Powerhouse-Immunity/dp/B0CZTZRYMX/ref=sr_1_19?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-19",
+          "category": "Herbal Remedies"
+        },
+        "other_formats": [
+          {
+            "title": "Hardcover",
+            "link": "https://www.amazon.com/Herbal-Remedies-Apothecary-Powerhouse-Immunity/dp/B0CKMV99SF/ref=sr_1_19?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-19",
+            "asin": "B0CKMV99SF"
+          },
+          {
+            "title": "Paperback",
+            "link": "https://www.amazon.com/Herbal-Remedies-Apothecary-Powerhouse-Immunity/dp/B0CKM1MZKM/ref=sr_1_19?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-19",
+            "asin": "B0CKM1MZKM"
+          },
+          {
+            "title": "$14.99$14.99",
+            "link": "https://www.amazon.com/Herbal-Remedies-Apothecary-Powerhouse-Immunity/dp/B0CKM1MZKM/ref=sr_1_19?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-19",
+            "asin": "B0CKM1MZKM"
+          },
+          {
+            "title": "Kindle",
+            "link": "https://www.amazon.com/Herbal-Remedies-Apothecary-Powerhouse-Immunity-ebook/dp/B0CKLTYJNP/ref=sr_1_19?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-19",
+            "asin": "B0CKLTYJNP"
+          },
+          {
+            "title": "$4.99$4.99",
+            "link": "https://www.amazon.com/Herbal-Remedies-Apothecary-Powerhouse-Immunity-ebook/dp/B0CKLTYJNP/ref=sr_1_19?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-19",
+            "asin": "B0CKLTYJNP"
+          }
+        ],
+        "is_prime": true,
+        "is_amazon_fresh": false,
+        "is_whole_foods_market": false,
+        "rating": 4.6,
+        "ratings_total": 85,
+        "prices": [
+          {
+            "symbol": "$",
+            "value": 0,
+            "currency": "USD",
+            "raw": "$0.00",
+            "name": "Audible Audiobook",
+            "list_price": "$14.95",
+            "asin": "B0CZTZRYMX",
+            "link": "https://www.amazon.com/Herbal-Remedies-Apothecary-Powerhouse-Immunity/dp/B0CZTZRYMX/ref=sr_1_19?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-19"
+          },
+          {
+            "symbol": "$",
+            "value": 14.99,
+            "currency": "USD",
+            "raw": "$14.99",
+            "name": "Paperback",
+            "list_price": "$35",
+            "asin": "B0CKM1MZKM",
+            "link": "https://www.amazon.com/Herbal-Remedies-Apothecary-Powerhouse-Immunity/dp/B0CKM1MZKM/ref=sr_1_19?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-19"
+          },
+          {
+            "symbol": "$",
+            "value": 4.99,
+            "currency": "USD",
+            "raw": "$4.99",
+            "name": "Kindle",
+            "asin": "B0CKLTYJNP",
+            "link": "https://www.amazon.com/Herbal-Remedies-Apothecary-Powerhouse-Immunity-ebook/dp/B0CKLTYJNP/ref=sr_1_19?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-19"
+          }
+        ],
+        "price": {
+          "symbol": "$",
+          "value": 0,
+          "currency": "USD",
+          "raw": "$0.00",
+          "name": "Audible Audiobook",
+          "list_price": "$14.95",
+          "asin": "B0CZTZRYMX",
+          "link": "https://www.amazon.com/Herbal-Remedies-Apothecary-Powerhouse-Immunity/dp/B0CZTZRYMX/ref=sr_1_19?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-19"
+        },
+        "page": 2,
+        "position_overall": 17
+      },
+      {
+        "position": 2,
+        "title": "Native American Herbalist’s Bible: 10 Books in 1: Ancient Herbal Remedies, the Dispensatory and Apothecary of the Natives. Theory and Practice to Create Your Own Herb Lab at Home",
+        "asin": "B0B3Y8635L",
+        "link": "https://www.amazon.com/Native-American-Herbalists-Bible-Dispensatory/dp/B0B3Y8635L/ref=sr_1_20?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-20",
+        "availability": {
+          "raw": null
+        },
+        "categories": [
+          {
+            "name": "Books",
+            "id": "stripbooks"
+          }
+        ],
+        "image": "https://m.media-amazon.com/images/I/91lWzF45XzL._AC_UY218_.jpg",
+        "is_prime": false,
+        "is_amazon_fresh": false,
+        "is_whole_foods_market": false,
+        "prices": [
+          {
+            "symbol": "$",
+            "value": 0,
+            "currency": "USD",
+            "raw": "$0.00",
+            "name": "Audible Audiobook",
+            "is_primary": true,
+            "list_price": "$19.95",
+            "asin": "B0B3Y8635L",
+            "link": "https://www.amazon.com/Native-American-Herbalists-Bible-Dispensatory/dp/B0B3Y8635L/ref=sr_1_20?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-20"
+          },
+          {
+            "symbol": "$",
+            "value": 19.95,
+            "currency": "USD",
+            "raw": "$19.95",
+            "name": "Audible Audiobook",
+            "is_rrp": true,
+            "link": "https://www.amazon.com/Native-American-Herbalists-Bible-Dispensatory/dp/B0B3Y8635L/ref=sr_1_20?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-20",
+            "asin": "B0B3Y8635L"
+          }
+        ],
+        "price": {
+          "symbol": "$",
+          "value": 0,
+          "currency": "USD",
+          "raw": "$0.00",
+          "name": "Audible Audiobook",
+          "is_primary": true,
+          "list_price": "$19.95",
+          "asin": "B0B3Y8635L",
+          "link": "https://www.amazon.com/Native-American-Herbalists-Bible-Dispensatory/dp/B0B3Y8635L/ref=sr_1_20?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-20"
+        },
+        "page": 2,
+        "position_overall": 18
+      },
+      {
+        "position": 3,
+        "title": "Business Apothecary",
+        "asin": "1966417179",
+        "link": "https://www.amazon.com/Business-Apothecary-Linda-Blackmoor/dp/1966417179/ref=sr_1_21?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-21",
+        "availability": {
+          "raw": "Only 3 left in stock - order soon."
+        },
+        "categories": [
+          {
+            "name": "Books",
+            "id": "stripbooks"
+          }
+        ],
+        "image": "https://m.media-amazon.com/images/I/614A8MFag8L._AC_UY218_.jpg",
+        "is_prime": true,
+        "is_amazon_fresh": false,
+        "is_whole_foods_market": false,
+        "rating": 1,
+        "ratings_total": 1,
+        "prices": [
+          {
+            "symbol": "$",
+            "value": 14.99,
+            "currency": "USD",
+            "raw": "$14.99",
+            "name": "Paperback",
+            "asin": "1966417179",
+            "link": "https://www.amazon.com/Business-Apothecary-Linda-Blackmoor/dp/1966417179/ref=sr_1_21?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-21"
+          }
+        ],
+        "price": {
+          "symbol": "$",
+          "value": 14.99,
+          "currency": "USD",
+          "raw": "$14.99",
+          "name": "Paperback",
+          "asin": "1966417179",
+          "link": "https://www.amazon.com/Business-Apothecary-Linda-Blackmoor/dp/1966417179/ref=sr_1_21?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-21"
+        },
+        "page": 2,
+        "position_overall": 19
+      },
+      {
+        "position": 4,
+        "title": "The Herbalist's Guide: How to Build and Use Your Own Apothecary",
+        "asin": "1510778098",
+        "link": "https://www.amazon.com/Herbalists-Guide-Build-Your-Apothecary/dp/1510778098/ref=sr_1_22?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-22",
+        "availability": {
+          "raw": null
+        },
+        "categories": [
+          {
+            "name": "Books",
+            "id": "stripbooks"
+          }
+        ],
+        "image": "https://m.media-amazon.com/images/I/81qilbdPo7L._AC_UY218_.jpg",
+        "is_prime": true,
+        "is_amazon_fresh": false,
+        "is_whole_foods_market": false,
+        "rating": 4.9,
+        "ratings_total": 56,
+        "prices": [
+          {
+            "symbol": "$",
+            "value": 22.49,
+            "currency": "USD",
+            "raw": "$22.49",
+            "name": "Paperback",
+            "list_price": "$24.99",
+            "asin": "1510778098",
+            "link": "https://www.amazon.com/Herbalists-Guide-Build-Your-Apothecary/dp/1510778098/ref=sr_1_22?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-22"
+          },
+          {
+            "symbol": "$",
+            "value": 18.99,
+            "currency": "USD",
+            "raw": "$18.99",
+            "name": "Kindle",
+            "list_price": "$24.99",
+            "asin": "B0CL5CK3VR",
+            "link": "https://www.amazon.com/Herbalists-Guide-Build-Your-Apothecary-ebook/dp/B0CL5CK3VR/ref=sr_1_22?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-22"
+          }
+        ],
+        "price": {
+          "symbol": "$",
+          "value": 22.49,
+          "currency": "USD",
+          "raw": "$22.49",
+          "name": "Paperback",
+          "list_price": "$24.99",
+          "asin": "1510778098",
+          "link": "https://www.amazon.com/Herbalists-Guide-Build-Your-Apothecary/dp/1510778098/ref=sr_1_22?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-22"
+        },
+        "page": 2,
+        "position_overall": 20
+      },
+      {
+        "position": 5,
+        "title": "The Apothecary Series 3 Books Set",
+        "asin": "B0B3BDVD5Z",
+        "link": "https://www.amazon.com/Apothecary-3-Books-Set/dp/B0B3BDVD5Z/ref=sr_1_23?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-23",
+        "availability": {
+          "raw": "Only 10 left in stock - order soon."
+        },
+        "categories": [
+          {
+            "name": "Books",
+            "id": "stripbooks"
+          }
+        ],
+        "image": "https://m.media-amazon.com/images/I/918KriJ9FyL._AC_UY218_.jpg",
+        "is_prime": true,
+        "is_amazon_fresh": false,
+        "is_whole_foods_market": false,
+        "rating": 4.6,
+        "ratings_total": 5,
+        "prices": [
+          {
+            "symbol": "$",
+            "value": 29.91,
+            "currency": "USD",
+            "raw": "$29.91",
+            "name": "Paperback",
+            "is_primary": true,
+            "list_price": "$89.99",
+            "asin": "B0B3BDVD5Z",
+            "link": "https://www.amazon.com/Apothecary-3-Books-Set/dp/B0B3BDVD5Z/ref=sr_1_23?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-23"
+          },
+          {
+            "symbol": "$",
+            "value": 89.99,
+            "currency": "USD",
+            "raw": "$89.99",
+            "name": "Paperback",
+            "is_rrp": true,
+            "link": "https://www.amazon.com/Apothecary-3-Books-Set/dp/B0B3BDVD5Z/ref=sr_1_23?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-23",
+            "asin": "B0B3BDVD5Z"
+          }
+        ],
+        "price": {
+          "symbol": "$",
+          "value": 29.91,
+          "currency": "USD",
+          "raw": "$29.91",
+          "name": "Paperback",
+          "is_primary": true,
+          "list_price": "$89.99",
+          "asin": "B0B3BDVD5Z",
+          "link": "https://www.amazon.com/Apothecary-3-Books-Set/dp/B0B3BDVD5Z/ref=sr_1_23?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-23"
+        },
+        "page": 2,
+        "position_overall": 21
+      },
+      {
+        "position": 6,
+        "title": "The Ultimate Amish Apothecary Book For Modern Families: Step-by-Step Herbal Remedies, Preventive Health Tips and Amish Wisdom for Everyday Life",
+        "asin": "B0DTK4P3TT",
+        "link": "https://www.amazon.com/Ultimate-Amish-Apothecary-Modern-Families/dp/B0DTK4P3TT/ref=sr_1_24?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-24",
+        "availability": {
+          "raw": null
+        },
+        "categories": [
+          {
+            "name": "Books",
+            "id": "stripbooks"
+          }
+        ],
+        "image": "https://m.media-amazon.com/images/I/71+OJWYw79L._AC_UY218_.jpg",
+        "is_prime": true,
+        "is_amazon_fresh": false,
+        "is_whole_foods_market": false,
+        "rating": 5,
+        "ratings_total": 25,
+        "prices": [
+          {
+            "symbol": "$",
+            "value": 25.98,
+            "currency": "USD",
+            "raw": "$25.98",
+            "name": "Paperback",
+            "list_price": "$28.87",
+            "asin": "B0DTK4P3TT",
+            "link": "https://www.amazon.com/Ultimate-Amish-Apothecary-Modern-Families/dp/B0DTK4P3TT/ref=sr_1_24?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-24"
+          },
+          {
+            "symbol": "$",
+            "value": 0,
+            "currency": "USD",
+            "raw": "$0.00",
+            "name": "Kindle",
+            "list_price": "$9.99",
+            "asin": "B0DTB5T7F8",
+            "link": "https://www.amazon.com/Ultimate-Amish-Apothecary-Modern-Families-ebook/dp/B0DTB5T7F8/ref=sr_1_24?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-24"
+          }
+        ],
+        "price": {
+          "symbol": "$",
+          "value": 25.98,
+          "currency": "USD",
+          "raw": "$25.98",
+          "name": "Paperback",
+          "list_price": "$28.87",
+          "asin": "B0DTK4P3TT",
+          "link": "https://www.amazon.com/Ultimate-Amish-Apothecary-Modern-Families/dp/B0DTK4P3TT/ref=sr_1_24?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-24"
+        },
+        "page": 2,
+        "position_overall": 22
+      },
+      {
+        "position": 7,
+        "title": "The Comprehensive Guide to Herbalism for Beginners: Grow Medicinal Herbs to Fill Your Herbalist Apothecary with Natural Herbal Remedies and Plant Medicine",
+        "asin": "B09YLR8SZK",
+        "link": "https://www.amazon.com/Comprehensive-Guide-Herbalism-Beginners-Apothecary/dp/B09YLR8SZK/ref=sr_1_25?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-25",
+        "availability": {
+          "raw": null
+        },
+        "categories": [
+          {
+            "name": "Books",
+            "id": "stripbooks"
+          }
+        ],
+        "image": "https://m.media-amazon.com/images/I/91xJ+rqwJvL._AC_UY218_.jpg",
+        "other_formats": [
+          {
+            "title": "Hardcover",
+            "link": "https://www.amazon.com/Comprehensive-Guide-Herbalism-Beginners-Apothecary/dp/1956493123/ref=sr_1_25?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-25",
+            "asin": "1956493123"
+          },
+          {
+            "title": "$44.99$44.99",
+            "link": "https://www.amazon.com/Comprehensive-Guide-Herbalism-Beginners-Apothecary/dp/1956493123/ref=sr_1_25?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-25",
+            "asin": "1956493123"
+          },
+          {
+            "title": "Kindle",
+            "link": "https://www.amazon.com/Comprehensive-Guide-Herbalism-Beginners-Apothecary-ebook/dp/B09SNWP8MP/ref=sr_1_25?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-25",
+            "asin": "B09SNWP8MP"
+          },
+          {
+            "title": "$9.99$9.99 Print List Price: $44.99$44.99",
+            "link": "https://www.amazon.com/Comprehensive-Guide-Herbalism-Beginners-Apothecary-ebook/dp/B09SNWP8MP/ref=sr_1_25?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-25",
+            "asin": "B09SNWP8MP"
+          }
+        ],
+        "is_prime": true,
+        "is_amazon_fresh": false,
+        "is_whole_foods_market": false,
+        "rating": 4.6,
+        "ratings_total": 76,
+        "prices": [
+          {
+            "symbol": "$",
+            "value": 0,
+            "currency": "USD",
+            "raw": "$0.00",
+            "name": "Audible Audiobook",
+            "list_price": "$15.56",
+            "asin": "B09YLR8SZK",
+            "link": "https://www.amazon.com/Comprehensive-Guide-Herbalism-Beginners-Apothecary/dp/B09YLR8SZK/ref=sr_1_25?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-25"
+          },
+          {
+            "symbol": "$",
+            "value": 44.99,
+            "currency": "USD",
+            "raw": "$44.99",
+            "name": "Hardcover",
+            "list_price": "$43.73",
+            "asin": "1956493123",
+            "link": "https://www.amazon.com/Comprehensive-Guide-Herbalism-Beginners-Apothecary/dp/1956493123/ref=sr_1_25?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-25"
+          },
+          {
+            "symbol": "$",
+            "value": 9.99,
+            "currency": "USD",
+            "raw": "$9.99",
+            "name": "Kindle",
+            "list_price": "$44.99",
+            "asin": "B09SNWP8MP",
+            "link": "https://www.amazon.com/Comprehensive-Guide-Herbalism-Beginners-Apothecary-ebook/dp/B09SNWP8MP/ref=sr_1_25?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-25"
+          }
+        ],
+        "price": {
+          "symbol": "$",
+          "value": 0,
+          "currency": "USD",
+          "raw": "$0.00",
+          "name": "Audible Audiobook",
+          "list_price": "$15.56",
+          "asin": "B09YLR8SZK",
+          "link": "https://www.amazon.com/Comprehensive-Guide-Herbalism-Beginners-Apothecary/dp/B09YLR8SZK/ref=sr_1_25?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-25"
+        },
+        "page": 2,
+        "position_overall": 23
+      },
+      {
+        "position": 8,
+        "title": "The Apothecary Diaries: Volume 1 (Light Novel) (The Apothecary Diaries (Light Novel))",
+        "asin": "B0953NMHMW",
+        "link": "https://www.amazon.com/Apothecary-Diaries-Light-Novel-ebook/dp/B0953NMHMW/ref=sr_1_26?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-26",
+        "availability": {
+          "raw": null
+        },
+        "categories": [
+          {
+            "name": "Books",
+            "id": "stripbooks"
+          }
+        ],
+        "image": "https://m.media-amazon.com/images/I/91yTsBLvNOS._AC_UY218_.jpg",
+        "bestseller": {
+          "link": "https://www.amazon.com/Apothecary-Diaries-Light-Novel-ebook/dp/B0953NMHMW/ref=sr_1_26?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-26",
+          "category": "Teen & Young Adult Light Novel (Ranobe) eBooks"
+        },
+        "other_formats": [
+          {
+            "title": "Paperback",
+            "link": "https://www.amazon.com/Apothecary-Diaries-01-Light-Novel/dp/1646092724/ref=sr_1_26?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-26",
+            "asin": "1646092724"
+          },
+          {
+            "title": "$17.09$17.09 List: $18.99$18.99",
+            "link": "https://www.amazon.com/Apothecary-Diaries-01-Light-Novel/dp/1646092724/ref=sr_1_26?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-26",
+            "asin": "1646092724"
+          }
+        ],
+        "is_prime": true,
+        "is_amazon_fresh": false,
+        "is_whole_foods_market": false,
+        "rating": 4.8,
+        "ratings_total": 1716,
+        "prices": [
+          {
+            "symbol": "$",
+            "value": 7.99,
+            "currency": "USD",
+            "raw": "$7.99",
+            "name": "Kindle",
+            "list_price": "$18.99",
+            "asin": "B0953NMHMW",
+            "link": "https://www.amazon.com/Apothecary-Diaries-Light-Novel-ebook/dp/B0953NMHMW/ref=sr_1_26?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-26"
+          },
+          {
+            "symbol": "$",
+            "value": 17.09,
+            "currency": "USD",
+            "raw": "$17.09",
+            "name": "Paperback",
+            "list_price": "$18.99",
+            "asin": "1646092724",
+            "link": "https://www.amazon.com/Apothecary-Diaries-01-Light-Novel/dp/1646092724/ref=sr_1_26?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-26"
+          }
+        ],
+        "price": {
+          "symbol": "$",
+          "value": 7.99,
+          "currency": "USD",
+          "raw": "$7.99",
+          "name": "Kindle",
+          "list_price": "$18.99",
+          "asin": "B0953NMHMW",
+          "link": "https://www.amazon.com/Apothecary-Diaries-Light-Novel-ebook/dp/B0953NMHMW/ref=sr_1_26?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-26"
+        },
+        "page": 2,
+        "position_overall": 24
+      },
+      {
+        "position": 9,
+        "title": "Ancient Home Remedies: 250 Complete Collection of Holistic Herbal and Natural Antibiotics For a Non-Toxic Lifestyle (Forgotten Home Apothecary Book & the holistic guide to good health)",
+        "asin": "9695492983",
+        "link": "https://www.amazon.com/Ancient-Home-Remedies-Collection-Antibiotics/dp/9695492983/ref=sr_1_29?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqZkfg0fTjbgcrhAViFnVgoB78-Ec-tQzXxtL9-Xq_nF17l0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.ZdA98HDdGWn1L9ii5GjnjgAwKGV_yJilYTW0uDy6hOg&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-29",
+        "availability": {
+          "raw": null
+        },
+        "categories": [
+          {
+            "name": "Books",
+            "id": "stripbooks"
+          }
+        ],
+        "image": "https://m.media-amazon.com/images/I/71ctlB3fmtL._AC_UY218_.jpg",
+        "is_prime": true,
+        "is_amazon_fresh": false,
+        "is_whole_foods_market": false,
+        "rating": 4,
+        "ratings_total": 49,
+        "prices": [
+          {
+            "symbol": "$",
+            "value": 26.99,
+            "currency": "USD",
+            "raw": "$26.99",
+            "name": "Paperback",
+            "list_price": "$29.99",
+            "asin": "9695492983",
+            "link": "https://www.amazon.com/Ancient-Home-Remedies-Collection-Antibiotics/dp/9695492983/ref=sr_1_29?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqZkfg0fTjbgcrhAViFnVgoB78-Ec-tQzXxtL9-Xq_nF17l0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.ZdA98HDdGWn1L9ii5GjnjgAwKGV_yJilYTW0uDy6hOg&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-29"
+          },
+          {
+            "symbol": "$",
+            "value": 0.99,
+            "currency": "USD",
+            "raw": "$0.99",
+            "name": "Kindle",
+            "list_price": "$29.99",
+            "asin": "B0DRVGKCS7",
+            "link": "https://www.amazon.com/Ancient-Remedies-Apothecary-Complete-Collection-ebook/dp/B0DRVGKCS7/ref=sr_1_29?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqZkfg0fTjbgcrhAViFnVgoB78-Ec-tQzXxtL9-Xq_nF17l0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.ZdA98HDdGWn1L9ii5GjnjgAwKGV_yJilYTW0uDy6hOg&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-29"
+          }
+        ],
+        "price": {
+          "symbol": "$",
+          "value": 26.99,
+          "currency": "USD",
+          "raw": "$26.99",
+          "name": "Paperback",
+          "list_price": "$29.99",
+          "asin": "9695492983",
+          "link": "https://www.amazon.com/Ancient-Home-Remedies-Collection-Antibiotics/dp/9695492983/ref=sr_1_29?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqZkfg0fTjbgcrhAViFnVgoB78-Ec-tQzXxtL9-Xq_nF17l0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.ZdA98HDdGWn1L9ii5GjnjgAwKGV_yJilYTW0uDy6hOg&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-29"
+        },
+        "page": 2,
+        "position_overall": 25
+      },
+      {
+        "position": 10,
+        "title": "Ancient Apothecary: Herbs, Roots, Flowers, & More for Natural Home Remedies",
+        "asin": "B0DNR8D92T",
+        "link": "https://www.amazon.com/Ancient-Apothecary-Flowers-Natural-Remedies/dp/B0DNR8D92T/ref=sr_1_30?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-30",
+        "availability": {
+          "raw": null
+        },
+        "categories": [
+          {
+            "name": "Books",
+            "id": "stripbooks"
+          }
+        ],
+        "image": "https://m.media-amazon.com/images/I/81O8qJ6w4OL._AC_UY218_.jpg",
+        "other_formats": [
+          {
+            "title": "Hardcover",
+            "link": "https://www.amazon.com/Ancient-Apothecary-Flowers-Natural-Remedies/dp/B0DNSVR9RN/ref=sr_1_30?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-30",
+            "asin": "B0DNSVR9RN"
+          }
+        ],
+        "is_prime": true,
+        "is_amazon_fresh": false,
+        "is_whole_foods_market": false,
+        "rating": 4.5,
+        "ratings_total": 26,
+        "prices": [
+          {
+            "symbol": "$",
+            "value": 9.99,
+            "currency": "USD",
+            "raw": "$9.99",
+            "name": "Paperback",
+            "asin": "B0DNR8D92T",
+            "link": "https://www.amazon.com/Ancient-Apothecary-Flowers-Natural-Remedies/dp/B0DNR8D92T/ref=sr_1_30?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-30"
+          },
+          {
+            "symbol": "$",
+            "value": 0,
+            "currency": "USD",
+            "raw": "$0.00",
+            "name": "Kindle",
+            "list_price": "$3.99",
+            "asin": "B0DMY6QMTK",
+            "link": "https://www.amazon.com/Ancient-Apothecary-Flowers-Natural-Remedies-ebook/dp/B0DMY6QMTK/ref=sr_1_30?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-30"
+          },
+          {
+            "symbol": "$",
+            "value": 22.99,
+            "currency": "USD",
+            "raw": "$22.99",
+            "name": "Hardcover",
+            "list_price": "$35",
+            "asin": "B0DNSVR9RN",
+            "link": "https://www.amazon.com/Ancient-Apothecary-Flowers-Natural-Remedies/dp/B0DNSVR9RN/ref=sr_1_30?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-30"
+          }
+        ],
+        "price": {
+          "symbol": "$",
+          "value": 9.99,
+          "currency": "USD",
+          "raw": "$9.99",
+          "name": "Paperback",
+          "asin": "B0DNR8D92T",
+          "link": "https://www.amazon.com/Ancient-Apothecary-Flowers-Natural-Remedies/dp/B0DNR8D92T/ref=sr_1_30?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-30"
+        },
+        "page": 2,
+        "position_overall": 26
+      },
+      {
+        "position": 11,
+        "title": "The Apothecary Diaries 13 (Manga)",
+        "asin": "164609347X",
+        "link": "https://www.amazon.com/Apothecary-Diaries-13-Manga/dp/164609347X/ref=sr_1_31?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-31",
+        "availability": {
+          "raw": null
+        },
+        "categories": [
+          {
+            "name": "Books",
+            "id": "stripbooks"
+          }
+        ],
+        "image": "https://m.media-amazon.com/images/I/912EscjsZ3L._AC_UY218_.jpg",
+        "bestseller": {
+          "link": "https://www.amazon.com/Apothecary-Diaries-13-Manga/dp/164609347X/ref=sr_1_31?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-31",
+          "category": "Seinen Manga"
+        },
+        "is_prime": true,
+        "is_amazon_fresh": false,
+        "is_whole_foods_market": false,
+        "prices": [
+          {
+            "symbol": "$",
+            "value": 11.69,
+            "currency": "USD",
+            "raw": "$11.69",
+            "name": "Paperback",
+            "list_price": "$12.99",
+            "asin": "164609347X",
+            "link": "https://www.amazon.com/Apothecary-Diaries-13-Manga/dp/164609347X/ref=sr_1_31?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-31"
+          },
+          {
+            "symbol": "$",
+            "value": 7.99,
+            "currency": "USD",
+            "raw": "$7.99",
+            "name": "Kindle",
+            "asin": "B0D65QG8M3",
+            "link": "https://www.amazon.com/Apothecary-Diaries-13-Manga-ebook/dp/B0D65QG8M3/ref=sr_1_31?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-31"
+          }
+        ],
+        "price": {
+          "symbol": "$",
+          "value": 11.69,
+          "currency": "USD",
+          "raw": "$11.69",
+          "name": "Paperback",
+          "list_price": "$12.99",
+          "asin": "164609347X",
+          "link": "https://www.amazon.com/Apothecary-Diaries-13-Manga/dp/164609347X/ref=sr_1_31?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-31"
+        },
+        "page": 2,
+        "position_overall": 27
+      },
+      {
+        "position": 12,
+        "title": "The Rebel's Apothecary: A Practical Guide to the Healing Magic of Cannabis, CBD, and Mushrooms",
+        "asin": "0593086570",
+        "link": "https://www.amazon.com/Rebels-Apothecary-Practical-Cannabis-Mushrooms/dp/0593086570/ref=sr_1_32?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negSs0pnz-glR11AR2D0MCW62vYxBmy25Uy-1faMHqymd69QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.eLQvCeJm8Jd9dTCtgVXv9YHW7QXRx9dIolDUDHiZvFM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-32",
+        "availability": {
+          "raw": null
+        },
+        "categories": [
+          {
+            "name": "Books",
+            "id": "stripbooks"
+          }
+        ],
+        "image": "https://m.media-amazon.com/images/I/91-jLNOYwML._AC_UY218_.jpg",
+        "other_formats": [
+          {
+            "title": "Spiral-bound,",
+            "link": "https://www.amazon.com/Rebels-Apothecary-Practical-Cannabis-Mushrooms/dp/1974809986/ref=sr_1_32?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negSs0pnz-glR11AR2D0MCW62vYxBmy25Uy-1faMHqymd69QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.eLQvCeJm8Jd9dTCtgVXv9YHW7QXRx9dIolDUDHiZvFM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-32",
+            "asin": "1974809986"
+          },
+          {
+            "title": "Audio CD",
+            "link": "https://www.amazon.com/Rebels-Apothecary-Practical-Cannabis-Mushrooms/dp/1094154466/ref=sr_1_32?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negSs0pnz-glR11AR2D0MCW62vYxBmy25Uy-1faMHqymd69QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.eLQvCeJm8Jd9dTCtgVXv9YHW7QXRx9dIolDUDHiZvFM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-32",
+            "asin": "1094154466"
+          },
+          {
+            "title": "Kindle",
+            "link": "https://www.amazon.com/Rebels-Apothecary-Practical-Cannabis-Mushrooms-ebook/dp/B082H2P7KL/ref=sr_1_32?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negSs0pnz-glR11AR2D0MCW62vYxBmy25Uy-1faMHqymd69QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.eLQvCeJm8Jd9dTCtgVXv9YHW7QXRx9dIolDUDHiZvFM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-32",
+            "asin": "B082H2P7KL"
+          }
+        ],
+        "is_prime": true,
+        "is_amazon_fresh": false,
+        "is_whole_foods_market": false,
+        "rating": 4.8,
+        "ratings_total": 689,
+        "prices": [
+          {
+            "symbol": "$",
+            "value": 19.53,
+            "currency": "USD",
+            "raw": "$19.53",
+            "name": "Paperback",
+            "list_price": "$21.00",
+            "asin": "0593086570",
+            "link": "https://www.amazon.com/Rebels-Apothecary-Practical-Cannabis-Mushrooms/dp/0593086570/ref=sr_1_32?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negSs0pnz-glR11AR2D0MCW62vYxBmy25Uy-1faMHqymd69QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.eLQvCeJm8Jd9dTCtgVXv9YHW7QXRx9dIolDUDHiZvFM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-32"
+          },
+          {
+            "symbol": "$",
+            "value": 0,
+            "currency": "USD",
+            "raw": "$0.00",
+            "name": "Audible Audiobook",
+            "list_price": "$14.12",
+            "asin": "B08375R1D8",
+            "link": "https://www.amazon.com/Rebels-Apothecary-Practical-Cannabis-Mushrooms/dp/B08375R1D8/ref=sr_1_32?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negSs0pnz-glR11AR2D0MCW62vYxBmy25Uy-1faMHqymd69QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.eLQvCeJm8Jd9dTCtgVXv9YHW7QXRx9dIolDUDHiZvFM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-32"
+          },
+          {
+            "symbol": "$",
+            "value": 9.99,
+            "currency": "USD",
+            "raw": "$9.99",
+            "name": "Kindle",
+            "asin": "B082H2P7KL",
+            "link": "https://www.amazon.com/Rebels-Apothecary-Practical-Cannabis-Mushrooms-ebook/dp/B082H2P7KL/ref=sr_1_32?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negSs0pnz-glR11AR2D0MCW62vYxBmy25Uy-1faMHqymd69QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.eLQvCeJm8Jd9dTCtgVXv9YHW7QXRx9dIolDUDHiZvFM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-32"
+          }
+        ],
+        "price": {
+          "symbol": "$",
+          "value": 19.53,
+          "currency": "USD",
+          "raw": "$19.53",
+          "name": "Paperback",
+          "list_price": "$21.00",
+          "asin": "0593086570",
+          "link": "https://www.amazon.com/Rebels-Apothecary-Practical-Cannabis-Mushrooms/dp/0593086570/ref=sr_1_32?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negSs0pnz-glR11AR2D0MCW62vYxBmy25Uy-1faMHqymd69QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.eLQvCeJm8Jd9dTCtgVXv9YHW7QXRx9dIolDUDHiZvFM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-32"
+        },
+        "page": 2,
+        "position_overall": 28
+      },
+      {
+        "position": 13,
+        "title": "The Essential Home Apothecary; 250 Healing Remedies at Your Fingertips",
+        "asin": "B0DRVTVGSB",
+        "link": "https://www.amazon.com/Essential-Apothecary-Healing-Remedies-Fingertips/dp/B0DRVTVGSB/ref=sr_1_33?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-33",
+        "availability": {
+          "raw": null
+        },
+        "categories": [
+          {
+            "name": "Books",
+            "id": "stripbooks"
+          }
+        ],
+        "image": "https://m.media-amazon.com/images/I/71TLNc-KmgL._AC_UY218_.jpg",
+        "is_prime": true,
+        "is_amazon_fresh": false,
+        "is_whole_foods_market": false,
+        "rating": 3.1,
+        "ratings_total": 4,
+        "prices": [
+          {
+            "symbol": "$",
+            "value": 19.99,
+            "currency": "USD",
+            "raw": "$19.99",
+            "name": "Paperback",
+            "asin": "B0DRVTVGSB",
+            "link": "https://www.amazon.com/Essential-Apothecary-Healing-Remedies-Fingertips/dp/B0DRVTVGSB/ref=sr_1_33?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-33"
+          }
+        ],
+        "price": {
+          "symbol": "$",
+          "value": 19.99,
+          "currency": "USD",
+          "raw": "$19.99",
+          "name": "Paperback",
+          "asin": "B0DRVTVGSB",
+          "link": "https://www.amazon.com/Essential-Apothecary-Healing-Remedies-Fingertips/dp/B0DRVTVGSB/ref=sr_1_33?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-33"
+        },
+        "page": 2,
+        "position_overall": 29
+      },
+      {
+        "position": 14,
+        "title": "From Garden to Apothecary: A Beginner's Journey Into Herbal Remedies: Easily navigate the basics to identify, prepare & safely use herbs to manage ... A Beginners Journey in Herbal Remedies)",
+        "asin": "B0DM1WPTT6",
+        "link": "https://www.amazon.com/Garden-Apothecary-Beginners-Remedies-navigate/dp/B0DM1WPTT6/ref=sr_1_34?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-34",
+        "availability": {
+          "raw": null
+        },
+        "categories": [
+          {
+            "name": "Books",
+            "id": "stripbooks"
+          }
+        ],
+        "image": "https://m.media-amazon.com/images/I/61rvrQfT0sL._AC_UY218_.jpg",
+        "other_formats": [
+          {
+            "title": "Hardcover",
+            "link": "https://www.amazon.com/Garden-Apothecary-Beginners-Remedies-navigate/dp/B0DMK94X3P/ref=sr_1_34?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-34",
+            "asin": "B0DMK94X3P"
+          },
+          {
+            "title": "Audible Audiobook",
+            "link": "https://www.amazon.com/Garden-Apothecary-Beginners-Remedies-Navigate/dp/B0DT4W65ZZ/ref=sr_1_34?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-34",
+            "asin": "B0DT4W65ZZ"
+          }
+        ],
+        "is_prime": true,
+        "is_amazon_fresh": false,
+        "is_whole_foods_market": false,
+        "rating": 4.8,
+        "ratings_total": 527,
+        "prices": [
+          {
+            "symbol": "$",
+            "value": 16.99,
+            "currency": "USD",
+            "raw": "$16.99",
+            "name": "Paperback",
+            "asin": "B0DM1WPTT6",
+            "link": "https://www.amazon.com/Garden-Apothecary-Beginners-Remedies-navigate/dp/B0DM1WPTT6/ref=sr_1_34?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-34"
+          },
+          {
+            "symbol": "$",
+            "value": 0,
+            "currency": "USD",
+            "raw": "$0.00",
+            "name": "Kindle",
+            "list_price": "$9.99",
+            "asin": "B0D3JJS7J1",
+            "link": "https://www.amazon.com/Garden-Apothecary-Beginners-Remedies-navigate-ebook/dp/B0D3JJS7J1/ref=sr_1_34?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-34"
+          },
+          {
+            "symbol": "$",
+            "value": 0,
+            "currency": "USD",
+            "raw": "$0.00",
+            "name": "Audible Audiobook",
+            "list_price": "$19.95",
+            "asin": "B0DT4W65ZZ",
+            "link": "https://www.amazon.com/Garden-Apothecary-Beginners-Remedies-Navigate/dp/B0DT4W65ZZ/ref=sr_1_34?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-34"
+          }
+        ],
+        "price": {
+          "symbol": "$",
+          "value": 16.99,
+          "currency": "USD",
+          "raw": "$16.99",
+          "name": "Paperback",
+          "asin": "B0DM1WPTT6",
+          "link": "https://www.amazon.com/Garden-Apothecary-Beginners-Remedies-navigate/dp/B0DM1WPTT6/ref=sr_1_34?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-34"
+        },
+        "page": 2,
+        "position_overall": 30
+      },
+      {
+        "position": 15,
+        "title": "The Apothecary Diaries: Volume 14 (Light Novel) (The Apothecary Diaries (Light Novel))",
+        "asin": "B0DSHVCQLZ",
+        "link": "https://www.amazon.com/Apothecary-Diaries-14-Light-Novel-ebook/dp/B0DSHVCQLZ/ref=sr_1_35?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-35",
+        "availability": {
+          "raw": null
+        },
+        "categories": [
+          {
+            "name": "Books",
+            "id": "stripbooks"
+          }
+        ],
+        "image": "https://m.media-amazon.com/images/I/81-e8fb22GL._AC_UY218_.jpg",
+        "is_prime": false,
+        "is_amazon_fresh": false,
+        "is_whole_foods_market": false,
+        "prices": [
+          {
+            "symbol": "$",
+            "value": 7.99,
+            "currency": "USD",
+            "raw": "$7.99",
+            "name": "Kindle Edition",
+            "asin": "B0DSHVCQLZ",
+            "link": "https://www.amazon.com/Apothecary-Diaries-14-Light-Novel-ebook/dp/B0DSHVCQLZ/ref=sr_1_35?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-35"
+          }
+        ],
+        "price": {
+          "symbol": "$",
+          "value": 7.99,
+          "currency": "USD",
+          "raw": "$7.99",
+          "name": "Kindle Edition",
+          "asin": "B0DSHVCQLZ",
+          "link": "https://www.amazon.com/Apothecary-Diaries-14-Light-Novel-ebook/dp/B0DSHVCQLZ/ref=sr_1_35?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-35"
+        },
+        "page": 2,
+        "position_overall": 31
+      },
+      {
+        "position": 16,
+        "title": "The 5-in-1 Home Apothecary: 500+ Natural Remedies for Living Long, Ageless Beauty & Stress Relief (Ancient Recipes for Holistic Wellness)",
+        "asin": "B0DY1Q8RQG",
+        "link": "https://www.amazon.com/5-1-Home-Apothecary-Remedies-ebook/dp/B0DY1Q8RQG/ref=sr_1_36?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-36",
+        "availability": {
+          "raw": null
+        },
+        "categories": [
+          {
+            "name": "Books",
+            "id": "stripbooks"
+          }
+        ],
+        "image": "https://m.media-amazon.com/images/I/81cJ4ng9RoL._AC_UY218_.jpg",
+        "is_prime": true,
+        "is_amazon_fresh": false,
+        "is_whole_foods_market": false,
+        "prices": [
+          {
+            "symbol": "$",
+            "value": 0,
+            "currency": "USD",
+            "raw": "$0.00",
+            "name": "Kindle",
+            "list_price": "$35",
+            "asin": "B0DY1Q8RQG",
+            "link": "https://www.amazon.com/5-1-Home-Apothecary-Remedies-ebook/dp/B0DY1Q8RQG/ref=sr_1_36?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-36"
+          },
+          {
+            "symbol": "$",
+            "value": 24,
+            "currency": "USD",
+            "raw": "$24.00",
+            "name": "Hardcover",
+            "list_price": "$35",
+            "asin": "B0DY1XYH81",
+            "link": "https://www.amazon.com/5-1-Home-Apothecary-Remedies/dp/B0DY1XYH81/ref=sr_1_36?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-36"
+          },
+          {
+            "symbol": "$",
+            "value": 18,
+            "currency": "USD",
+            "raw": "$18.00",
+            "name": "Paperback",
+            "list_price": "$35",
+            "asin": "B0DY2LYZR3",
+            "link": "https://www.amazon.com/5-1-Home-Apothecary-Remedies/dp/B0DY2LYZR3/ref=sr_1_36?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-36"
+          }
+        ],
+        "price": {
+          "symbol": "$",
+          "value": 0,
+          "currency": "USD",
+          "raw": "$0.00",
+          "name": "Kindle",
+          "list_price": "$35",
+          "asin": "B0DY1Q8RQG",
+          "link": "https://www.amazon.com/5-1-Home-Apothecary-Remedies-ebook/dp/B0DY1Q8RQG/ref=sr_1_36?dib=eyJ2IjoiMSJ9.rh_cprH-VX7Ee-bMhzhQAt_pTtswmVbjACjjAi5eI4nUUBX9qfEv8zOOpN2f9oM6d9k-YghVIiZ65id1aydGTq7b6qkjPBTlEdX3zFMgRqa6aq4YQd9F1qBtdB5vor0QPGaZhVX9ndkjRfrG96negbl0s8ojYZuQwQ8V34fs-FF4WzM7mu2Aldzb3MwAo_FV9QSQ4v_kMOAG8GhffLiBwy3JuRHrANiIpazkNQ_keIg.A5e9v4k-lCdx3z3XJCUy5O52hUbJqlOKRJcuSHK0PXM&dib_tag=se&keywords=Apothecary&qid=1740428240&s=books&sr=1-36"
+        },
+        "page": 2,
+        "position_overall": 32
+      }
+    ],
+    "search_information": {
+      "results_text_raw": "1-16 of over 7,000 results for \"Apothecary\"",
+      "results_begin": 1,
+      "results_end": 16,
+      "total_results": 7000,
+      "search_term": "Apothecary"
+    },
+    "category_information": {
+      "is_landing_page": false
+    },
+    "pagination": {
+      "pages": [
+        {
+          "current_page": 1,
+          "current_page_link": "https://www.amazon.com/s/?k=Apothecary&ref=nb_sb_noss_2&node=283155&page=1",
+          "next_page_link": "https://www.amazon.com/s/?k=Apothecary&ref=nb_sb_noss_2&node=283155&page=2",
+          "total_pages": 400
+        },
+        {
+          "current_page": 2,
+          "current_page_link": "https://www.amazon.com/s/?k=Apothecary&ref=nb_sb_noss_2&node=283155&page=2",
+          "next_page_link": "https://www.amazon.com/s/?k=Apothecary&ref=nb_sb_noss_2&node=283155&page=3",
+          "total_pages": 400
+        }
+      ]
+    },
+    "refinements": {
+      "prime": [
+        {
+          "name": "Free Shipping by Amazon",
+          "value": "n:283155||p_76/1250218011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cp_76%3A1250218011&dc&qid=1740428236&rnid=1250216011&ref=sr_nr_p_76_1&ds=v1%3AmF7rgdNzuhqfSMuN0YptVa9c1%2BiALmriUtn7s65Ak%2F0",
+          "refinement_display_name": "Prime"
+        }
+      ],
+      "departments": [
+        {
+          "name": "Books",
+          "value": "n/283155",
+          "refinement_display_name": "Departments"
+        },
+        {
+          "name": "Arts & Photography",
+          "value": "n/1",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A1&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_1&ds=v1%3AsHhLtECAm2HHbXkVyhCAcMNMiE9%2BFBMaZmXljmNfoWo",
+          "refinement_display_name": "Departments"
+        },
+        {
+          "name": "Biographies & Memoirs",
+          "value": "n/2",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A2&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_2&ds=v1%3Am9NZBkD7JsALy2W5DCpeUZr6JvKw8MG16nphIoqEPEc",
+          "refinement_display_name": "Departments"
+        },
+        {
+          "name": "Business & Money",
+          "value": "n/3",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A3&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_3&ds=v1%3Ah7mOu6YlO%2B6Oerd96%2FJGAKUS1iVa%2BfQchmKroeevuLs",
+          "refinement_display_name": "Departments"
+        },
+        {
+          "name": "Calendars",
+          "value": "n/3248857011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A3248857011&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_4&ds=v1%3AJVG8ffGu3vqeMj6qKoS%2BiJ4xcUijYQQW4X2hQezFd2E",
+          "refinement_display_name": "Departments"
+        },
+        {
+          "name": "Children's Books",
+          "value": "n/4",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A4&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_5&ds=v1%3A12mjIOnGW%2FxevBD6UxT4UNt7yOKdTY77TBv5eHE9e1A",
+          "refinement_display_name": "Departments"
+        },
+        {
+          "name": "Comics & Graphic Novels",
+          "value": "n/4366",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A4366&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_6&ds=v1%3AdQLBerAARw7tLFnLOK3o%2BO7H7x9pcbOBLrJeJpflALA",
+          "refinement_display_name": "Departments"
+        },
+        {
+          "name": "Computers & Technology",
+          "value": "n/5",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A5&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_7&ds=v1%3Ac8JWFgOSBvS5nLh4bxjhMQiMxcC9ogH0wMfEleizmXs",
+          "refinement_display_name": "Departments"
+        },
+        {
+          "name": "Cookbooks, Food & Wine",
+          "value": "n/6",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A6&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_8&ds=v1%3AKz9JHCiCRy3gFCy2ZpUHPwQ6rqLrp%2FVbWvy3q%2BmJBKk",
+          "refinement_display_name": "Departments"
+        },
+        {
+          "name": "Crafts, Hobbies & Home",
+          "value": "n/48",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A48&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_9&ds=v1%3ASHLTcMKX0s1YdD1VM9UO%2BQdkjRG058JjUF8w49A6Mnw",
+          "refinement_display_name": "Departments"
+        },
+        {
+          "name": "Education & Teaching",
+          "value": "n/8975347011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A8975347011&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_10&ds=v1%3AMsJ9W9fm82EIAynPBMcYwp5xZ7Jx%2FLwsG%2Fwbx4b4h4o",
+          "refinement_display_name": "Departments"
+        },
+        {
+          "name": "Engineering & Transportation",
+          "value": "n/173507",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A173507&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_11&ds=v1%3ADmfDpqtmEuxTUHRN7GuXNClaMGKfNInQoEhXLQtdSvg",
+          "refinement_display_name": "Departments"
+        },
+        {
+          "name": "Health, Fitness & Dieting",
+          "value": "n/10",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A10&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_12&ds=v1%3A67sR14lzIUrsRNxOTNmtxUUIzt1V2voRHCA0HjUyCYU",
+          "refinement_display_name": "Departments"
+        },
+        {
+          "name": "History",
+          "value": "n/9",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A9&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_13&ds=v1%3A%2B1V6wCcmK7kIYLXRc1BnYH04YgOn6tgpHXKry1lgTLs",
+          "refinement_display_name": "Departments"
+        },
+        {
+          "name": "Humor & Entertainment",
+          "value": "n/86",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A86&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_14&ds=v1%3AMsh03kvaq0eM4V6gfqasL5Fw8LkkspPcIHLKDnp4TX8",
+          "refinement_display_name": "Departments"
+        },
+        {
+          "name": "Law",
+          "value": "n/10777",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A10777&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_15&ds=v1%3AutI9F3nbVmUYNJGU%2B%2BfQqFvcvKTC14QUgms7ZT0xmEA",
+          "refinement_display_name": "Departments"
+        },
+        {
+          "name": "LGBTQ+ Books",
+          "value": "n/301889",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A301889&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_16&ds=v1%3AhPxJB7OzWN%2BqWG0hpcN5gIVZOPdm%2BtlSrZmQkA%2Bx7hA",
+          "refinement_display_name": "Departments"
+        },
+        {
+          "name": "Literature & Fiction",
+          "value": "n/17",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A17&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_17&ds=v1%3AuLBxJPy358C2GVqSFTkiA7klGi7NVvm3ZzFTyPf3ARc",
+          "refinement_display_name": "Departments"
+        },
+        {
+          "name": "Medical Books",
+          "value": "n/173514",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A173514&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_18&ds=v1%3AKXsVjRyAj3uDLbMMuGFdXmeA3J9%2B4qIauKMQQ6phuY4",
+          "refinement_display_name": "Departments"
+        },
+        {
+          "name": "Mystery, Thriller & Suspense",
+          "value": "n/18",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A18&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_19&ds=v1%3AL8a20NSbepOTDWi0Q4JAJNznecYvfH08bEKljGmIEVE",
+          "refinement_display_name": "Departments"
+        },
+        {
+          "name": "Parenting & Relationships",
+          "value": "n/20",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A20&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_20&ds=v1%3AueS%2Bpa4m3NEpHdj2FqI5sWN4g38%2BUL%2FC1zSkipbM2h8",
+          "refinement_display_name": "Departments"
+        },
+        {
+          "name": "Politics & Social Sciences",
+          "value": "n/3377866011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A3377866011&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_21&ds=v1%3AkNn4BfLBYuJLmjuxzGOHmJR7YhI9D5J5k416Bnze18o",
+          "refinement_display_name": "Departments"
+        },
+        {
+          "name": "Reference",
+          "value": "n/21",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A21&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_22&ds=v1%3AuoVclY0tjjJYzCKXku78cVfFttnttp2qb8Px7vE1zj8",
+          "refinement_display_name": "Departments"
+        },
+        {
+          "name": "Religion & Spirituality",
+          "value": "n/22",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A22&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_23&ds=v1%3A2rECd6%2BCavZVVBDJpHtJxdOzNePi46iSs7Nfr7jqhVU",
+          "refinement_display_name": "Departments"
+        },
+        {
+          "name": "Romance",
+          "value": "n/23",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A23&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_24&ds=v1%3A0LTXmZB5HWx9%2BUieq89v8qn%2BBOo9MtWrkFnYGLbTL4s",
+          "refinement_display_name": "Departments"
+        },
+        {
+          "name": "Science & Math",
+          "value": "n/75",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A75&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_25&ds=v1%3ARr5%2ByWEFD6aZAw6%2B6Ex52t6lAbfDJAxo6WfPPzK7DmM",
+          "refinement_display_name": "Departments"
+        },
+        {
+          "name": "Science Fiction & Fantasy",
+          "value": "n/25",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A25&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_26&ds=v1%3AnI2ADsgbH3lJzSKJdF0UqgVJRUgPRnpDtdu5GzaZRWo",
+          "refinement_display_name": "Departments"
+        },
+        {
+          "name": "Self-Help",
+          "value": "n/4736",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A4736&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_27&ds=v1%3AXqdT3of%2B%2FSmV7oWA0ZhxAGHbKqHkPH7a4aWAgakdZ4o",
+          "refinement_display_name": "Departments"
+        },
+        {
+          "name": "Sports & Outdoors",
+          "value": "n/26",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A26&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_28&ds=v1%3A9o1cg6EMCNDy%2Bz9HGbfjInVplTrksf1x4NMwGIj1nVE",
+          "refinement_display_name": "Departments"
+        },
+        {
+          "name": "Teen & Young Adult",
+          "value": "n/28",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A28&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_29&ds=v1%3AC5UPedUQywZ0rBvg1zlRzGPcoqg%2FVckvHqsBDVC0ExI",
+          "refinement_display_name": "Departments"
+        },
+        {
+          "name": "Test Preparation",
+          "value": "n/5267710011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A5267710011&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_30&ds=v1%3AaCA2MAtj8KEdZhCmitUDT62HV2cDY%2BVvfQATsUdqKVE",
+          "refinement_display_name": "Departments"
+        },
+        {
+          "name": "Travel",
+          "value": "n/27",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A27&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_31&ds=v1%3ABTZLQi55m3zQIzqpNIlYMK7efmKn61q3KjA%2F2paC1M4",
+          "refinement_display_name": "Departments"
+        }
+      ],
+      "child_categories": [
+        {
+          "name": "Arts & Photography",
+          "value": "n/1",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A1&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_1&ds=v1%3AsHhLtECAm2HHbXkVyhCAcMNMiE9%2BFBMaZmXljmNfoWo",
+          "refinement_display_name": "Child Categories"
+        },
+        {
+          "name": "Biographies & Memoirs",
+          "value": "n/2",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A2&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_2&ds=v1%3Am9NZBkD7JsALy2W5DCpeUZr6JvKw8MG16nphIoqEPEc",
+          "refinement_display_name": "Child Categories"
+        },
+        {
+          "name": "Business & Money",
+          "value": "n/3",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A3&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_3&ds=v1%3Ah7mOu6YlO%2B6Oerd96%2FJGAKUS1iVa%2BfQchmKroeevuLs",
+          "refinement_display_name": "Child Categories"
+        },
+        {
+          "name": "Calendars",
+          "value": "n/3248857011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A3248857011&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_4&ds=v1%3AJVG8ffGu3vqeMj6qKoS%2BiJ4xcUijYQQW4X2hQezFd2E",
+          "refinement_display_name": "Child Categories"
+        },
+        {
+          "name": "Children's Books",
+          "value": "n/4",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A4&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_5&ds=v1%3A12mjIOnGW%2FxevBD6UxT4UNt7yOKdTY77TBv5eHE9e1A",
+          "refinement_display_name": "Child Categories"
+        },
+        {
+          "name": "Comics & Graphic Novels",
+          "value": "n/4366",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A4366&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_6&ds=v1%3AdQLBerAARw7tLFnLOK3o%2BO7H7x9pcbOBLrJeJpflALA",
+          "refinement_display_name": "Child Categories"
+        },
+        {
+          "name": "Computers & Technology",
+          "value": "n/5",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A5&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_7&ds=v1%3Ac8JWFgOSBvS5nLh4bxjhMQiMxcC9ogH0wMfEleizmXs",
+          "refinement_display_name": "Child Categories"
+        },
+        {
+          "name": "Cookbooks, Food & Wine",
+          "value": "n/6",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A6&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_8&ds=v1%3AKz9JHCiCRy3gFCy2ZpUHPwQ6rqLrp%2FVbWvy3q%2BmJBKk",
+          "refinement_display_name": "Child Categories"
+        },
+        {
+          "name": "Crafts, Hobbies & Home",
+          "value": "n/48",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A48&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_9&ds=v1%3ASHLTcMKX0s1YdD1VM9UO%2BQdkjRG058JjUF8w49A6Mnw",
+          "refinement_display_name": "Child Categories"
+        },
+        {
+          "name": "Education & Teaching",
+          "value": "n/8975347011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A8975347011&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_10&ds=v1%3AMsJ9W9fm82EIAynPBMcYwp5xZ7Jx%2FLwsG%2Fwbx4b4h4o",
+          "refinement_display_name": "Child Categories"
+        },
+        {
+          "name": "Engineering & Transportation",
+          "value": "n/173507",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A173507&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_11&ds=v1%3ADmfDpqtmEuxTUHRN7GuXNClaMGKfNInQoEhXLQtdSvg",
+          "refinement_display_name": "Child Categories"
+        },
+        {
+          "name": "Health, Fitness & Dieting",
+          "value": "n/10",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A10&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_12&ds=v1%3A67sR14lzIUrsRNxOTNmtxUUIzt1V2voRHCA0HjUyCYU",
+          "refinement_display_name": "Child Categories"
+        },
+        {
+          "name": "History",
+          "value": "n/9",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A9&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_13&ds=v1%3A%2B1V6wCcmK7kIYLXRc1BnYH04YgOn6tgpHXKry1lgTLs",
+          "refinement_display_name": "Child Categories"
+        },
+        {
+          "name": "Humor & Entertainment",
+          "value": "n/86",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A86&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_14&ds=v1%3AMsh03kvaq0eM4V6gfqasL5Fw8LkkspPcIHLKDnp4TX8",
+          "refinement_display_name": "Child Categories"
+        },
+        {
+          "name": "Law",
+          "value": "n/10777",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A10777&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_15&ds=v1%3AutI9F3nbVmUYNJGU%2B%2BfQqFvcvKTC14QUgms7ZT0xmEA",
+          "refinement_display_name": "Child Categories"
+        },
+        {
+          "name": "LGBTQ+ Books",
+          "value": "n/301889",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A301889&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_16&ds=v1%3AhPxJB7OzWN%2BqWG0hpcN5gIVZOPdm%2BtlSrZmQkA%2Bx7hA",
+          "refinement_display_name": "Child Categories"
+        },
+        {
+          "name": "Literature & Fiction",
+          "value": "n/17",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A17&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_17&ds=v1%3AuLBxJPy358C2GVqSFTkiA7klGi7NVvm3ZzFTyPf3ARc",
+          "refinement_display_name": "Child Categories"
+        },
+        {
+          "name": "Medical Books",
+          "value": "n/173514",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A173514&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_18&ds=v1%3AKXsVjRyAj3uDLbMMuGFdXmeA3J9%2B4qIauKMQQ6phuY4",
+          "refinement_display_name": "Child Categories"
+        },
+        {
+          "name": "Mystery, Thriller & Suspense",
+          "value": "n/18",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A18&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_19&ds=v1%3AL8a20NSbepOTDWi0Q4JAJNznecYvfH08bEKljGmIEVE",
+          "refinement_display_name": "Child Categories"
+        },
+        {
+          "name": "Parenting & Relationships",
+          "value": "n/20",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A20&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_20&ds=v1%3AueS%2Bpa4m3NEpHdj2FqI5sWN4g38%2BUL%2FC1zSkipbM2h8",
+          "refinement_display_name": "Child Categories"
+        },
+        {
+          "name": "Politics & Social Sciences",
+          "value": "n/3377866011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A3377866011&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_21&ds=v1%3AkNn4BfLBYuJLmjuxzGOHmJR7YhI9D5J5k416Bnze18o",
+          "refinement_display_name": "Child Categories"
+        },
+        {
+          "name": "Reference",
+          "value": "n/21",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A21&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_22&ds=v1%3AuoVclY0tjjJYzCKXku78cVfFttnttp2qb8Px7vE1zj8",
+          "refinement_display_name": "Child Categories"
+        },
+        {
+          "name": "Religion & Spirituality",
+          "value": "n/22",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A22&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_23&ds=v1%3A2rECd6%2BCavZVVBDJpHtJxdOzNePi46iSs7Nfr7jqhVU",
+          "refinement_display_name": "Child Categories"
+        },
+        {
+          "name": "Romance",
+          "value": "n/23",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A23&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_24&ds=v1%3A0LTXmZB5HWx9%2BUieq89v8qn%2BBOo9MtWrkFnYGLbTL4s",
+          "refinement_display_name": "Child Categories"
+        },
+        {
+          "name": "Science & Math",
+          "value": "n/75",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A75&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_25&ds=v1%3ARr5%2ByWEFD6aZAw6%2B6Ex52t6lAbfDJAxo6WfPPzK7DmM",
+          "refinement_display_name": "Child Categories"
+        },
+        {
+          "name": "Science Fiction & Fantasy",
+          "value": "n/25",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A25&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_26&ds=v1%3AnI2ADsgbH3lJzSKJdF0UqgVJRUgPRnpDtdu5GzaZRWo",
+          "refinement_display_name": "Child Categories"
+        },
+        {
+          "name": "Self-Help",
+          "value": "n/4736",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A4736&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_27&ds=v1%3AXqdT3of%2B%2FSmV7oWA0ZhxAGHbKqHkPH7a4aWAgakdZ4o",
+          "refinement_display_name": "Child Categories"
+        },
+        {
+          "name": "Sports & Outdoors",
+          "value": "n/26",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A26&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_28&ds=v1%3A9o1cg6EMCNDy%2Bz9HGbfjInVplTrksf1x4NMwGIj1nVE",
+          "refinement_display_name": "Child Categories"
+        },
+        {
+          "name": "Teen & Young Adult",
+          "value": "n/28",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A28&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_29&ds=v1%3AC5UPedUQywZ0rBvg1zlRzGPcoqg%2FVckvHqsBDVC0ExI",
+          "refinement_display_name": "Child Categories"
+        },
+        {
+          "name": "Test Preparation",
+          "value": "n/5267710011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A5267710011&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_30&ds=v1%3AaCA2MAtj8KEdZhCmitUDT62HV2cDY%2BVvfQATsUdqKVE",
+          "refinement_display_name": "Child Categories"
+        },
+        {
+          "name": "Travel",
+          "value": "n/27",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A27&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_31&ds=v1%3ABTZLQi55m3zQIzqpNIlYMK7efmKn61q3KjA%2F2paC1M4",
+          "refinement_display_name": "Child Categories"
+        }
+      ],
+      "reviews": [
+        {
+          "name": "4 Stars & Up",
+          "value": "n:283155||p_72/1250221011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cp_72%3A1250221011&dc&qid=1740428236&rnid=1250219011&ref=sr_nr_p_72_1&ds=v1%3AgXjjFyaWVwbfYu3XWzuPAbVbPvHzNZV6HnYQoKg%2BbK0",
+          "refinement_display_name": "Reviews"
+        }
+      ],
+      "price": [
+        {
+          "name": "All Discounts",
+          "value": "n:283155||p_n_deal_type/23566065011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cp_n_deal_type%3A23566065011&dc&qid=1740428236&rnid=23566063011&ref=sr_nr_p_n_deal_type_1&ds=v1%3A%2BRmjJbp0czGfQja8VUdR2cyNtD%2FokZ7CPkk0%2FtcAyEc",
+          "refinement_display_name": "Price"
+        }
+      ],
+      "brand": [
+        {
+          "name": "Sacred Apothecary Series",
+          "value": "n:283155||p_lbr_books_series_browse-bin/Sacred Apothecary Series",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cp_lbr_books_series_browse-bin%3ASacred%2BApothecary%2BSeries&dc&qid=1740428236&rnid=3275128011&ref=sr_nr_p_lbr_books_series_browse-bin_1&ds=v1%3AGmpF%2BIf8md93EoJ9eOepG1GHmj2OM3W%2BHVOMnxw28%2Fc",
+          "refinement_display_name": "Brand"
+        },
+        {
+          "name": "The Apothecary Series",
+          "value": "n:283155||p_lbr_books_series_browse-bin/The Apothecary Series",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cp_lbr_books_series_browse-bin%3AThe%2BApothecary%2BSeries&dc&qid=1740428236&rnid=3275128011&ref=sr_nr_p_lbr_books_series_browse-bin_2&ds=v1%3Au0JgVbpizb0pIgDS1ltm6E0cFVTBJb3sdlnZQwTCmPY",
+          "refinement_display_name": "Brand"
+        }
+      ],
+      "eligible_for_free_shipping": [
+        {
+          "name": "Free Shipping by Amazon",
+          "value": "n:283155||p_76/1250218011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cp_76%3A1250218011&dc&qid=1740428236&rnid=1250216011&ref=sr_nr_p_76_1&ds=v1%3AmF7rgdNzuhqfSMuN0YptVa9c1%2BiALmriUtn7s65Ak%2F0",
+          "refinement_display_name": "Eligible for Free Shipping"
+        }
+      ],
+      "customer_reviews": [
+        {
+          "name": "4 Stars & Up",
+          "value": "n:283155||p_72/1250221011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cp_72%3A1250221011&dc&qid=1740428236&rnid=1250219011&ref=sr_nr_p_72_1&ds=v1%3AgXjjFyaWVwbfYu3XWzuPAbVbPvHzNZV6HnYQoKg%2BbK0",
+          "refinement_display_name": "Customer Reviews"
+        }
+      ],
+      "format": [
+        {
+          "name": "Paperback",
+          "value": "n:283155||p_n_feature_browse-bin/2656022011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cp_n_feature_browse-bin%3A2656022011&dc&qid=1740428236&rnid=618072011&ref=sr_nr_p_n_feature_browse-bin_1&ds=v1%3AyCUvj2UKtb3p7kbsgH%2BD%2FK8QlVcFLlQ6U7fKJ2D1sd8",
+          "refinement_display_name": "Format"
+        },
+        {
+          "name": "Hardcover",
+          "value": "n:283155||p_n_feature_browse-bin/2656020011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cp_n_feature_browse-bin%3A2656020011&dc&qid=1740428236&rnid=618072011&ref=sr_nr_p_n_feature_browse-bin_2&ds=v1%3Ad%2FMQR30tZn83xuipZGNMCs4d7VbaZMwuEeQ%2FALu1tPE",
+          "refinement_display_name": "Format"
+        },
+        {
+          "name": "Kindle Edition",
+          "value": "n:283155||p_n_feature_browse-bin/618073011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cp_n_feature_browse-bin%3A618073011&dc&qid=1740428236&rnid=618072011&ref=sr_nr_p_n_feature_browse-bin_3&ds=v1%3A0DphS77rvT4PM2mh8U92E4ptWWbkPQpK9raw%2F4v3lDs",
+          "refinement_display_name": "Format"
+        },
+        {
+          "name": "Large Print",
+          "value": "n:283155||p_n_feature_browse-bin/14725254011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cp_n_feature_browse-bin%3A14725254011&dc&qid=1740428236&rnid=618072011&ref=sr_nr_p_n_feature_browse-bin_4&ds=v1%3A8YbYJsnV0q5wx3Vo91RNQ4fVs8RqBDjRIdEnd7ERkIA",
+          "refinement_display_name": "Format"
+        },
+        {
+          "name": "Audible Audiobook",
+          "value": "n:283155||p_n_feature_browse-bin/1240885011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cp_n_feature_browse-bin%3A1240885011&dc&qid=1740428236&rnid=618072011&ref=sr_nr_p_n_feature_browse-bin_5&ds=v1%3AwOkI%2FcpXN%2FqQWMZfBM4YzCaUihD5jXr4sGOGE0T8PaQ",
+          "refinement_display_name": "Format"
+        },
+        {
+          "name": "Printed Access Code",
+          "value": "n:283155||p_n_feature_browse-bin/7114437011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cp_n_feature_browse-bin%3A7114437011&dc&qid=1740428236&rnid=618072011&ref=sr_nr_p_n_feature_browse-bin_6&ds=v1%3AOj1lhFqt5GQ2JGE%2BQS0r%2FJ77M1%2Fosbki%2BgHNCJ1E4jc",
+          "refinement_display_name": "Format"
+        },
+        {
+          "name": "Audio CD",
+          "value": "n:283155||p_n_feature_browse-bin/2682077011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cp_n_feature_browse-bin%3A2682077011&dc&qid=1740428236&rnid=618072011&ref=sr_nr_p_n_feature_browse-bin_7&ds=v1%3AglVpBEwt140%2Fdow%2B0mPOOa00Mi5jsbvddTWno9TnDQI",
+          "refinement_display_name": "Format"
+        },
+        {
+          "name": "Spiral-bound",
+          "value": "n:283155||p_n_feature_browse-bin/23488071011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cp_n_feature_browse-bin%3A23488071011&dc&qid=1740428236&rnid=618072011&ref=sr_nr_p_n_feature_browse-bin_8&ds=v1%3A4OSCVXv5hQAwAl2RattMBEVBxg03UBg09sJ%2BsHR9%2BM4",
+          "refinement_display_name": "Format"
+        }
+      ],
+      "department": [
+        {
+          "name": "Books",
+          "value": "n/283155",
+          "refinement_display_name": "Department"
+        },
+        {
+          "name": "Arts & Photography",
+          "value": "n/1",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A1&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_1&ds=v1%3AsHhLtECAm2HHbXkVyhCAcMNMiE9%2BFBMaZmXljmNfoWo",
+          "refinement_display_name": "Department"
+        },
+        {
+          "name": "Biographies & Memoirs",
+          "value": "n/2",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A2&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_2&ds=v1%3Am9NZBkD7JsALy2W5DCpeUZr6JvKw8MG16nphIoqEPEc",
+          "refinement_display_name": "Department"
+        },
+        {
+          "name": "Business & Money",
+          "value": "n/3",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A3&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_3&ds=v1%3Ah7mOu6YlO%2B6Oerd96%2FJGAKUS1iVa%2BfQchmKroeevuLs",
+          "refinement_display_name": "Department"
+        },
+        {
+          "name": "Calendars",
+          "value": "n/3248857011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A3248857011&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_4&ds=v1%3AJVG8ffGu3vqeMj6qKoS%2BiJ4xcUijYQQW4X2hQezFd2E",
+          "refinement_display_name": "Department"
+        },
+        {
+          "name": "Children's Books",
+          "value": "n/4",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A4&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_5&ds=v1%3A12mjIOnGW%2FxevBD6UxT4UNt7yOKdTY77TBv5eHE9e1A",
+          "refinement_display_name": "Department"
+        },
+        {
+          "name": "Comics & Graphic Novels",
+          "value": "n/4366",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A4366&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_6&ds=v1%3AdQLBerAARw7tLFnLOK3o%2BO7H7x9pcbOBLrJeJpflALA",
+          "refinement_display_name": "Department"
+        },
+        {
+          "name": "Computers & Technology",
+          "value": "n/5",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A5&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_7&ds=v1%3Ac8JWFgOSBvS5nLh4bxjhMQiMxcC9ogH0wMfEleizmXs",
+          "refinement_display_name": "Department"
+        },
+        {
+          "name": "Cookbooks, Food & Wine",
+          "value": "n/6",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A6&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_8&ds=v1%3AKz9JHCiCRy3gFCy2ZpUHPwQ6rqLrp%2FVbWvy3q%2BmJBKk",
+          "refinement_display_name": "Department"
+        },
+        {
+          "name": "Crafts, Hobbies & Home",
+          "value": "n/48",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A48&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_9&ds=v1%3ASHLTcMKX0s1YdD1VM9UO%2BQdkjRG058JjUF8w49A6Mnw",
+          "refinement_display_name": "Department"
+        },
+        {
+          "name": "Education & Teaching",
+          "value": "n/8975347011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A8975347011&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_10&ds=v1%3AMsJ9W9fm82EIAynPBMcYwp5xZ7Jx%2FLwsG%2Fwbx4b4h4o",
+          "refinement_display_name": "Department"
+        },
+        {
+          "name": "Engineering & Transportation",
+          "value": "n/173507",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A173507&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_11&ds=v1%3ADmfDpqtmEuxTUHRN7GuXNClaMGKfNInQoEhXLQtdSvg",
+          "refinement_display_name": "Department"
+        },
+        {
+          "name": "Health, Fitness & Dieting",
+          "value": "n/10",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A10&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_12&ds=v1%3A67sR14lzIUrsRNxOTNmtxUUIzt1V2voRHCA0HjUyCYU",
+          "refinement_display_name": "Department"
+        },
+        {
+          "name": "History",
+          "value": "n/9",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A9&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_13&ds=v1%3A%2B1V6wCcmK7kIYLXRc1BnYH04YgOn6tgpHXKry1lgTLs",
+          "refinement_display_name": "Department"
+        },
+        {
+          "name": "Humor & Entertainment",
+          "value": "n/86",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A86&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_14&ds=v1%3AMsh03kvaq0eM4V6gfqasL5Fw8LkkspPcIHLKDnp4TX8",
+          "refinement_display_name": "Department"
+        },
+        {
+          "name": "Law",
+          "value": "n/10777",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A10777&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_15&ds=v1%3AutI9F3nbVmUYNJGU%2B%2BfQqFvcvKTC14QUgms7ZT0xmEA",
+          "refinement_display_name": "Department"
+        },
+        {
+          "name": "LGBTQ+ Books",
+          "value": "n/301889",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A301889&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_16&ds=v1%3AhPxJB7OzWN%2BqWG0hpcN5gIVZOPdm%2BtlSrZmQkA%2Bx7hA",
+          "refinement_display_name": "Department"
+        },
+        {
+          "name": "Literature & Fiction",
+          "value": "n/17",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A17&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_17&ds=v1%3AuLBxJPy358C2GVqSFTkiA7klGi7NVvm3ZzFTyPf3ARc",
+          "refinement_display_name": "Department"
+        },
+        {
+          "name": "Medical Books",
+          "value": "n/173514",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A173514&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_18&ds=v1%3AKXsVjRyAj3uDLbMMuGFdXmeA3J9%2B4qIauKMQQ6phuY4",
+          "refinement_display_name": "Department"
+        },
+        {
+          "name": "Mystery, Thriller & Suspense",
+          "value": "n/18",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A18&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_19&ds=v1%3AL8a20NSbepOTDWi0Q4JAJNznecYvfH08bEKljGmIEVE",
+          "refinement_display_name": "Department"
+        },
+        {
+          "name": "Parenting & Relationships",
+          "value": "n/20",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A20&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_20&ds=v1%3AueS%2Bpa4m3NEpHdj2FqI5sWN4g38%2BUL%2FC1zSkipbM2h8",
+          "refinement_display_name": "Department"
+        },
+        {
+          "name": "Politics & Social Sciences",
+          "value": "n/3377866011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A3377866011&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_21&ds=v1%3AkNn4BfLBYuJLmjuxzGOHmJR7YhI9D5J5k416Bnze18o",
+          "refinement_display_name": "Department"
+        },
+        {
+          "name": "Reference",
+          "value": "n/21",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A21&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_22&ds=v1%3AuoVclY0tjjJYzCKXku78cVfFttnttp2qb8Px7vE1zj8",
+          "refinement_display_name": "Department"
+        },
+        {
+          "name": "Religion & Spirituality",
+          "value": "n/22",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A22&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_23&ds=v1%3A2rECd6%2BCavZVVBDJpHtJxdOzNePi46iSs7Nfr7jqhVU",
+          "refinement_display_name": "Department"
+        },
+        {
+          "name": "Romance",
+          "value": "n/23",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A23&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_24&ds=v1%3A0LTXmZB5HWx9%2BUieq89v8qn%2BBOo9MtWrkFnYGLbTL4s",
+          "refinement_display_name": "Department"
+        },
+        {
+          "name": "Science & Math",
+          "value": "n/75",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A75&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_25&ds=v1%3ARr5%2ByWEFD6aZAw6%2B6Ex52t6lAbfDJAxo6WfPPzK7DmM",
+          "refinement_display_name": "Department"
+        },
+        {
+          "name": "Science Fiction & Fantasy",
+          "value": "n/25",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A25&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_26&ds=v1%3AnI2ADsgbH3lJzSKJdF0UqgVJRUgPRnpDtdu5GzaZRWo",
+          "refinement_display_name": "Department"
+        },
+        {
+          "name": "Self-Help",
+          "value": "n/4736",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A4736&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_27&ds=v1%3AXqdT3of%2B%2FSmV7oWA0ZhxAGHbKqHkPH7a4aWAgakdZ4o",
+          "refinement_display_name": "Department"
+        },
+        {
+          "name": "Sports & Outdoors",
+          "value": "n/26",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A26&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_28&ds=v1%3A9o1cg6EMCNDy%2Bz9HGbfjInVplTrksf1x4NMwGIj1nVE",
+          "refinement_display_name": "Department"
+        },
+        {
+          "name": "Teen & Young Adult",
+          "value": "n/28",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A28&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_29&ds=v1%3AC5UPedUQywZ0rBvg1zlRzGPcoqg%2FVckvHqsBDVC0ExI",
+          "refinement_display_name": "Department"
+        },
+        {
+          "name": "Test Preparation",
+          "value": "n/5267710011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A5267710011&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_30&ds=v1%3AaCA2MAtj8KEdZhCmitUDT62HV2cDY%2BVvfQATsUdqKVE",
+          "refinement_display_name": "Department"
+        },
+        {
+          "name": "Travel",
+          "value": "n/27",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cn%3A27&dc&qid=1740428236&rnid=283155&ref=sr_nr_n_31&ds=v1%3ABTZLQi55m3zQIzqpNIlYMK7efmKn61q3KjA%2F2paC1M4",
+          "refinement_display_name": "Department"
+        }
+      ],
+      "deals_and_discounts": [
+        {
+          "name": "All Discounts",
+          "value": "n:283155||p_n_deal_type/23566065011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cp_n_deal_type%3A23566065011&dc&qid=1740428236&rnid=23566063011&ref=sr_nr_p_n_deal_type_1&ds=v1%3A%2BRmjJbp0czGfQja8VUdR2cyNtD%2FokZ7CPkk0%2FtcAyEc",
+          "refinement_display_name": "Deals & Discounts"
+        }
+      ],
+      "condition": [
+        {
+          "name": "Collectible",
+          "value": "n:283155||p_n_condition-type/1294422011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cp_n_condition-type%3A1294422011&dc&qid=1740428236&rnid=1294421011&ref=sr_nr_p_n_condition-type_1&ds=v1%3AG6ab9oCOYRC%2BZ5CfPR1zlBcgdBWEuD684Dg6TfVIfGY",
+          "refinement_display_name": "Condition"
+        },
+        {
+          "name": "New",
+          "value": "n:283155||p_n_condition-type/1294423011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cp_n_condition-type%3A1294423011&dc&qid=1740428236&rnid=1294421011&ref=sr_nr_p_n_condition-type_2&ds=v1%3Av1V5r4xnAD6HO%2B9PkO%2FJiBYyUi5Hhptm5q8OWrLUi1I",
+          "refinement_display_name": "Condition"
+        },
+        {
+          "name": "Used",
+          "value": "n:283155||p_n_condition-type/1294425011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cp_n_condition-type%3A1294425011&dc&qid=1740428236&rnid=1294421011&ref=sr_nr_p_n_condition-type_3&ds=v1%3Ac19K%2BoWP4qZp977uFDq%2BTnJ%2Fr9zyDXze54C2a7fMHJ0",
+          "refinement_display_name": "Condition"
+        }
+      ],
+      "kindle_unlimited": [
+        {
+          "name": "Kindle Unlimited Eligible",
+          "value": "n:283155||p_n_feature_twenty_browse-bin/13054657011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cp_n_feature_twenty_browse-bin%3A13054657011&dc&qid=1740428236&rnid=13054642011&ref=sr_nr_p_n_feature_twenty_browse-bin_1&ds=v1%3ArZRK6CbWvC52m3WUcy05aOC0K%2BS%2BRtgvNPIvEG%2BF2Zg",
+          "refinement_display_name": "Kindle Unlimited"
+        }
+      ],
+      "language": [
+        {
+          "name": "English",
+          "value": "n:283155||p_n_feature_twenty-five_browse-bin/3291437011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cp_n_feature_twenty-five_browse-bin%3A3291437011&dc&qid=1740428236&rnid=3291435011&ref=sr_nr_p_n_feature_twenty-five_browse-bin_1&ds=v1%3A3PwWLQAdlmM7DwolgMdAQyMOMRiKDdorGxVoF%2FTbut0",
+          "refinement_display_name": "Language"
+        },
+        {
+          "name": "German",
+          "value": "n:283155||p_n_feature_twenty-five_browse-bin/3291436011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cp_n_feature_twenty-five_browse-bin%3A3291436011&dc&qid=1740428236&rnid=3291435011&ref=sr_nr_p_n_feature_twenty-five_browse-bin_2&ds=v1%3ABIRjrJcZf5Ftwge%2FG7kJcGVbp1ozMddeQmf%2FdMhkcOM",
+          "refinement_display_name": "Language"
+        },
+        {
+          "name": "Spanish",
+          "value": "n:283155||p_n_feature_twenty-five_browse-bin/3291439011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cp_n_feature_twenty-five_browse-bin%3A3291439011&dc&qid=1740428236&rnid=3291435011&ref=sr_nr_p_n_feature_twenty-five_browse-bin_3&ds=v1%3A1XkRowz2yg7Qo3n5RluNH3bccUaazwc48suyvzFhFjY",
+          "refinement_display_name": "Language"
+        },
+        {
+          "name": "Italian",
+          "value": "n:283155||p_n_feature_twenty-five_browse-bin/3291440011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cp_n_feature_twenty-five_browse-bin%3A3291440011&dc&qid=1740428236&rnid=3291435011&ref=sr_nr_p_n_feature_twenty-five_browse-bin_4&ds=v1%3ADDTUkijCyna7GHHpqtVxjTZiOn7b0c6m9RQAb1MvkmM",
+          "refinement_display_name": "Language"
+        },
+        {
+          "name": "Russian",
+          "value": "n:283155||p_n_feature_twenty-five_browse-bin/3291441011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cp_n_feature_twenty-five_browse-bin%3A3291441011&dc&qid=1740428236&rnid=3291435011&ref=sr_nr_p_n_feature_twenty-five_browse-bin_5&ds=v1%3AZuCIZS8krvvxYi90OLx6cMpgUY4USHu3wNz%2BT0cVu%2BY",
+          "refinement_display_name": "Language"
+        },
+        {
+          "name": "Middle English",
+          "value": "n:283155||p_n_feature_twenty-five_browse-bin/3291508011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cp_n_feature_twenty-five_browse-bin%3A3291508011&dc&qid=1740428236&rnid=3291435011&ref=sr_nr_p_n_feature_twenty-five_browse-bin_6&ds=v1%3AiowSu2puwMuF0svoNXzARgbYh9GL7bVbe1VF%2FK3HKWc",
+          "refinement_display_name": "Language"
+        }
+      ],
+      "new_releases": [
+        {
+          "name": "Last 30 days",
+          "value": "n:283155||p_n_publication_date/1250226011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cp_n_publication_date%3A1250226011&dc&qid=1740428236&rnid=1250225011&ref=sr_nr_p_n_publication_date_1&ds=v1%3Ankbhb978tlY7US78MCoWQKa%2BVNhNcc%2Fm30MLrJxB7gg",
+          "refinement_display_name": "New Releases"
+        },
+        {
+          "name": "Last 90 days",
+          "value": "n:283155||p_n_publication_date/1250227011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cp_n_publication_date%3A1250227011&dc&qid=1740428236&rnid=1250225011&ref=sr_nr_p_n_publication_date_2&ds=v1%3AXpTSQjjphc62tRPQxtdj%2F3DoqheV9KQAAm90iQT56qk",
+          "refinement_display_name": "New Releases"
+        },
+        {
+          "name": "Coming Soon",
+          "value": "n:283155||p_n_publication_date/1250228011",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cp_n_publication_date%3A1250228011&dc&qid=1740428236&rnid=1250225011&ref=sr_nr_p_n_publication_date_3&ds=v1%3A8yQdSigiPmg681JAmbftmI3aJhWAK8adEPU3kJ%2F2MtY",
+          "refinement_display_name": "New Releases"
+        }
+      ],
+      "author": [
+        {
+          "name": "Grace Hearthstone",
+          "value": "n:283155||p_lbr_one_browse-bin/Grace Hearthstone",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cp_lbr_one_browse-bin%3AGrace%2BHearthstone&dc&qid=1740428236&rnid=2272759011&ref=sr_nr_p_lbr_one_browse-bin_1&ds=v1%3AIKKLETCg%2FDY9p7GXudSC6srlM47nCd4Qw2EFIBwtiuY",
+          "refinement_display_name": "Author"
+        },
+        {
+          "name": "Cedar Fireheart",
+          "value": "n:283155||p_lbr_one_browse-bin/Cedar Fireheart",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cp_lbr_one_browse-bin%3ACedar%2BFireheart&dc&qid=1740428236&rnid=2272759011&ref=sr_nr_p_lbr_one_browse-bin_2&ds=v1%3AOQcYVVmUptxYrvNatz4yitY6SrVl15CYrXpQ6m7dwAU",
+          "refinement_display_name": "Author"
+        },
+        {
+          "name": "Lorriane Anderson",
+          "value": "n:283155||p_lbr_one_browse-bin/Lorriane Anderson",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cp_lbr_one_browse-bin%3ALorriane%2BAnderson&dc&qid=1740428236&rnid=2272759011&ref=sr_nr_p_lbr_one_browse-bin_3&ds=v1%3AfCjNU7vKEfefY7TgOd7PZ6NnhYEQp5P%2F99apXGAzbUc",
+          "refinement_display_name": "Author"
+        },
+        {
+          "name": "Sarah Penner",
+          "value": "n:283155||p_lbr_one_browse-bin/Sarah Penner",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cp_lbr_one_browse-bin%3ASarah%2BPenner&dc&qid=1740428236&rnid=2272759011&ref=sr_nr_p_lbr_one_browse-bin_4&ds=v1%3ACRZd59NGeQcqWGAK3xKXEUj%2F70ca4PcH6w29whMIFEs",
+          "refinement_display_name": "Author"
+        }
+      ],
+      "book_series": [
+        {
+          "name": "Sacred Apothecary Series",
+          "value": "n:283155||p_lbr_books_series_browse-bin/Sacred Apothecary Series",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cp_lbr_books_series_browse-bin%3ASacred%2BApothecary%2BSeries&dc&qid=1740428236&rnid=3275128011&ref=sr_nr_p_lbr_books_series_browse-bin_1&ds=v1%3AGmpF%2BIf8md93EoJ9eOepG1GHmj2OM3W%2BHVOMnxw28%2Fc",
+          "refinement_display_name": "Book Series"
+        },
+        {
+          "name": "The Apothecary Series",
+          "value": "n:283155||p_lbr_books_series_browse-bin/The Apothecary Series",
+          "link": "https://www.amazon.com/s?k=Apothecary&i=stripbooks&rh=n%3A283155%2Cp_lbr_books_series_browse-bin%3AThe%2BApothecary%2BSeries&dc&qid=1740428236&rnid=3275128011&ref=sr_nr_p_lbr_books_series_browse-bin_2&ds=v1%3Au0JgVbpizb0pIgDS1ltm6E0cFVTBJb3sdlnZQwTCmPY",
+          "refinement_display_name": "Book Series"
+        }
+      ]
+    },
+    "video_blocks": [
+      {
+        "video_link": "https://m.media-amazon.com/images/S/al-na-9d5791cf-3faf/3343605f-7dc3-4cba-b582-76293c7d1ecd.mp4/productVideoOptimized.mp4",
+        "thumbnail_link": "https://m.media-amazon.com/images/S/al-na-9d5791cf-3faf/3343605f-7dc3-4cba-b582-76293c7d1ecd.mp4/r/THUMBNAIL_360P_FRAME_3_CAPTURE_2.JPG",
+        "campaign_id": "300040058091306",
+        "advertiser_id": "33340359705",
+        "has_audio": true,
+        "products": [
+          {
+            "asin": "B0DJQVYV99",
+            "link": "https://www.amazon.com/dp/B0DJQVYV99",
+            "title": "Forgotten Home Apothecary : 250 Powerful Remedies at Your Fingertips",
+            "rating": 4.5,
+            "ratings_total": 2174,
+            "price": {
+              "value": 37,
+              "currency": "USD",
+              "symbol": "$",
+              "raw": "37"
+            }
+          }
+        ]
+      },
+      {
+        "video_link": "https://m.media-amazon.com/images/S/al-na-9d5791cf-3faf/ae1d7966-8195-4257-9234-ba7e8228d91c.mp4/productVideoOptimized.mp4",
+        "thumbnail_link": "https://m.media-amazon.com/images/S/al-na-9d5791cf-3faf/ae1d7966-8195-4257-9234-ba7e8228d91c.mp4/r/THUMBNAIL_360P_FRAME_3_CAPTURE_2.JPG",
+        "campaign_id": "300041703044006",
+        "advertiser_id": "33340359705",
+        "has_audio": true,
+        "products": [
+          {
+            "asin": "B0DJQVYV99",
+            "link": "https://www.amazon.com/dp/B0DJQVYV99",
+            "title": "Forgotten Home Apothecary : 250 Powerful Remedies at Your Fingertips",
+            "rating": 4.5,
+            "ratings_total": 2174,
+            "price": {
+              "value": 37,
+              "currency": "USD",
+              "symbol": "$",
+              "raw": "37"
+            }
+          }
+        ]
+      }
+    ]
+  }
