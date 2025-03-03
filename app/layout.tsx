@@ -7,8 +7,8 @@ import type React from "react"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Publisher Insights Platform",
-  description: "Trend analysis and AI-powered content generation for publishers",
+  title: "PubInsights - Book Research and Publishing Insights",
+  description: "Research book trends, generate outlines, and get publishing insights",
 }
 
 export default function RootLayout({

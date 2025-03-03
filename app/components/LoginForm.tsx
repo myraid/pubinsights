@@ -1,30 +1,71 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { useAuth } from "../context/AuthContext"
 import { Card, Title, TextInput } from "@tremor/react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
+import { updateProfile } from "firebase/auth"
+import { doc, setDoc } from "firebase/firestore"
+import { auth, db } from "../lib/firebase/config"
 
 export default function LoginForm({ initialMode = "login" }: { initialMode?: "login" | "signup" }) {
   const [isLogin, setIsLogin] = useState(initialMode === "login")
-  const [username, setUsername] = useState("")
+  const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const { login, signup } = useAuth()
+  const [fullName, setFullName] = useState("")
+  const [error, setError] = useState("")
+  const [loading, setLoading] = useState(false)
+  const { signIn, signUp, signInWithGoogle } = useAuth()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const success = true // Always succeed for testing
-    if (success) {
-      await login(username, password)
+    setError("")
+    setLoading(true)
+
+    try {
+      if (isLogin) {
+        // Handle login
+        await signIn(email, password)
+      } else {
+        // Handle signup
+        const userCredential = await signUp(email, password)
+        
+        // Update user profile with full name
+        if (userCredential.user) {
+          await updateProfile(userCredential.user, {
+            displayName: fullName
+          })
+
+          // Create user document with additional info
+          await setDoc(doc(db, 'users', userCredential.user.uid), {
+            email: userCredential.user.email,
+            displayName: fullName,
+            isPremium: false,
+            operationsCount: 0,
+            createdAt: new Date(),
+            updatedAt: new Date()
+          })
+        }
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred')
+    } finally {
+      setLoading(false)
     }
   }
 
-  const handleGoogleSignIn = () => {
-    // Implement Google Sign-In logic here
-    console.log("Google Sign-In clicked")
+  const handleGoogleSignIn = async () => {
+    try {
+      setError("")
+      setLoading(true)
+      await signInWithGoogle()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -41,11 +82,27 @@ export default function LoginForm({ initialMode = "login" }: { initialMode?: "lo
         </div>
         <Title className="text-center mb-6 text-primary">{isLogin ? "Login" : "Sign Up"} to Publisher Insights</Title>
 
+        {error && (
+          <div className="mb-4 p-2 bg-red-100 border border-red-400 text-red-700 rounded">
+            {error}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-4">
+          {!isLogin && (
+            <TextInput
+              placeholder="Full Name"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              required={!isLogin}
+              className="border-primary"
+            />
+          )}
           <TextInput
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
             className="border-primary"
           />
@@ -57,8 +114,12 @@ export default function LoginForm({ initialMode = "login" }: { initialMode?: "lo
             required
             className="border-primary"
           />
-          <Button type="submit" className="w-full bg-primary text-white hover:bg-primary/90">
-            {isLogin ? "Login" : "Sign Up"}
+          <Button 
+            type="submit" 
+            className="w-full bg-primary text-white hover:bg-primary/90"
+            disabled={loading}
+          >
+            {loading ? "Please wait..." : (isLogin ? "Login" : "Sign Up")}
           </Button>
         </form>
 
@@ -71,11 +132,19 @@ export default function LoginForm({ initialMode = "login" }: { initialMode?: "lo
           variant="outline"
           className="w-full mt-4 bg-white text-primary hover:bg-primary/10"
           onClick={handleGoogleSignIn}
+          disabled={loading}
         >
-          Sign in with Google
+          {loading ? "Please wait..." : "Sign in with Google"}
         </Button>
 
-        <button onClick={() => setIsLogin(!isLogin)} className="mt-4 text-primary hover:underline w-full text-center">
+        <button 
+          onClick={() => {
+            setIsLogin(!isLogin)
+            setError("")
+          }} 
+          className="mt-4 text-primary hover:underline w-full text-center"
+          disabled={loading}
+        >
           {isLogin ? "Need an account? Sign up" : "Already have an account? Login"}
         </button>
       </Card>

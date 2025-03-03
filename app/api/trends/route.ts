@@ -59,7 +59,7 @@ export async function GET(request: Request) {
     const webSearchData = await googleTrends.interestOverTime(options)
       .then(res => {
         console.log('web search res size: ', res.length);
-        console.log('web search res : ', res);
+        //console.log('web search res : ', res);
         try {
           const parsed = JSON.parse(res);
           // Apply smoothing to the timeline data

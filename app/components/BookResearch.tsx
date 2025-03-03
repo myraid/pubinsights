@@ -7,7 +7,6 @@ import { Star, ChevronDown, TrendingUp, ShoppingCart } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
-import { createClient } from '@supabase/supabase-js'
 import googleTrends from 'google-trends-api'
 import axios from 'axios'
 import dynamic from 'next/dynamic'
@@ -18,12 +17,6 @@ const Plot = dynamic(() => import('react-plotly.js'), {
   ssr: false,
   loading: () => <div>Loading Plot...</div>
 })
-
-// Initialize Supabase client
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
 
 const wellKnownPublishers = [
   "Penguin Random House",

@@ -1,96 +1,85 @@
 "use client"
 
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
-import type { User } from "../types"
+import { createContext, useContext, useEffect, useState } from "react"
+import {
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+  GoogleAuthProvider,
+  signInWithPopup,
+  User,
+  UserCredential
+} from "firebase/auth"
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore"
+import { auth, db } from "../lib/firebase/config"
 
 interface AuthContextType {
   user: User | null
-  login: (username: string, password: string) => Promise<boolean>
-  signup: (username: string, password: string) => Promise<boolean>
-  logout: () => void
+  loading: boolean
+  signIn: (email: string, password: string) => Promise<UserCredential>
+  signUp: (email: string, password: string) => Promise<UserCredential>
+  signInWithGoogle: () => Promise<UserCredential>
+  logout: () => Promise<void>
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined)
+const AuthContext = createContext<AuthContextType>({} as AuthContextType)
 
-export function AuthProvider({ children }: { children: ReactNode }) {
+export const useAuth = () => useContext(AuthContext)
+
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Check if there's a user in localStorage
-    const storedUser = localStorage.getItem("user")
-    if (storedUser) {
-      setUser(JSON.parse(storedUser))
-    }
-    setLoading(false)
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        setUser(user)
+        
+        // Check if user document exists
+        const userDoc = await getDoc(doc(db, 'users', user.uid))
+        
+        if (!userDoc.exists()) {
+          // Create new user document if it doesn't exist
+          await setDoc(doc(db, 'users', user.uid), {
+            email: user.email,
+            displayName: user.displayName,
+            isPremium: false,
+            operationsCount: 0,
+            createdAt: new Date(),
+            updatedAt: new Date()
+          })
+        }
+      } else {
+        setUser(null)
+      }
+      setLoading(false)
+    })
+
+    return () => unsubscribe()
   }, [])
 
-  const login = async (username: string, password: string) => {
-    // Always succeed for testing
-    const newUser = { username }
-    setUser(newUser)
-    localStorage.setItem("user", JSON.stringify(newUser))
-    return true
+  const signIn = async (email: string, password: string) => {
+    return signInWithEmailAndPassword(auth, email, password)
   }
 
-  const signup = async (username: string, password: string) => {
-    try {
-      const hashedPassword = await hashPassword(password)
-      await saveUser(username, hashedPassword)
-      const newUser = { username }
-      setUser(newUser)
-      localStorage.setItem("user", JSON.stringify(newUser))
-      return true
-    } catch (error) {
-      console.error("Signup error:", error)
-      return false
-    }
+  const signUp = async (email: string, password: string) => {
+    return createUserWithEmailAndPassword(auth, email, password)
   }
 
-  const logout = () => {
-    setUser(null)
-    localStorage.removeItem("user")
+  const signInWithGoogle = async () => {
+    const provider = new GoogleAuthProvider()
+    return signInWithPopup(auth, provider)
   }
 
-  if (loading) {
-    return <div>Loading...</div>
+  const logout = async () => {
+    await signOut(auth)
   }
 
-  return <AuthContext.Provider value={{ user, login, signup, logout }}>{children}</AuthContext.Provider>
-}
-
-export function useAuth() {
-  const context = useContext(AuthContext)
-  if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider")
-  }
-  return context
-}
-
-// Helper functions
-async function hashPassword(password: string): Promise<string> {
-  const encoder = new TextEncoder()
-  const data = encoder.encode(password)
-  const hash = await crypto.subtle.digest("SHA-256", data)
-  return Array.from(new Uint8Array(hash))
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("")
-}
-
-async function checkAuthentication(username: string, passwordHash: string): Promise<boolean> {
-  // In a real app, this would check against a database
-  const users = await loadUsers()
-  return users[username] === passwordHash
-}
-
-async function saveUser(username: string, passwordHash: string): Promise<void> {
-  const users = await loadUsers()
-  users[username] = passwordHash
-  localStorage.setItem("users", JSON.stringify(users))
-}
-
-async function loadUsers(): Promise<Record<string, string>> {
-  const users = localStorage.getItem("users")
-  return users ? JSON.parse(users) : {}
+  return (
+    <AuthContext.Provider value={{ user, loading, signIn, signUp, signInWithGoogle, logout }}>
+      {!loading && children}
+    </AuthContext.Provider>
+  )
 }
 
