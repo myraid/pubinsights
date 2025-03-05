@@ -1,43 +1,88 @@
 import { NextResponse } from 'next/server'
 
-interface OutlineSection {
+interface Chapter {
   title: string;
-  points: string[];
+  content: string[];
 }
 
-function parseOutlineContent(content: string): OutlineSection[] {
-  const sections: OutlineSection[] = [];
-  const lines = content.split('\n').filter(line => line.trim());
-  
-  let currentSection: OutlineSection | null = null;
-  
-  for (const line of lines) {
-    if (line.startsWith('### ')) {
-      // New chapter starts
-      if (currentSection) {
-        sections.push(currentSection);
+interface OutlineData {
+  title: string;
+  chapters: Chapter[];
+}
+
+function parseOutlineContent(title: string, content: string): OutlineData {
+  try {
+    // Split content into lines and process
+    const lines = content.split('\n').map(line => line.trim()).filter(line => line);
+    
+    // Process chapters
+    const chapters: Chapter[] = [];
+    let currentChapter: Partial<Chapter> = {};
+    let currentContent: string[] = [];
+    
+    // Handle first line as chapter if it's a chapter heading or contains "Introduction"
+    if (lines[0]) {
+      const chapterMatch = lines[0].match(/\*\*(.*?)\*\*/) || 
+                          lines[0].match(/^Chapter\s+\d+:(.+)/) || 
+                          lines[0].match(/^(.*?Introduction.*?)$/) ||
+                          lines[0].match(/^##(.+)$/);
+      if (chapterMatch) {
+        currentChapter = {
+          title: chapterMatch[1] ? chapterMatch[1].trim() : lines[0].trim()
+        };
       }
-      // Remove ### and ** from title
-      const title = line.replace('### ', '')
-        .replace(/\*\*$/, '')
-        .replace(/\*\*/g, '')
-        .replace(/^Chapter \d+: /, '');
-      
-      currentSection = { title, points: [] };
-    } else if (line.startsWith('- ') && currentSection) {
-      // Add point, removing bold markers
-      const point = line.replace('- ', '')
-        .replace(/\*\*$/, '')
-        .replace(/\*\*/g, '');
-      currentSection.points.push(point);
     }
-  }
 
-  if (currentSection) {
-    sections.push(currentSection);
-  }
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      
+      // Check for new chapter heading
+      const chapterMatch = line.match(/\*\*(.*?)\*\*/) || 
+                          line.match(/^Chapter\s+\d+:(.+)/) || 
+                          line.match(/^(.*?Introduction.*?)$/) ||
+                          line.match(/^##(.+)$/);
 
-  return sections;
+      if (chapterMatch) {  // Only process as new chapter if not first line
+        // Save previous chapter if exists
+        if (currentChapter.title && i > 0) {
+          chapters.push({
+            title: currentChapter.title,
+            content: currentContent
+          });
+        }
+        
+        // Start new chapter
+        currentChapter = {
+          title: chapterMatch[1] ? chapterMatch[1].trim() : line.trim()
+        };
+        currentContent = [];
+      } else  {
+        // Add bullet point as separate item with newline
+        currentContent.push(line+"\n");
+
+      }
+    }
+    
+    // Add the last chapter if exists
+    if (currentChapter.title) {  // Removed content length check to include chapters with no bullets
+      chapters.push({
+        title: currentChapter.title,
+        content: currentContent
+      });
+    }
+
+    if (chapters.length === 0) {
+      throw new Error('No chapters available in this outline.');
+    }
+
+    return {
+      title,
+      chapters
+    };
+  } catch (error) {
+    console.error('Error parsing outline content:', error);
+    throw new Error('Failed to parse outline content');
+  }
 }
 
 export async function POST(request: Request) {
@@ -62,13 +107,13 @@ export async function POST(request: Request) {
 
     const data = await response.json()
     const content = data[0]?.message?.content
-    
+
     if (!content) {
       throw new Error('Invalid response format')
     }
 
-    const parsedOutline = parseOutlineContent(content)
-    return NextResponse.json({ sections: parsedOutline })
+    const parsedOutline = parseOutlineContent(title, content)
+    return NextResponse.json({ outline: parsedOutline })
 
   } catch (error) {
     console.error('Error generating outline:', error)

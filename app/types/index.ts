@@ -17,39 +17,32 @@ export interface TimelineData {
 export interface TrendData {
   webSearch: {
     timelineData: Array<{
-      time: string
-      formattedTime: string
-      formattedAxisTime: string
-      value: number[]
-      hasData: boolean[]
-      formattedValue: string[]
-    }>
-  }
-  youtubeSearch: {
+      time: string;
+      value: number[];
+    }>;
+  };
+  youtube: {
     timelineData: Array<{
-      time: string
-      formattedTime: string
-      formattedAxisTime: string
-      value: number[]
-      hasData: boolean[]
-      formattedValue: string[]
-    }>
-  }
+      time: string;
+      value: number[];
+    }>;
+  };
 }
 
 export interface AmazonBook {
-  id: string
-  title: string
-  author: string
-  price: number
-  image: string
+  id: string;
+  title: string;
+  author: string;
+  price: number;
+  image: string;
   bsr: Array<{
-    rank: number
-    category: string
-  }>
-  categories: string[]
-  rating: number
-  reviewCount: number
-  publisher: string
-  url: string
+    rank: number;
+    category: string;
+  }>;
+  categories: string[];
+  rating: number;
+  reviewCount: number;
+  publisher: string;
+  publicationYear?: number;
+  isIndie: boolean;
 } 

@@ -8,7 +8,9 @@ import { Card } from "@/components/ui/card"
 import { useAuth } from "../context/AuthContext"
 import { createProject, getUserProjects, getProject } from "../lib/firebase/services"
 import type { Project, BookOutline, RelatedBook } from "../types/firebase"
-import type { TrendData, AmazonBook } from "../types"
+import type { TrendData, AmazonBook } from "@/app/types/index"
+import Image from "next/image"
+import { toast } from "sonner"
 
 interface BookContent {
   research: {
@@ -20,7 +22,27 @@ interface BookContent {
 }
 
 interface ProjectWithContent extends Project {
-  content?: BookContent
+  content?: BookContent;
+  outlines?: {
+    title: string;
+    outline: {
+      title: string;
+      chapters: {
+        title: string;
+        content: string[];
+      }[];
+    };
+    createdAt: {
+      seconds: number;
+      nanoseconds: number;
+    };
+  }[];
+  relatedBooks?: RelatedBook[];
+  research?: {
+    keyword: string;
+    trendData: TrendData;
+    books: AmazonBook[];
+  }[];
 }
 
 const MyProjects: React.FC = () => {
@@ -30,6 +52,15 @@ const MyProjects: React.FC = () => {
   const [newProjectTitle, setNewProjectTitle] = useState("")
   const [loading, setLoading] = useState(true)
   const [isAddingProject, setIsAddingProject] = useState(false)
+
+  const showToast = (message: string) => {
+    toast(message, {
+      className: "bg-purple-50 text-purple-800 border-purple-200",
+      style: {
+        border: "1px solid #e9d8fd",
+      },
+    });
+  };
 
   // Fetch user's projects on component mount
   useEffect(() => {
@@ -42,7 +73,6 @@ const MyProjects: React.FC = () => {
 
       try {
         setLoading(true);
-        console.log('Starting project fetch for user:', user.uid);
         
         // Check if user.uid is defined
         if (!user.uid) {
@@ -50,7 +80,6 @@ const MyProjects: React.FC = () => {
         }
         
         const userProjects = await getUserProjects(user.uid);
-        console.log('Successfully fetched projects:', userProjects);
         
         if (!Array.isArray(userProjects)) {
           throw new Error('Fetched projects is not an array');
@@ -58,12 +87,12 @@ const MyProjects: React.FC = () => {
         
         setProjects(userProjects);
       } catch (error) {
-        console.error("Error in fetchProjects:", error);
+        //console.error("Error in fetchProjects:", error);
         if (error instanceof Error) {
-          console.error('Error details:', {
-            message: error.message,
-            stack: error.stack
-          });
+         // console.error('Error details:', {
+          // message: error.message,
+          // stack: error.stack
+          //});
           alert(`Failed to load projects: ${error.message}`);
         } else {
           alert('Failed to load projects. Please try refreshing the page.');
@@ -206,17 +235,148 @@ const MyProjects: React.FC = () => {
             )}
 
             {/* Book Outlines Section */}
-            {selectedProject.bookOutlines && selectedProject.bookOutlines.length > 0 && (
+            {selectedProject.outlines && selectedProject.outlines.length > 0 && (
+              <Card className="p-4">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold text-purple-800 flex items-center">
+                    <FileText className="w-5 h-5 mr-2" /> Book Outlines
+                  </h3>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-purple-800 hover:text-purple-900"
+                    onClick={() => {
+                      const outlineText = selectedProject.outlines
+                        ?.map(outline => JSON.stringify(outline, null, 2))
+                        .join('\n\n') || '';
+                      navigator.clipboard.writeText(outlineText);
+                      showToast('Outline copied to clipboard!');
+                    }}
+                  >
+                    Copy All Outlines
+                  </Button>
+                </div>
+                <div className="space-y-6">
+                  {selectedProject.outlines.map((outline, index) => (
+                    <Card key={index} className="bg-white shadow-sm">
+                      <div className="p-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <h4 className="font-semibold text-purple-800">{outline.title}</h4>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-purple-800 hover:text-purple-900"
+                            onClick={() => {
+                              navigator.clipboard.writeText(JSON.stringify(outline, null, 2));
+                              showToast('Outline copied to clipboard!');
+                            }}
+                          >
+                            Copy
+                          </Button>
+                        </div>
+                        <div className="prose prose-sm max-w-none">
+                          <h3 className="text-2xl font-bold mb-2">{outline.outline.title}</h3>
+                          {outline.outline.chapters && outline.outline.chapters.length > 0 ? (
+                            outline.outline.chapters.map((chapter) => (
+                              <div key={chapter.title} className="mt-6">
+                                <h4 className="text-xl text-black font-bold mb-2">
+                                  {chapter.title}
+                                </h4>
+                                <div className="ml-4 space-y-2">
+                                  {chapter.content.map((content, contentIndex) => (
+                                    <p key={contentIndex} className="text-gray-700">
+                                      {content}
+                                    </p>
+                                  ))}
+                                </div>
+                              </div>
+                            ))
+                          ) : (
+                            <p className="text-gray-600">No chapters available in this outline.</p>
+                          )}
+                        </div>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              </Card>
+            )}
+
+            {/* Research Section */}
+            {selectedProject.research && selectedProject.research.length > 0 && (
               <Card className="p-4">
                 <h3 className="text-lg font-semibold text-purple-800 mb-2 flex items-center">
-                  <FileText className="w-5 h-5 mr-2" /> Book Outlines
+                  <TrendingUp className="w-5 h-5 mr-2" /> Market Research
                 </h3>
-                <div className="space-y-4">
-                  {selectedProject.bookOutlines.map((outline, index) => (
-                    <div key={outline.id || index} className="bg-gray-50 p-3 rounded">
-                      <pre className="whitespace-pre-wrap text-sm">
-                        {outline.content}
-                      </pre>
+                <div className="space-y-6">
+                  {selectedProject.research.map((research, index) => (
+                    <div key={index} className="space-y-4">
+                      <h4 className="font-medium text-gray-900">Research for "{research.keyword}"</h4>
+                      <div className="space-y-4">
+                        {research.books.map((book) => (
+                          <div key={book.id} className="flex gap-4 p-4 border rounded-lg hover:bg-primary/5 transition-colors duration-200">
+                            <div className="relative w-24 h-32 flex-shrink-0">
+                              <Image
+                                src={book.image}
+                                alt={book.title}
+                                fill
+                                className="object-cover rounded"
+                              />
+                            </div>
+                            <div className="flex-grow">
+                              <div className="flex items-center gap-2 mb-2">
+                                <h5 
+                                  className="font-semibold text-lg text-black hover:text-primary cursor-pointer"
+                                  onClick={() => window.open(`https://www.amazon.com/dp/${book.id}`, "_blank")}
+                                >
+                                  {book.title}
+                                </h5>
+                                {book.isIndie && (
+                                  <span className="bg-primary/10 text-primary px-2 py-1 rounded text-xs font-medium">
+                                    Indie Author
+                                  </span>
+                                )}
+                              </div>
+                              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 text-sm text-gray-600 mb-2">
+                                <div className="flex flex-col">
+                                  <span className="text-xs text-gray-500">Author</span>
+                                  <span className="truncate">{book.author}</span>
+                                </div>
+                                <div className="flex flex-col">
+                                  <span className="text-xs text-gray-500">Rating</span>
+                                  <span>{book.rating.toFixed(1)} ({book.reviewCount} reviews)</span>
+                                </div>
+                                <div className="flex flex-col">
+                                  <span className="text-xs text-gray-500">Rank</span>
+                                  <span>{Math.min(...book.bsr.map((rank: { rank: number }) => rank.rank))}</span>
+                                </div>
+                                <div className="flex flex-col">
+                                  <span className="text-xs text-gray-500">Price</span>
+                                  <span>${book.price.toFixed(2)}</span>
+                                </div>
+                                <div className="flex flex-col">
+                                  <span className="text-xs text-gray-500">Publisher</span>
+                                  <span className="truncate">{book.publisher}</span>
+                                </div>
+                                <div className="flex flex-col">
+                                  <span className="text-xs text-gray-500">Release</span>
+                                  <span>{book.publicationYear}</span>
+                                </div>
+                              </div>
+                              <div className="flex flex-wrap gap-1">
+                                {book.categories.slice(0, 3).map((category: string, idx: number) => (
+                                  <span
+                                    key={idx}
+                                    className="text-xs bg-gray-100 px-2 py-1 rounded"
+                                  >
+                                    {category}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -241,8 +401,9 @@ const MyProjects: React.FC = () => {
               </Card>
             )}
 
-            {(!selectedProject.bookOutlines || selectedProject.bookOutlines.length === 0) &&
-             (!selectedProject.relatedBooks || selectedProject.relatedBooks.length === 0) && (
+            {(!selectedProject.outlines || selectedProject.outlines.length === 0) &&
+             (!selectedProject.relatedBooks || selectedProject.relatedBooks.length === 0) &&
+             (!selectedProject.research || selectedProject.research.length === 0) && (
               <p className="text-gray-600">
                 No content has been added to this project yet. Use the Book Research, Book Outline, or Social Media features to
                 add content.

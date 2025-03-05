@@ -58,7 +58,6 @@ export async function GET(request: Request) {
     // Get web search trends
     const webSearchData = await googleTrends.interestOverTime(options)
       .then(res => {
-        console.log('web search res size: ', res.length);
         //console.log('web search res : ', res);
         try {
           const parsed = JSON.parse(res);
@@ -75,7 +74,7 @@ export async function GET(request: Request) {
       })
 
     // Wait for 1 seconds before making YouTube API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 2000));
 
     // Get YouTube trends
     const youtubeOptions = {
@@ -85,7 +84,6 @@ export async function GET(request: Request) {
 
     const youtubeData = await googleTrends.interestOverTime(youtubeOptions)
       .then(res => {
-        console.log('youtube res size: ', res.length);
         try {
           const parsed = JSON.parse(res);
           // Apply smoothing to the timeline data

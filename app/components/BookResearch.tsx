@@ -3,14 +3,92 @@
 import { useState, useEffect } from "react"
 import { Card, TextInput, Button as TremorButton } from "@tremor/react"
 import React from "react"
-import { Star, ChevronDown, TrendingUp, ShoppingCart } from "lucide-react"
+import { Star, ChevronDown, TrendingUp, ShoppingCart, History, Filter } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
+import { Switch } from "@/components/ui/switch"
+import { Label } from "../components/ui/label"
 import Image from "next/image"
 import googleTrends from 'google-trends-api'
 import axios from 'axios'
 import dynamic from 'next/dynamic'
-import type { TrendData, AmazonBook } from "@/app/types"
+import type { TrendData, AmazonBook } from "@/app/types/index"
+import { useAuth } from "../context/AuthContext"
+import { getUserProjects, saveUserSearch, getUserSearches, addBooksToProject } from "../lib/firebase/services"
+import type { Project, SearchHistoryItem } from "../types/firebase"
+
+// Add Plotly types
+interface PlotlyLayout {
+  height?: number;
+  margin?: { t: number; r: number; b: number; l: number };
+  xaxis?: {
+    title?: string;
+    showgrid?: boolean;
+    zeroline?: boolean;
+    tickformat?: string;
+    dtick?: string;
+    tickangle?: number;
+    tickfont?: {
+      size?: number;
+      color?: string;
+    };
+    range?: string[];
+    automargin?: boolean;
+  };
+  yaxis?: {
+    title?: string;
+    showgrid?: boolean;
+    gridcolor?: string;
+    zeroline?: boolean;
+    range?: number[];
+    ticksuffix?: string;
+    tickfont?: {
+      size?: number;
+      color?: string;
+    };
+    rangemode?: string;
+    automargin?: boolean;
+  };
+  plot_bgcolor?: string;
+  paper_bgcolor?: string;
+  showlegend?: boolean;
+  legend?: {
+    orientation?: string;
+    yanchor?: string;
+    y?: number;
+    xanchor?: string;
+    x?: number;
+    font?: {
+      size?: number;
+      color?: string;
+    };
+    bgcolor?: string;
+    bordercolor?: string;
+    borderwidth?: number;
+  };
+  hovermode?: string;
+  autosize?: boolean;
+  shapes?: Array<{
+    type: string;
+    xref: string;
+    yref: string;
+    x0: number;
+    y0: number;
+    x1: number;
+    y1: number;
+    line: {
+      color: string;
+      width: number;
+    };
+    layer: string;
+  }>;
+}
+
+interface PlotlyConfig {
+  displayModeBar?: boolean;
+  responsive?: boolean;
+  scrollZoom?: boolean;
+}
 
 // Dynamically import Plotly with no SSR
 const Plot = dynamic(() => import('react-plotly.js'), {
@@ -33,34 +111,203 @@ const wellKnownPublishers = [
 ]
 
 const BookResearch = React.memo(() => {
+  const { user } = useAuth()
   const [keyword, setKeyword] = useState("")
   const [data, setData] = useState<TrendData | null>(null)
   const [books, setBooks] = useState<AmazonBook[]>([])
   const [loading, setLoading] = useState(false)
-  const [projectBooks, setProjectBooks] = useState<{ id: string; title: string }[]>([])
+  const [projectBooks, setProjectBooks] = useState<Project[]>([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const [hasMore, setHasMore] = useState(true)
+  const [showIndieOnly, setShowIndieOnly] = useState(false)
+  const [searchHistory, setSearchHistory] = useState<SearchHistoryItem[]>([])
 
   useEffect(() => {
-    // In a real app, fetch the list of books from your backend or state management
-    setProjectBooks([
-      { id: "1", title: "The Future of AI" },
-      { id: "2", title: "Mindful Living" },
-    ])
-  }, [])
+    const fetchProjects = async () => {
+      if (!user) {
+        console.log('No user found, skipping project fetch');
+        return;
+      }
 
-  const fetchData = async (keyword: string) => {
+      try {
+        // Check if user.uid is defined
+        if (!user.uid) {
+          throw new Error('User ID is undefined');
+        }
+        
+        const userProjects = await getUserProjects(user.uid);
+        
+        if (!Array.isArray(userProjects)) {
+          throw new Error('Fetched projects is not an array');
+        }
+        
+        setProjectBooks(userProjects);
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+        if (error instanceof Error) {
+          alert(`Failed to load projects: ${error.message}`);
+        } else {
+          alert('Failed to load projects. Please try refreshing the page.');
+        }
+      }
+    };
+
+    fetchProjects();
+  }, [user]);
+
+  useEffect(() => {
+    const fetchSearchHistory = async () => {
+      if (!user?.uid) {
+        console.log('No user found, skipping search history fetch');
+        return;
+      }
+      try {
+        console.log('Fetching search history for user:', user.uid);
+        const searches = await getUserSearches(user.uid);
+        console.log('Fetched search history:', searches);
+        setSearchHistory(searches);
+      } catch (error) {
+        console.error("Error fetching search history:", error);
+      }
+    };
+
+    fetchSearchHistory();
+  }, [user]);
+
+  const fetchData = async (keyword: string, page: number = 1) => {
     try {
       setLoading(true)
-      const response = await fetch(`/api/trends?keyword=${encodeURIComponent(keyword)}`)
-      console.log('response : ', response);
-      const trendData = await response.json()
-      console.log('trendData : ', trendData);
-      setData(trendData)
+      // Clear existing books when starting a new search
+      if (page === 1) {
+        setBooks([]);
+      }
       
-      const booksResponse = await fetch(`/api/amazon-books?keyword=${encodeURIComponent(keyword)}`)
+      const response = await fetch(`/api/trends?keyword=${encodeURIComponent(keyword)}`)
+      const trendData = await response.json()
+      
+      // Validate and structure trend data
+      const validTrendData: TrendData = {
+        webSearch: {
+          timelineData: trendData?.webSearch?.timelineData?.map((point: any) => ({
+            time: point.time,
+            value: Array.isArray(point.value) ? point.value : [0]
+          })) || []
+        },
+        youtube: {
+          timelineData: trendData?.youtube?.timelineData?.map((point: any) => ({
+            time: point.time,
+            value: Array.isArray(point.value) ? point.value : [0]
+          })) || []
+        }
+      };
+      
+      setData(validTrendData)
+      
+      // Log Amazon books API call
+      const booksResponse = await fetch(`/api/amazon-books/search?keywords=${encodeURIComponent(keyword)}&page=${page}`)
+      console.log('Amazon books API response status:', booksResponse.status)
       const booksData = await booksResponse.json()
-      setBooks(booksData)
+      
+      // If it's page 1, fetch page 2 as well for complete data
+      let combinedBooksData = booksData;
+      if (page === 1) {
+        const page2Response = await fetch(`/api/amazon-books/search?keywords=${encodeURIComponent(keyword)}&page=2`)
+        const page2Data = await page2Response.json()
+        combinedBooksData = {
+          SearchResult: {
+            Items: [...(booksData.SearchResult?.Items || []), ...(page2Data.SearchResult?.Items || [])]
+          }
+        }
+      }
+      
+      // Process the response to extract required information
+      const processedBooks = combinedBooksData.SearchResult?.Items?.map((item: any) => {
+        //const publicationDate = item.ItemInfo.ProductInfo?.PublicationDate?.DisplayValue;
+        //const publicationYear = publicationDate ? publicationDate.split('T')[0] : "Unknown";
+        const publicationYear = item.ItemInfo.ContentInfo?.PublicationDate?.DisplayValue?.split('T')[0] || "unknown";
+        console.log('product info : ', item.ItemInfo.ContentInfo)
+
+        const publisher = item.ItemInfo.ByLineInfo.Manufacturer?.DisplayValue || 'Unknown Publisher';
+        const isIndie = publisher.toLowerCase().includes("independently published") ||
+                       publisher.toLowerCase().includes("self-published") ||
+                       publisher.toLowerCase().includes("self-published") ||
+                       publisher.toLowerCase().includes("unknown publisher");
+        // Get the first listing's merchant info
+        const firstListing = item.Offers?.Listings?.[0];
+        const merchantInfo = firstListing?.MerchantInfo;
+        
+        // Get the first contributor as author
+        const author = item.ItemInfo.ByLineInfo.Contributors?.[0]?.Name || 'Unknown Author';
+        
+        // Get the first price amount
+        const price = firstListing?.Price?.Amount || 0;
+        
+        // Get the first image URL
+        const image = item.Images?.Primary?.Large?.URL || '/images/cover.jpg';
+        
+        // Get BSR data
+        const bsr = item.BrowseNodeInfo.WebsiteSalesRank?.SalesRank ? [{
+          rank: item.BrowseNodeInfo.WebsiteSalesRank.SalesRank,
+          category: item.BrowseNodeInfo.BrowseNodes[0]?.ContextFreeName || 'General'
+        }] : [];
+        
+        // Get categories
+        const categories = item.BrowseNodeInfo.BrowseNodes.map((node: any) => node.DisplayName) || [];
+        
+        // Get rating and review count from the first listing's merchant info
+        console.log('merchantInfo : ', merchantInfo);
+        const rating = merchantInfo?.FeedbackRating || 0;
+        const reviewCount = merchantInfo?.FeedbackCount || 0;
+
+        return {
+          id: item.ASIN,
+          title: item.ItemInfo.Title.DisplayValue,
+          author,
+          price,
+          image,
+          bsr,
+          categories,
+          rating,
+          reviewCount,
+          publisher,
+          publicationYear,
+          isIndie
+        }
+      }) || []
+
+      if (page === 1) {
+        setBooks(processedBooks);
+        // Save search results to history
+        if (user?.uid) {
+          try {
+            console.log('Saving search to history:', {
+              keyword,
+              booksCount: processedBooks.length,
+              trendDataExists: !!validTrendData
+            });
+
+            await saveUserSearch(user.uid, keyword, processedBooks, validTrendData);
+            
+            // Update local search history state
+            const newSearchItem: SearchHistoryItem = {
+              keyword,
+              timestamp: Date.now(),
+              books: processedBooks,
+              trendData: validTrendData
+            };
+            setSearchHistory(prev => [newSearchItem, ...prev.filter(h => h.keyword !== keyword)].slice(0, 10));
+            console.log('asetting search history : ', newSearchItem)
+          } catch (error) {
+            console.error("Error saving search:", error);
+          }
+        }
+      } else {
+        setBooks(prev => [...prev, ...processedBooks]);
+      }
+
+      setCurrentPage(page);
     } catch (error) {
-      console.error('Error fetching data:', error)
+      console.error('Error in fetchData:', error)
     } finally {
       setLoading(false)
     }
@@ -68,22 +315,34 @@ const BookResearch = React.memo(() => {
 
   const analyzeKeyword = async () => {
     if (!keyword.trim()) return
-    await fetchData(keyword)
+    await fetchData(keyword, 1)
   }
 
-  const addResearchToBook = async (bookId: string) => {
-    // In a real app, you would send this to your backend
-    console.log(`Adding research for keyword "${keyword}" to book ${bookId}`)
-    console.log("Trend data:", data)
-    console.log("Amazon books data:", books)
+  const handleAddBooksToProject = async (projectId: string) => {
+    if (!user) {
+      alert('Please sign in to add research to a project');
+      return;
+    }
 
-    // Here you would typically make an API call to save this data
-    // For now, we'll just show an alert
-    alert(`Research added to book: ${projectBooks.find((b) => b.id === bookId)?.title}`)
-  }
+    try {
+      if (!books.length) {
+        alert('No books available to add to project');
+        return;
+      }
+
+      await addBooksToProject(projectId, keyword, books);
+      
+      // Show success message
+      const project = projectBooks.find((p) => p.id === projectId);
+      alert(`Books added to project: ${project?.name}`);
+    } catch (error) {
+      console.error("Error adding books to project:", error);
+      alert('Failed to add books to project. Please try again.');
+    }
+  };
 
   const isIndieAuthor = (book: AmazonBook) => {
-    return !wellKnownPublishers.some((publisher) => book.publisher.toLowerCase().includes(publisher.toLowerCase()))
+    return book.isIndie;
   }
 
   const getOverallBSR = (book: AmazonBook) => {
@@ -91,28 +350,23 @@ const BookResearch = React.memo(() => {
   }
 
   const openAmazonPage = (book: AmazonBook) => {
-    // In a real app, you would use the actual Amazon URL for the book
-    // For this example, we'll just open a search page
-    window.open(`https://www.amazon.com/s?k=${encodeURIComponent(book.title)}`, "_blank")
+    window.open(`https://www.amazon.com/dp/${book.id}`, "_blank")
   }
 
-  const addBookToProject = async (projectId: string, book: AmazonBook) => {
-    try {
-      const { data, error } = await supabase
-        .from('project_books')
-        .insert([
-          {
-            project_id: projectId,
-            book_data: book,
-            added_at: new Date().toISOString(),
-          }
-        ])
+  const filteredBooks = showIndieOnly 
+    ? books.filter(book => isIndieAuthor(book))
+    : books;
 
-      if (error) throw error
-      
-      // Handle success (e.g., show notification)
+  const loadSearchFromHistory = async (searchItem: SearchHistoryItem) => {
+    try {
+      console.log('Loading search from history:', searchItem.keyword);
+      setKeyword(searchItem.keyword);
+      setData(searchItem.trendData);
+      setBooks(searchItem.books);
+      setHasMore(false);
+      setCurrentPage(1);
     } catch (error) {
-      console.error('Error adding book to project:', error)
+      console.error('Error loading search from history:', error);
     }
   }
 
@@ -129,6 +383,7 @@ const BookResearch = React.memo(() => {
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
             className="flex-grow tr-input"
+            onKeyDown={(e) => e.key === 'Enter' && analyzeKeyword()}
           />
           <TremorButton
             onClick={analyzeKeyword}
@@ -140,6 +395,27 @@ const BookResearch = React.memo(() => {
         </div>
       </Card>
 
+      {/* Recent Searches Panel */}
+      <Card className="bg-white shadow-sm p-4">
+        <div className="flex items-center gap-2 mb-3">
+          <History className="w-5 h-5 text-gray-500" />
+          <h2 className="text-lg font-semibold">Recent Searches</h2>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {searchHistory.map((item) => (
+            <Button
+              key={item.keyword}
+              variant="outline"
+              size="sm"
+              className="text-sm"
+              onClick={() => loadSearchFromHistory(item)}
+            >
+              {item.keyword}
+            </Button>
+          ))}
+        </div>
+      </Card>
+
       {data && (
         <Card className="bg-white shadow-sm p-6">
           <div className="flex items-center mb-6">
@@ -148,225 +424,234 @@ const BookResearch = React.memo(() => {
           </div>
           <div className="flex flex-col md:flex-row gap-4">
             <div className="w-full">
-              {data.webSearch && data.youtube && (
-                <Plot
-                  data={[
-                    {
-                      x: data.webSearch.timelineData.map(point => 
-                        new Date(parseInt(point.time) * 1000)
-                      ),
-                      y: data.webSearch.timelineData.map(point => point.value[0]),
-                      type: "scatter",
-                      mode: "lines",
-                      name: "Web Search",
-                      line: {
-                        shape: "spline",
-                        color: '#4285f4',
-                        smoothing: 1.3,
-                      },
-                      hovertemplate: 'Web: %{y:.0f}%<extra></extra>'
-                    },
-                    {
-                      x: data.youtube.timelineData.map(point => 
-                        new Date(parseInt(point.time) * 1000)
-                      ),
-                      y: data.youtube.timelineData.map(point => point.value[0]),
-                      type: "scatter",
-                      mode: "lines",
-                      name: "YouTube Search",
-                      line: {
-                        shape: "spline",
-                        color: '#ff0000',
-                        smoothing: 1.3,
-                      },
-                      hovertemplate: 'YouTube: %{y:.0f}%<extra></extra>'
-                    }
-                  ]}
-                  layout={{
-                    height: 400,
-                    margin: { t: 10, r: 30, b: 40, l: 40 },
-                    xaxis: {
-                      title: '',
-                      showgrid: false,
-                      zeroline: false,
-                      tickformat: '%b %Y',
-                      dtick: 'M1',
-                      tickangle: 0,
-                      tickfont: {
-                        size: 12,
-                        color: '#666'
-                      },
-                      range: [
-                        new Date(Date.now() - 6 * 30 * 24 * 60 * 60 * 1000).toISOString(),
-                        new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
-                      ],
-                      automargin: true
-                    },
-                    yaxis: {
-                      title: '',
-                      showgrid: true,
-                      gridcolor: '#f0f0f0',
-                      zeroline: false,
-                      range: [0, 100],
-                      ticksuffix: '',
-                      tickfont: {
-                        size: 12,
-                        color: '#666'
-                      },
-                      rangemode: 'tozero',
-                      automargin: true
-                    },
-                    plot_bgcolor: 'white',
-                    paper_bgcolor: 'white',
-                    showlegend: true,
-                    legend: {
-                      orientation: 'h',
-                      yanchor: 'bottom',
-                      y: -0.2,
-                      xanchor: 'center',
-                      x: 0.5,
-                      font: {
-                        size: 12,
-                        color: '#666'
-                      },
-                      bgcolor: 'rgba(255,255,255,0.9)',
-                      bordercolor: 'rgba(0,0,0,0.1)',
-                      borderwidth: 1
-                    },
-                    hovermode: 'x unified',
-                    autosize: true,
-                    shapes: [
-                      {
-                        type: 'rect',
-                        xref: 'paper',
-                        yref: 'paper',
-                        x0: 0,
-                        y0: 0,
-                        x1: 1,
-                        y1: 1,
+              {loading ? (
+                <div className="flex items-center justify-center h-[400px]">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                </div>
+              ) : (
+                (data.webSearch?.timelineData?.length > 0 || data.youtube?.timelineData?.length > 0) && (
+                  <Plot
+                    data={[
+                      ...(data.webSearch?.timelineData?.length > 0 ? [{
+                        x: data.webSearch.timelineData.map(point => 
+                          new Date(parseInt(point.time) * 1000)
+                        ),
+                        y: data.webSearch.timelineData.map(point => point.value[0]),
+                        type: "scatter",
+                        mode: "lines",
+                        name: "Web Search",
                         line: {
-                          color: 'rgba(0,0,0,0.1)',
-                          width: 1,
+                          shape: "spline",
+                          smoothing: 1.3,
                         },
-                        layer: 'below'
-                      }
-                    ]
-                  }}
-                  config={{
-                    displayModeBar: false,
-                    responsive: true,
-                    scrollZoom: false
-                  }}
-                  style={{
-                    width: '100%',
-                    minHeight: '400px'
-                  }}
-                />
+                        hovertemplate: 'Web: %{y:.0f}%<extra></extra>'
+                      }] : []),
+                      ...(data.youtube?.timelineData?.length > 0 ? [{
+                        x: data.youtube.timelineData.map(point => 
+                          new Date(parseInt(point.time) * 1000)
+                        ),
+                        y: data.youtube.timelineData.map(point => point.value[0]),
+                        type: "scatter",
+                        mode: "lines",
+                        name: "YouTube Search",
+                        line: {
+                          shape: "spline",
+                          smoothing: 1.3,
+                        },
+                        hovertemplate: 'YouTube: %{y:.0f}%<extra></extra>'
+                      }] : [])
+                    ]}
+                    layout={{
+                      height: 400,
+                      margin: { t: 10, r: 30, b: 40, l: 40 },
+                      xaxis: {
+                        title: '',
+                        showgrid: false,
+                        zeroline: false,
+                        tickformat: '%b %Y',
+                        dtick: 'M1',
+                        tickangle: 0,
+                        tickfont: {
+                          size: 12,
+                          color: '#666'
+                        },
+                        range: [
+                          new Date(Date.now() - 6 * 30 * 24 * 60 * 60 * 1000).toISOString(),
+                          new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+                        ],
+                        automargin: true
+                      },
+                      yaxis: {
+                        title: '',
+                        showgrid: true,
+                        gridcolor: '#f0f0f0',
+                        zeroline: false,
+                        range: [0, 100],
+                        ticksuffix: '',
+                        tickfont: {
+                          size: 12,
+                          color: '#666'
+                        },
+                        rangemode: 'tozero',
+                        automargin: true
+                      },
+                      plot_bgcolor: 'white',
+                      paper_bgcolor: 'white',
+                      showlegend: true,
+                      legend: {
+                        orientation: 'h',
+                        yanchor: 'bottom',
+                        y: -0.2,
+                        xanchor: 'center',
+                        x: 0.5,
+                        font: {
+                          size: 12,
+                          color: '#666'
+                        },
+                        bgcolor: 'rgba(255,255,255,0.9)',
+                        bordercolor: 'rgba(0,0,0,0.1)',
+                        borderwidth: 1
+                      },
+                      hovermode: 'x unified',
+                      autosize: true,
+                      shapes: [
+                        {
+                          type: 'rect',
+                          xref: 'paper',
+                          yref: 'paper',
+                          x0: 0,
+                          y0: 0,
+                          x1: 1,
+                          y1: 1,
+                          line: {
+                            color: 'rgba(0,0,0,0.1)',
+                            width: 1,
+                          },
+                          layer: 'below'
+                        }
+                      ]
+                    } as PlotlyLayout}
+                    config={{
+                      displayModeBar: false,
+                      responsive: true,
+                      scrollZoom: false
+                    } as PlotlyConfig}
+                    style={{
+                      width: '100%',
+                      minHeight: '400px'
+                    }}
+                  />
+                )
               )}
             </div>
           </div>
         </Card>
       )}
 
-      {books.length > 0 && (
-        <Card className="bg-white shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center">
-              <ShoppingCart className="w-6 h-6 text-primary mr-2" />
-              <h2 className="text-lg font-semibold text-primary">Amazon Book Analyzer</h2>
+      {filteredBooks.length > 0 && (
+        <Card className="bg-white shadow-sm p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center">
+                <ShoppingCart className="w-6 h-6 text-primary mr-2" />
+                <h2 className="text-lg font-semibold text-primary">Competing Books</h2>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Switch
+                  id="indie-filter"
+                  checked={showIndieOnly}
+                  onCheckedChange={setShowIndieOnly}
+                />
+                <Label htmlFor="indie-filter">Indie Authors Only</Label>
+              </div>
             </div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="ml-auto">
-                  Add to Project <ChevronDown className="ml-2 h-4 w-4" />
+                <Button variant="outline" className="flex items-center gap-2">
+                  Add to Project
+                  <ChevronDown className="w-4 h-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                {projectBooks.map((book) => (
-                  <DropdownMenuItem key={book.id} onSelect={() => addResearchToBook(book.id)}>
-                    {book.title}
+                {projectBooks.map((project) => (
+                  <DropdownMenuItem
+                    key={project.id}
+                    onClick={() => handleAddBooksToProject(project.id)}
+                  >
+                    {project.name}
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="bg-gray-100">
-                  <th className="px-4 py-2 text-left">Book</th>
-                  <th className="px-4 py-2 text-left">Reviews</th>
-                  <th className="px-4 py-2 text-left">Overall BSR</th>
-                  <th className="px-4 py-2 text-left">Price</th>
-                  <th className="px-4 py-2 text-left">Author</th>
-                </tr>
-              </thead>
-              <tbody>
-                {books.map((book) => (
-                  <tr key={book.id} className="border-b">
-                    <td className="px-4 py-2">
-                      <div className="flex items-center">
-                        <div className="mr-4 cursor-pointer" onClick={() => openAmazonPage(book)}>
-                          <Image
-                            src={book.image || "/placeholder.svg"}
-                            alt={book.title}
-                            width={60}
-                            height={90}
-                            className="object-cover rounded"
-                          />
-                        </div>
-                        <div>
-                          <p
-                            className="font-semibold text-primary cursor-pointer hover:underline"
-                            onClick={() => openAmazonPage(book)}
-                          >
-                            {book.title}
-                          </p>
-                          {isIndieAuthor(book) && (
-                            <span className="inline-block bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full mt-1">
-                              Indie Author
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-4 py-2">
-                      <div className="flex items-center">
-                        {Array.from({ length: 5 }).map((_, i) => (
-                          <Star
-                            key={i}
-                            className={`w-4 h-4 ${
-                              i < Math.floor(book.rating) ? "text-yellow-400 fill-current" : "text-gray-300"
-                            }`}
-                          />
-                        ))}
-                        <span className="ml-2 text-sm text-gray-600">({book.reviewCount})</span>
-                      </div>
-                    </td>
-                    <td className="px-4 py-2">
-                      <span className="font-semibold">#{getOverallBSR(book).toLocaleString()}</span>
-                    </td>
-                    <td className="px-4 py-2">
-                      <span className="font-bold text-primary">${book.price.toFixed(2)}</span>
-                    </td>
-                    <td className="px-4 py-2">
-                      <p className="text-gray-600">{book.author}</p>
-                      <div className="flex flex-wrap gap-1 mt-1">
-                        {book.categories.map((category, index) => (
-                          <span key={index} className="text-xs px-2 py-1 bg-primary/10 text-primary rounded-full">
-                            {category}
-                          </span>
-                        ))}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+
+          <div className="space-y-4">
+            {filteredBooks.map((book) => (
+              <div key={book.id} className="flex gap-4 p-4 border rounded-lg hover:bg-primary/5 transition-colors duration-200">
+                <div className="relative w-24 h-32 flex-shrink-0">
+                  <Image
+                    src={book.image}
+                    alt={book.title}
+                    fill
+                    className="object-cover rounded"
+                  />
+                </div>
+                <div className="flex-grow">
+                  <div className="flex items-center gap-2 mb-2">
+                    <h3 
+                      className="font-semibold text-lg text-black hover:text-primary cursor-pointer"
+                      onClick={() => openAmazonPage(book)}
+                    >
+                      {book.title}
+                    </h3>
+                    {isIndieAuthor(book) && (
+                      <span className="bg-primary/10 text-primary px-2 py-1 rounded text-xs font-medium">
+                        Indie Author
+                      </span>
+                    )}
+                  </div>
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 text-sm text-gray-600 mb-2">
+                    <div className="flex flex-col">
+                      <span className="text-xs text-gray-500">Author</span>
+                      <span className="truncate">{book.author}</span>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-xs text-gray-500">Rating</span>
+                      <span>{book.rating.toFixed(1)} ({book.reviewCount} reviews)</span>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-xs text-gray-500">Rank</span>
+                      <span>{getOverallBSR(book)}</span>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-xs text-gray-500">Price</span>
+                      <span>${book.price.toFixed(2)}</span>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-xs text-gray-500">Publisher</span>
+                      <span className="truncate">{book.publisher}</span>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-xs text-gray-500">Release</span>
+                      <span>{book.publicationYear}</span>
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap gap-1">
+                    {book.categories.slice(0, 3).map((category, idx) => (
+                      <span
+                        key={idx}
+                        className="text-xs bg-gray-100 px-2 py-1 rounded"
+                      >
+                        {category}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </Card>
       )}
-
     </div>
   )
 })

@@ -10,10 +10,11 @@ import {
   orderBy,
   limit,
   Timestamp,
-  increment
+  increment,
+  setDoc
 } from 'firebase/firestore';
 import { db } from './config';
-import type { Project, BookOutline, RelatedBook, SearchHistory, ContentHistory } from '../types/firebase';
+import type { Project, BookOutline, RelatedBook, SearchHistory, ContentHistory, AmazonBook, TrendData } from '../types/firebase';
 
 // Project Services
 export const createProject = async (userId: string, name: string, description?: string) => {
@@ -244,4 +245,159 @@ export const addRelatedBook = async (
   }
 
   return { id: docRef.id, ...relatedBookData };
+};
+
+interface SearchHistoryItem {
+  keyword: string;
+  timestamp: number;
+  books: AmazonBook[];
+  trendData: TrendData;
+}
+
+export const saveUserSearch = async (userId: string, keyword: string, books: AmazonBook[], trendData: TrendData) => {
+  try {
+    const searchRef = doc(db, 'users', userId, 'searches', keyword);
+    const searchData: SearchHistoryItem = {
+      keyword,
+      timestamp: Date.now(),
+      books,
+      trendData
+    };
+    await setDoc(searchRef, searchData);
+  } catch (error) {
+    console.error('Error saving search:', error);
+    throw error;
+  }
+};
+
+export const getUserSearches = async (userId: string): Promise<SearchHistoryItem[]> => {
+  try {
+    const searchesRef = collection(db, 'users', userId, 'searches');
+    const q = query(searchesRef, orderBy('timestamp', 'desc'), limit(10));
+    const querySnapshot = await getDocs(q);
+    
+    return querySnapshot.docs.map(doc => ({
+      ...doc.data(),
+      keyword: doc.id
+    })) as SearchHistoryItem[];
+  } catch (error) {
+    console.error('Error fetching search history:', error);
+    throw error;
+  }
+};
+
+export const addBooksToProject = async (projectId: string, keyword: string, books: AmazonBook[]) => {
+  try {
+    const projectRef = doc(db, 'projects', projectId);
+    const projectDoc = await getDoc(projectRef);
+    
+    if (!projectDoc.exists()) {
+      throw new Error('Project not found');
+    }
+
+    const projectData = projectDoc.data();
+    const research = projectData.research || [];
+    
+    // Add new research data with only books
+    research.push({
+      keyword,
+      books
+    });
+
+    // Update project with new research data
+    await updateDoc(projectRef, {
+      research,
+      updatedAt: Timestamp.now()
+    });
+
+    return true;
+  } catch (error) {
+    console.error('Error adding books to project:', error);
+    throw error;
+  }
+};
+
+// Outline History Services
+export const saveOutlineHistory = async (userId: string, outline: any) => {
+  const historyRef = collection(db, 'outlineHistory');
+  const userHistoryRef = doc(historyRef, userId);
+  
+  try {
+    // Get current history
+    const userHistoryDoc = await getDoc(userHistoryRef);
+    let history = [];
+    
+    if (userHistoryDoc.exists()) {
+      history = userHistoryDoc.data().history || [];
+    }
+    
+    // Add new outline to history
+    history.unshift({
+      ...outline,
+      createdAt: Timestamp.now()
+    });
+    
+    // Keep only last 10 outlines
+    history = history.slice(0, 10);
+    
+    // Update history document
+    await setDoc(userHistoryRef, {
+      userId,
+      history,
+      updatedAt: Timestamp.now()
+    });
+    
+    return true;
+  } catch (error) {
+    console.error('Error saving outline history:', error);
+    throw error;
+  }
+};
+
+export const getOutlineHistory = async (userId: string) => {
+  const historyRef = collection(db, 'outlineHistory');
+  const userHistoryRef = doc(historyRef, userId);
+  
+  try {
+    const userHistoryDoc = await getDoc(userHistoryRef);
+    if (userHistoryDoc.exists()) {
+      return userHistoryDoc.data().history || [];
+    }
+    return [];
+  } catch (error) {
+    console.error('Error getting outline history:', error);
+    throw error;
+  }
+};
+
+export const addOutlineToProject = async (projectId: string, title: string, outline: OutlineResponse) => {
+  try {
+    const projectRef = doc(db, 'projects', projectId);
+    const projectDoc = await getDoc(projectRef);
+    
+    if (!projectDoc.exists()) {
+      throw new Error('Project not found');
+    }
+
+    const projectData = projectDoc.data();
+    const outlines = projectData.outlines || [];
+    
+    // Add new outline data
+    outlines.push({
+      title,
+      outline: outline.outline,
+      createdAt: Timestamp.now()
+    });
+
+    // Update project with new outline data
+    await updateDoc(projectRef, {
+      outlines,
+      updatedAt: Timestamp.now()
+    });
+
+    return true;
+  } catch (error) {
+    console.error('Error adding outline to project:', error);
+    throw error;
+  }
 }; 
