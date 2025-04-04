@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Card, TextInput, Button as TremorButton } from "@tremor/react"
 import React from "react"
-import { Star, ChevronDown, TrendingUp, ShoppingCart, History, Filter } from "lucide-react"
+import { Star, ChevronDown, TrendingUp, ShoppingCart, Filter } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
@@ -14,8 +14,8 @@ import axios from 'axios'
 import dynamic from 'next/dynamic'
 import type { TrendData, AmazonBook } from "@/app/types/index"
 import { useAuth } from "../context/AuthContext"
-import { getUserProjects, saveUserSearch, getUserSearches, addBooksToProject } from "../lib/firebase/services"
-import type { Project, SearchHistoryItem } from "../types/firebase"
+import { getUserProjects, saveUserSearch, addBooksToProject } from "../lib/firebase/services"
+import type { Project } from "../types/firebase"
 
 // Add Plotly types
 interface PlotlyLayout {
@@ -120,7 +120,6 @@ const BookResearch = React.memo(() => {
   const [currentPage, setCurrentPage] = useState(1)
   const [hasMore, setHasMore] = useState(true)
   const [showIndieOnly, setShowIndieOnly] = useState(false)
-  const [searchHistory, setSearchHistory] = useState<SearchHistoryItem[]>([])
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -130,7 +129,6 @@ const BookResearch = React.memo(() => {
       }
 
       try {
-        // Check if user.uid is defined
         if (!user.uid) {
           throw new Error('User ID is undefined');
         }
@@ -153,25 +151,6 @@ const BookResearch = React.memo(() => {
     };
 
     fetchProjects();
-  }, [user]);
-
-  useEffect(() => {
-    const fetchSearchHistory = async () => {
-      if (!user?.uid) {
-        console.log('No user found, skipping search history fetch');
-        return;
-      }
-      try {
-        console.log('Fetching search history for user:', user.uid);
-        const searches = await getUserSearches(user.uid);
-        console.log('Fetched search history:', searches);
-        setSearchHistory(searches);
-      } catch (error) {
-        console.error("Error fetching search history:", error);
-      }
-    };
-
-    fetchSearchHistory();
   }, [user]);
 
   const fetchData = async (keyword: string, page: number = 1) => {
@@ -222,8 +201,6 @@ const BookResearch = React.memo(() => {
       
       // Process the response to extract required information
       const processedBooks = combinedBooksData.SearchResult?.Items?.map((item: any) => {
-        //const publicationDate = item.ItemInfo.ProductInfo?.PublicationDate?.DisplayValue;
-        //const publicationYear = publicationDate ? publicationDate.split('T')[0] : "Unknown";
         const publicationYear = item.ItemInfo.ContentInfo?.PublicationDate?.DisplayValue?.split('T')[0] || "unknown";
         console.log('product info : ', item.ItemInfo.ContentInfo)
 
@@ -287,16 +264,6 @@ const BookResearch = React.memo(() => {
             });
 
             await saveUserSearch(user.uid, keyword, processedBooks, validTrendData);
-            
-            // Update local search history state
-            const newSearchItem: SearchHistoryItem = {
-              keyword,
-              timestamp: Date.now(),
-              books: processedBooks,
-              trendData: validTrendData
-            };
-            setSearchHistory(prev => [newSearchItem, ...prev.filter(h => h.keyword !== keyword)].slice(0, 10));
-            console.log('asetting search history : ', newSearchItem)
           } catch (error) {
             console.error("Error saving search:", error);
           }
@@ -332,7 +299,6 @@ const BookResearch = React.memo(() => {
 
       await addBooksToProject(projectId, keyword, books);
       
-      // Show success message
       const project = projectBooks.find((p) => p.id === projectId);
       alert(`Books added to project: ${project?.name}`);
     } catch (error) {
@@ -357,19 +323,6 @@ const BookResearch = React.memo(() => {
     ? books.filter(book => isIndieAuthor(book))
     : books;
 
-  const loadSearchFromHistory = async (searchItem: SearchHistoryItem) => {
-    try {
-      console.log('Loading search from history:', searchItem.keyword);
-      setKeyword(searchItem.keyword);
-      setData(searchItem.trendData);
-      setBooks(searchItem.books);
-      setHasMore(false);
-      setCurrentPage(1);
-    } catch (error) {
-      console.error('Error loading search from history:', error);
-    }
-  }
-
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -392,27 +345,6 @@ const BookResearch = React.memo(() => {
           >
             Analyze
           </TremorButton>
-        </div>
-      </Card>
-
-      {/* Recent Searches Panel */}
-      <Card className="bg-white shadow-sm p-4">
-        <div className="flex items-center gap-2 mb-3">
-          <History className="w-5 h-5 text-gray-500" />
-          <h2 className="text-lg font-semibold">Recent Searches</h2>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {searchHistory.map((item) => (
-            <Button
-              key={item.keyword}
-              variant="outline"
-              size="sm"
-              className="text-sm"
-              onClick={() => loadSearchFromHistory(item)}
-            >
-              {item.keyword}
-            </Button>
-          ))}
         </div>
       </Card>
 

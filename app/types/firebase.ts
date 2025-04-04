@@ -2,13 +2,14 @@ import { Timestamp } from 'firebase/firestore';
 import type { AmazonBook, TrendData } from './index';
 
 interface Chapter {
-  title: string;
-  content: string[];
+  Title: string;
+  Content: string[];
+  Chapter: number;
 }
 
 interface OutlineData {
-  title: string;
-  chapters: Chapter[];
+  Title: string;
+  Chapters: Chapter[];
 }
 
 export interface User {
@@ -90,7 +91,14 @@ export interface OutlineHistoryItem {
 
 export interface ProjectOutline {
   title: string;
-  outline: OutlineData;
+  outline: {
+    Title: string;
+    Chapters: {
+      Chapter: number;
+      Title: string;
+      [key: string]: string[] | string | number;
+    }[];
+  };
   createdAt: {
     seconds: number;
     nanoseconds: number;
@@ -98,5 +106,12 @@ export interface ProjectOutline {
 }
 
 export interface OutlineResponse {
-  outline: OutlineData;
+  outline: {
+    Title: string;
+    Chapters: {
+      Chapter: number;
+      Title: string;
+      [key: string]: string[] | string | number;
+    }[];
+  };
 } 

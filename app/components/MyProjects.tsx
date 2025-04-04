@@ -26,10 +26,11 @@ interface ProjectWithContent extends Project {
   outlines?: {
     title: string;
     outline: {
-      title: string;
-      chapters: {
-        title: string;
-        content: string[];
+      Title: string;
+      Chapters: {
+        Chapter: number;
+        Title: string;
+        [key: string]: string[] | string | number; // Allow dynamic content
       }[];
     };
     createdAt: {
@@ -52,6 +53,19 @@ const MyProjects: React.FC = () => {
   const [newProjectTitle, setNewProjectTitle] = useState("")
   const [loading, setLoading] = useState(true)
   const [isAddingProject, setIsAddingProject] = useState(false)
+
+  const renderValue = (value: unknown): React.ReactNode => {
+    if (Array.isArray(value)) {
+      return (
+        <ul className="list-disc list-inside text-gray-700 space-y-1">
+          {value.map((item, index) => (
+            <li key={index} className="text-gray-700">{String(item)}</li>
+          ))}
+        </ul>
+      );
+    }
+    return <p className="text-gray-700">{String(value)}</p>;
+  };
 
   const showToast = (message: string) => {
     toast(message, {
@@ -115,16 +129,13 @@ const MyProjects: React.FC = () => {
         const projectDetails = await getProject(selectedProject.id)
         if (projectDetails) {
           console.log('Fetched project details:', projectDetails)
-          // Convert project details to the expected format
-          const projectWithContent: ProjectWithContent = {
-            ...projectDetails,
-            content: {
-              research: null, // You'll need to fetch this from your research collection
-              outline: projectDetails.bookOutlines?.[0] || null,
-              socialMedia: null // You'll need to fetch this from your social content collection
-            }
+          console.log('Project outlines:', projectDetails.outlines)
+          if (projectDetails.outlines?.[0]) {
+            console.log('First outline:', projectDetails.outlines[0])
+            console.log('First outline structure:', projectDetails.outlines[0].outline)
+            console.log('Chapters:', projectDetails.outlines[0].outline?.Chapters)
           }
-          setSelectedProject(projectWithContent)
+          setSelectedProject(projectDetails)
         }
       } catch (error) {
         console.error("Error fetching project details:", error)
@@ -238,66 +249,75 @@ const MyProjects: React.FC = () => {
             {selectedProject.outlines && selectedProject.outlines.length > 0 && (
               <Card className="p-4">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold text-purple-800 flex items-center">
-                    <FileText className="w-5 h-5 mr-2" /> Book Outlines
-                  </h3>
+                  <div className="flex items-center">
+                    <FileText className="w-5 h-5 mr-2" />
+                    <h3 className="text-lg font-semibold text-purple-800">Book Outline</h3>
+                  </div>
                   <Button
                     variant="outline"
                     size="sm"
                     className="text-purple-800 hover:text-purple-900"
                     onClick={() => {
-                      const outlineText = selectedProject.outlines
-                        ?.map(outline => JSON.stringify(outline, null, 2))
-                        .join('\n\n') || '';
-                      navigator.clipboard.writeText(outlineText);
+                      if (!selectedProject?.outlines?.[0]?.outline) return;
+                      const outline = selectedProject.outlines[0].outline;
+                      const formattedOutline = `${outline.Title}\n\n${outline.Chapters.map(chapter => {
+                        const chapterContent = Object.entries(chapter)
+                          .filter(([key]) => !['Chapter', 'Title'].includes(key))
+                          .map(([key, value]) => {
+                            const formattedKey = key.replace(/([A-Z])/g, ' $1').trim();
+                            if (Array.isArray(value)) {
+                              return `${formattedKey}:\n${value.map(item => `• ${item}`).join('\n')}`;
+                            }
+                            return `${formattedKey}: ${value}`;
+                          }).join('\n\n');
+                        
+                        return `Chapter ${chapter.Chapter}: ${chapter.Title}\n\n${chapterContent}`;
+                      }).join('\n\n')}`;
+                      
+                      navigator.clipboard.writeText(formattedOutline);
                       showToast('Outline copied to clipboard!');
                     }}
                   >
-                    Copy All Outlines
+                    Copy Outline
                   </Button>
                 </div>
-                <div className="space-y-6">
-                  {selectedProject.outlines.map((outline, index) => (
-                    <Card key={index} className="bg-white shadow-sm">
-                      <div className="p-4">
-                        <div className="flex items-center justify-between mb-2">
-                          <h4 className="font-semibold text-purple-800">{outline.title}</h4>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="text-purple-800 hover:text-purple-900"
-                            onClick={() => {
-                              navigator.clipboard.writeText(JSON.stringify(outline, null, 2));
-                              showToast('Outline copied to clipboard!');
-                            }}
-                          >
-                            Copy
-                          </Button>
-                        </div>
-                        <div className="prose prose-sm max-w-none">
-                          <h3 className="text-2xl font-bold mb-2">{outline.outline.title}</h3>
-                          {outline.outline.chapters && outline.outline.chapters.length > 0 ? (
-                            outline.outline.chapters.map((chapter) => (
-                              <div key={chapter.title} className="mt-6">
-                                <h4 className="text-xl text-black font-bold mb-2">
-                                  {chapter.title}
-                                </h4>
-                                <div className="ml-4 space-y-2">
-                                  {chapter.content.map((content, contentIndex) => (
-                                    <p key={contentIndex} className="text-gray-700">
-                                      {content}
-                                    </p>
-                                  ))}
-                                </div>
-                              </div>
-                            ))
-                          ) : (
-                            <p className="text-gray-600">No chapters available in this outline.</p>
-                          )}
-                        </div>
-                      </div>
-                    </Card>
-                  ))}
+                <div className="prose prose-sm max-w-none">
+                  {selectedProject.outlines[0].outline && (
+                    <>
+                      <h3 className="text-2xl font-bold mb-4">{selectedProject.outlines[0].outline.Title}</h3>
+                      {selectedProject.outlines[0].outline.Chapters && selectedProject.outlines[0].outline.Chapters.length > 0 ? (
+                        selectedProject.outlines[0].outline.Chapters.map((chapter) => (
+                          <div key={chapter.Chapter} className="mt-6">
+                            <h4 className="text-xl text-black font-bold mb-2">
+                              Chapter {chapter.Chapter}: {chapter.Title}
+                            </h4>
+                            <div className="ml-4 space-y-2">
+                              {Object.entries(chapter)
+                                .filter(([key]) => !['Chapter', 'Title'].includes(key))
+                                .map(([key, value]) => (
+                                  <div key={key} className="mb-4">
+                                    <h5 className="font-semibold text-gray-800 mb-2">
+                                      {key.replace(/([A-Z])/g, ' $1').trim()}
+                                    </h5>
+                                    {Array.isArray(value) ? (
+                                      <ul className="list-disc list-inside text-gray-700 space-y-1">
+                                        {value.map((item, index) => (
+                                          <li key={index} className="text-gray-700">{item}</li>
+                                        ))}
+                                      </ul>
+                                    ) : (
+                                      <p className="text-gray-700">{value}</p>
+                                    )}
+                                  </div>
+                                ))}
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <p className="text-gray-600">No chapters available in this outline.</p>
+                      )}
+                    </>
+                  )}
                 </div>
               </Card>
             )}

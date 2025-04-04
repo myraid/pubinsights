@@ -11,7 +11,8 @@ import {
   limit,
   Timestamp,
   increment,
-  setDoc
+  setDoc,
+  deleteDoc
 } from 'firebase/firestore';
 import { db } from './config';
 import type { Project, BookOutline, RelatedBook, SearchHistory, ContentHistory, AmazonBook, TrendData } from '../types/firebase';
@@ -72,6 +73,14 @@ export const getProject = async (projectId: string) => {
       return { 
         id: docSnap.id, 
         ...data,
+        outlines: data.outlines?.map((outline: any) => ({
+          ...outline,
+          createdAt: outline.createdAt || Timestamp.now(),
+          outline: outline.outline || {
+            Title: '',
+            Chapters: []
+          }
+        })) || [],
         createdAt: data.createdAt?.toDate(),
         updatedAt: data.updatedAt?.toDate()
       } as Project;
@@ -169,29 +178,62 @@ export const getRecentBookOutlines = async (userId: string) => {
 };
 
 // Search History Services
-export const saveSearchHistory = async (userId: string, query: string, trendsData: any, booksData: any) => {
-  const searchData = {
-    userId,
-    query,
-    trendsData,
-    booksData,
-    createdAt: Timestamp.now()
-  };
+export const saveUserSearch = async (userId: string, keyword: string, books: AmazonBook[], trendData: TrendData) => {
+  try {
+    const searchHistoryRef = collection(db, 'searchHistory');
+    const searchData = {
+      userId,
+      keyword,
+      timestamp: Date.now(),
+      books,
+      trendData,
+      searchType: trendData.searchType || 'general',
+      generatedContent: trendData.generatedContent || null,
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now()
+    };
 
-  const docRef = await addDoc(collection(db, 'searchHistory'), searchData);
-  return { id: docRef.id, ...searchData };
+    // Add to searchHistory collection
+    await addDoc(searchHistoryRef, searchData);
+
+    // Also save to user's searches for quick access
+    const userSearchRef = doc(db, 'users', userId, 'searches', keyword);
+    await setDoc(userSearchRef, {
+      ...searchData,
+      lastAccessed: Timestamp.now()
+    });
+
+    return searchData;
+  } catch (error) {
+    console.error('Error saving search:', error);
+    throw error;
+  }
 };
 
-export const getRecentSearches = async (userId: string) => {
-  const q = query(
-    collection(db, 'searchHistory'),
-    where('userId', '==', userId),
-    orderBy('createdAt', 'desc'),
-    limit(10)
-  );
-  
-  const querySnapshot = await getDocs(q);
-  return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as SearchHistory[];
+export const getUserSearches = async (userId: string, searchType?: string): Promise<SearchHistoryItem[]> => {
+  try {
+    const searchHistoryRef = collection(db, 'searchHistory');
+    let q = query(
+      searchHistoryRef,
+      where('userId', '==', userId),
+      orderBy('timestamp', 'desc')
+    );
+
+    if (searchType) {
+      q = query(q, where('searchType', '==', searchType));
+    }
+
+    q = query(q, limit(10));
+    
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    })) as SearchHistoryItem[];
+  } catch (error) {
+    console.error('Error fetching search history:', error);
+    throw error;
+  }
 };
 
 // Content History Services
@@ -254,38 +296,6 @@ interface SearchHistoryItem {
   trendData: TrendData;
 }
 
-export const saveUserSearch = async (userId: string, keyword: string, books: AmazonBook[], trendData: TrendData) => {
-  try {
-    const searchRef = doc(db, 'users', userId, 'searches', keyword);
-    const searchData: SearchHistoryItem = {
-      keyword,
-      timestamp: Date.now(),
-      books,
-      trendData
-    };
-    await setDoc(searchRef, searchData);
-  } catch (error) {
-    console.error('Error saving search:', error);
-    throw error;
-  }
-};
-
-export const getUserSearches = async (userId: string): Promise<SearchHistoryItem[]> => {
-  try {
-    const searchesRef = collection(db, 'users', userId, 'searches');
-    const q = query(searchesRef, orderBy('timestamp', 'desc'), limit(10));
-    const querySnapshot = await getDocs(q);
-    
-    return querySnapshot.docs.map(doc => ({
-      ...doc.data(),
-      keyword: doc.id
-    })) as SearchHistoryItem[];
-  } catch (error) {
-    console.error('Error fetching search history:', error);
-    throw error;
-  }
-};
-
 export const addBooksToProject = async (projectId: string, keyword: string, books: AmazonBook[]) => {
   try {
     const projectRef = doc(db, 'projects', projectId);
@@ -319,35 +329,46 @@ export const addBooksToProject = async (projectId: string, keyword: string, book
 
 // Outline History Services
 export const saveOutlineHistory = async (userId: string, outline: any) => {
-  const historyRef = collection(db, 'outlineHistory');
-  const userHistoryRef = doc(historyRef, userId);
-  
   try {
-    // Get current history
-    const userHistoryDoc = await getDoc(userHistoryRef);
-    let history = [];
+    const outlineHistoryRef = collection(db, 'outlineHistory');
     
-    if (userHistoryDoc.exists()) {
-      history = userHistoryDoc.data().history || [];
-    }
-    
-    // Add new outline to history
-    history.unshift({
-      ...outline,
-      createdAt: Timestamp.now()
-    });
-    
-    // Keep only last 10 outlines
-    history = history.slice(0, 10);
-    
-    // Update history document
-    await setDoc(userHistoryRef, {
+    // Create new outline history document
+    const newOutline = {
       userId,
-      history,
+      ...outline,
+      createdAt: Timestamp.now(),
       updatedAt: Timestamp.now()
-    });
+    };
+
+    // Add new outline to history collection
+    await addDoc(outlineHistoryRef, newOutline);
+
+    // Get current history - just filter by userId, no ordering needed for index
+    const q = query(
+      outlineHistoryRef,
+      where('userId', '==', userId)
+    );
     
-    return true;
+    const querySnapshot = await getDocs(q);
+    const history = querySnapshot.docs
+      .map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }))
+      // Sort in memory instead of in query
+      .sort((a, b) => b.createdAt.seconds - a.createdAt.seconds);
+
+    // Delete older documents if we have more than 10
+    if (history.length > 10) {
+      // Delete the oldest ones (after index 9)
+      const toDelete = history.slice(10);
+      for (const doc of toDelete) {
+        await deleteDoc(doc(outlineHistoryRef, doc.id));
+      }
+    }
+
+    // Return only the 10 most recent
+    return history.slice(0, 10);
   } catch (error) {
     console.error('Error saving outline history:', error);
     throw error;
@@ -355,22 +376,39 @@ export const saveOutlineHistory = async (userId: string, outline: any) => {
 };
 
 export const getOutlineHistory = async (userId: string) => {
-  const historyRef = collection(db, 'outlineHistory');
-  const userHistoryRef = doc(historyRef, userId);
-  
   try {
-    const userHistoryDoc = await getDoc(userHistoryRef);
-    if (userHistoryDoc.exists()) {
-      return userHistoryDoc.data().history || [];
-    }
-    return [];
+    const outlineHistoryRef = collection(db, 'outlineHistory');
+    const q = query(
+      outlineHistoryRef,
+      where('userId', '==', userId)
+    );
+    
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs
+      .map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }))
+      .sort((a, b) => b.createdAt.seconds - a.createdAt.seconds)
+      .slice(0, 10);
   } catch (error) {
     console.error('Error getting outline history:', error);
     throw error;
   }
 };
 
-export const addOutlineToProject = async (projectId: string, title: string, outline: OutlineResponse) => {
+export const deleteOutlineFromHistory = async (userId: string, outlineId: string) => {
+  try {
+    const outlineRef = doc(db, 'outlineHistory', outlineId);
+    await deleteDoc(outlineRef);
+    return true;
+  } catch (error) {
+    console.error('Error deleting outline from history:', error);
+    throw error;
+  }
+};
+
+export const addOutlineToProject = async (projectId: string, title: string, outline: any) => {
   try {
     const projectRef = doc(db, 'projects', projectId);
     const projectDoc = await getDoc(projectRef);
@@ -379,19 +417,25 @@ export const addOutlineToProject = async (projectId: string, title: string, outl
       throw new Error('Project not found');
     }
 
-    const projectData = projectDoc.data();
-    const outlines = projectData.outlines || [];
-    
-    // Add new outline data
-    outlines.push({
+    // Replace existing outline with new one
+    const updatedOutlines = [{
       title,
-      outline: outline.outline,
+      outline: {
+        Title: outline.outline.Title,
+        Chapters: outline.outline.Chapters.map((chapter: any) => ({
+          Chapter: chapter.Chapter,
+          Title: chapter.Title,
+          ...Object.fromEntries(
+            Object.entries(chapter).filter(([key]) => !['Chapter', 'Title'].includes(key))
+          )
+        }))
+      },
       createdAt: Timestamp.now()
-    });
+    }];
 
-    // Update project with new outline data
+    // Update project with new outline
     await updateDoc(projectRef, {
-      outlines,
+      outlines: updatedOutlines,
       updatedAt: Timestamp.now()
     });
 

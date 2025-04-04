@@ -1,83 +1,59 @@
 import { NextResponse } from 'next/server'
 
-interface Chapter {
-  title: string;
-  content: string[];
+interface ChapterContent {
+  Chapter: number;
+  Title: string;
+  [key: string]: any; // Allow for dynamic fields
 }
 
 interface OutlineData {
-  title: string;
-  chapters: Chapter[];
+  Title: string;
+  Chapters: ChapterContent[];
 }
 
 function parseOutlineContent(title: string, content: string): OutlineData {
   try {
-    // Split content into lines and process
-    const lines = content.split('\n').map(line => line.trim()).filter(line => line);
+    // Parse the JSON content
+    const parsedContent = JSON.parse(content);
+    console.log('parsedContent', parsedContent);
     
-    // Process chapters
-    const chapters: Chapter[] = [];
-    let currentChapter: Partial<Chapter> = {};
-    let currentContent: string[] = [];
-    
-    // Handle first line as chapter if it's a chapter heading or contains "Introduction"
-    if (lines[0]) {
-      const chapterMatch = lines[0].match(/\*\*(.*?)\*\*/) || 
-                          lines[0].match(/^Chapter\s+\d+:(.+)/) || 
-                          lines[0].match(/^(.*?Introduction.*?)$/) ||
-                          lines[0].match(/^##(.+)$/);
-      if (chapterMatch) {
-        currentChapter = {
-          title: chapterMatch[1] ? chapterMatch[1].trim() : lines[0].trim()
-        };
-      }
+    // Validate the structure
+    if (!parsedContent.Title || !Array.isArray(parsedContent.Chapters)) {
+      throw new Error('Invalid outline structure');
     }
 
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i];
-      
-      // Check for new chapter heading
-      const chapterMatch = line.match(/\*\*(.*?)\*\*/) || 
-                          line.match(/^Chapter\s+\d+:(.+)/) || 
-                          line.match(/^(.*?Introduction.*?)$/) ||
-                          line.match(/^##(.+)$/);
+    // Process each chapter to ensure all required fields are present
+    const processedChapters = parsedContent.Chapters.map((chapter: any, index: number) => {
+      // Create a base chapter object with required fields
+      const processedChapter: ChapterContent = {
+        Chapter: chapter.Chapter || index + 1,
+        Title: chapter.Title || 'Untitled Chapter'
+      };
 
-      if (chapterMatch) {  // Only process as new chapter if not first line
-        // Save previous chapter if exists
-        if (currentChapter.title && i > 0) {
-          chapters.push({
-            title: currentChapter.title,
-            content: currentContent
-          });
+      // Add all other fields from the chapter
+      Object.entries(chapter).forEach(([key, value]) => {
+        // Skip the fields we've already processed
+        if (!['Chapter', 'Title'].includes(key)) {
+          // Handle different types of values
+          if (Array.isArray(value)) {
+            processedChapter[key] = value;
+          } else if (typeof value === 'object' && value !== null) {
+            processedChapter[key] = value;
+          } else {
+            processedChapter[key] = String(value);
+          }
         }
-        
-        // Start new chapter
-        currentChapter = {
-          title: chapterMatch[1] ? chapterMatch[1].trim() : line.trim()
-        };
-        currentContent = [];
-      } else  {
-        // Add bullet point as separate item with newline
-        currentContent.push(line+"\n");
-
-      }
-    }
-    
-    // Add the last chapter if exists
-    if (currentChapter.title) {  // Removed content length check to include chapters with no bullets
-      chapters.push({
-        title: currentChapter.title,
-        content: currentContent
       });
-    }
+      console.log('processedChapter', processedChapter);
+      return processedChapter;
+    });
 
-    if (chapters.length === 0) {
-      throw new Error('No chapters available in this outline.');
-    }
+    // Sort chapters by chapter number
+    processedChapters.sort((a: ChapterContent, b: ChapterContent) => a.Chapter - b.Chapter);
 
     return {
-      title,
-      chapters
+      Title: parsedContent.Title,
+      Chapters: processedChapters
     };
   } catch (error) {
     console.error('Error parsing outline content:', error);
