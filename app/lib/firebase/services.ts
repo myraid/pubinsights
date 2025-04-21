@@ -408,6 +408,28 @@ export const deleteOutlineFromHistory = async (userId: string, outlineId: string
   }
 };
 
+export const getKeywordInsights = async (userId: string, keyword: string) => {
+  try {
+    // Get the user's search document for this keyword
+    const userSearchRef = doc(db, 'users', userId, 'searches', keyword);
+    const searchDoc = await getDoc(userSearchRef);
+    
+    if (!searchDoc.exists()) {
+      return null;
+    }
+
+    const data = searchDoc.data();
+    return {
+      insights: data.generatedContent || [],
+      timestamp: data.timestamp,
+      lastAccessed: data.lastAccessed?.toDate()
+    };
+  } catch (error) {
+    console.error('Error fetching insights:', error);
+    throw error;
+  }
+};
+
 export const addOutlineToProject = async (projectId: string, title: string, outline: any) => {
   try {
     const projectRef = doc(db, 'projects', projectId);

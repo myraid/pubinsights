@@ -14,14 +14,13 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 export default function SocialMedia() {
   const [bookTitle, setBookTitle] = useState("")
   const [description, setDescription] = useState("")
-  const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([])
   const [content, setContent] = useState<Record<string, any>>({})
   const [loading, setLoading] = useState(false)
   const [pdfFile, setPdfFile] = useState<File | null>(null)
   const [pdfError, setPdfError] = useState("")
   const [projectBooks, setProjectBooks] = useState<{ id: string; title: string }[]>([])
 
-  const availablePlatforms = ["Instagram", "TikTok", "YouTube", "Facebook"]
+  const platforms = ["Facebook", "Instagram"]
 
   useEffect(() => {
     // In a real app, fetch the list of books from your backend or state management
@@ -45,8 +44,8 @@ export default function SocialMedia() {
   }
 
   const generateContent = async () => {
-    if (!bookTitle.trim() || !description.trim() || selectedPlatforms.length === 0) {
-      return
+    if (!bookTitle.trim() || !description.trim()) {
+      return;
     }
 
     setLoading(true)
@@ -54,10 +53,10 @@ export default function SocialMedia() {
       const formData = new FormData()
       formData.append("bookTitle", bookTitle)
       formData.append("description", description)
-      formData.append("platforms", JSON.stringify(selectedPlatforms))
       if (pdfFile) {
         formData.append("pdfFile", pdfFile)
       }
+      formData.append("platforms", JSON.stringify(platforms))
 
       const response = await fetch("/api/generate-social", {
         method: "POST",
@@ -117,7 +116,8 @@ export default function SocialMedia() {
             onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setDescription(e.target.value)}
             className="border-primary"
           />
-          <div className="space-y-2">
+          
+          <div className="space-y-2 pt-2 border-t">
             <p className="text-sm text-gray-600">Upload Book Draft (Optional)</p>
             <input
               type="file"
@@ -131,46 +131,27 @@ export default function SocialMedia() {
                 hover:file:bg-primary/80"
             />
             {pdfError && <p className="text-red-500 text-sm">{pdfError}</p>}
+            {pdfFile && (
+              <p className="text-sm text-green-600">
+                ✓ PDF uploaded: {pdfFile.name}
+              </p>
+            )}
           </div>
-          <Listbox value={selectedPlatforms} onChange={setSelectedPlatforms} multiple>
-            <div className="relative mt-1">
-              <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
-                <span className="block truncate">
-                  {selectedPlatforms.length === 0
-                    ? "Select platforms"
-                    : `${selectedPlatforms.length} platform(s) selected`}
+          
+          <div className="flex gap-2 items-center justify-center py-2 px-4 bg-gray-50 rounded-lg">
+            <p className="text-sm text-gray-600">Will generate posts for:</p>
+            <div className="flex gap-2">
+              {platforms.map((platform) => (
+                <span key={platform} className="px-2 py-1 bg-primary/10 text-primary rounded text-sm">
+                  {platform}
                 </span>
-                <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                  <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                </span>
-              </Listbox.Button>
-              <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                {availablePlatforms.map((platform) => (
-                  <Listbox.Option
-                    key={platform}
-                    className={({ active }) =>
-                      `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                        active ? "bg-amber-100 text-amber-900" : "text-gray-900"
-                      }`
-                    }
-                    value={platform}
-                  >
-                    {({ selected }) => (
-                      <>
-                        <span className={`block truncate ${selected ? "font-medium" : "font-normal"}`}>{platform}</span>
-                        {selected && (
-                          <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">✓</span>
-                        )}
-                      </>
-                    )}
-                  </Listbox.Option>
-                ))}
-              </Listbox.Options>
+              ))}
             </div>
-          </Listbox>
+          </div>
+
           <Button
             onClick={generateContent}
-            disabled={loading || !bookTitle.trim() || !description.trim() || selectedPlatforms.length === 0}
+            disabled={loading || !bookTitle.trim() || !description.trim()}
             className="w-full bg-primary text-white hover:bg-primary/90"
           >
             {loading ? "Generating..." : "Generate Content"}

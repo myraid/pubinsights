@@ -14,8 +14,9 @@ import axios from 'axios'
 import dynamic from 'next/dynamic'
 import type { TrendData, AmazonBook } from "@/app/types/index"
 import { useAuth } from "../context/AuthContext"
-import { getUserProjects, saveUserSearch, addBooksToProject } from "../lib/firebase/services"
+import { getUserProjects, saveUserSearch, addBooksToProject, getKeywordInsights } from "../lib/firebase/services"
 import type { Project } from "../types/firebase"
+import { estimateMonthlySales, formatSales } from "../utils/bsrCalculations"
 
 // Add Plotly types
 interface PlotlyLayout {
@@ -84,6 +85,22 @@ interface PlotlyLayout {
   }>;
 }
 
+// Add a new interface for Plot data
+interface PlotData {
+  x: any[];
+  y: any[];
+  type: string;
+  mode?: string;
+  name?: string;
+  line?: {
+    shape?: string;
+    smoothing?: number;
+    width?: number;
+    color?: string;
+  };
+  hovertemplate?: string;
+}
+
 interface PlotlyConfig {
   displayModeBar?: boolean;
   responsive?: boolean;
@@ -120,6 +137,9 @@ const BookResearch = React.memo(() => {
   const [currentPage, setCurrentPage] = useState(1)
   const [hasMore, setHasMore] = useState(true)
   const [showIndieOnly, setShowIndieOnly] = useState(false)
+  const [insights, setInsights] = useState<string[]>([])
+  const [insightsLoading, setInsightsLoading] = useState(false)
+  const [pollingTimeout, setPollingTimeout] = useState<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -153,12 +173,74 @@ const BookResearch = React.memo(() => {
     fetchProjects();
   }, [user]);
 
+  // Function to check for insights
+  const checkForInsights = async (userId: string, searchKeyword: string) => {
+    try {
+      const insightsData = await getKeywordInsights(userId, searchKeyword);
+      
+      if (insightsData?.insights) {
+        const insightsArray = Array.isArray(insightsData.insights) 
+          ? insightsData.insights 
+          : [insightsData.insights];
+        setInsights(insightsArray);
+        return true; // Insights found
+      }
+      return false; // No insights yet
+    } catch (error) {
+      console.error('Error checking insights:', error);
+      return false;
+    }
+  };
+
+  // Start polling for insights
+  const startPollingForInsights = (userId: string, searchKeyword: string) => {
+    setInsightsLoading(true);
+    let attempts = 0;
+    const maxAttempts = 10; // Maximum 10 attempts (50 seconds)
+    
+    const poll = async () => {
+      attempts++;
+      const hasInsights = await checkForInsights(userId, searchKeyword);
+      
+      if (hasInsights) {
+        setInsightsLoading(false);
+        if (pollingTimeout) {
+          clearTimeout(pollingTimeout);
+          setPollingTimeout(null);
+        }
+      } else if (attempts < maxAttempts) {
+        // Continue polling every 5 seconds
+        const timeout = setTimeout(() => poll(), 5000);
+        setPollingTimeout(timeout);
+      } else {
+        // Stop polling after max attempts
+        setInsightsLoading(false);
+        if (pollingTimeout) {
+          clearTimeout(pollingTimeout);
+          setPollingTimeout(null);
+        }
+      }
+    };
+
+    poll();
+  };
+
+  // Cleanup polling on unmount or when keyword changes
+  useEffect(() => {
+    return () => {
+      if (pollingTimeout) {
+        clearTimeout(pollingTimeout);
+      }
+    };
+  }, [pollingTimeout]);
+
   const fetchData = async (keyword: string, page: number = 1) => {
     try {
       setLoading(true)
       // Clear existing books when starting a new search
       if (page === 1) {
         setBooks([]);
+        setInsights([]); // Clear existing insights
       }
       
       const response = await fetch(`/api/trends?keyword=${encodeURIComponent(keyword)}`)
@@ -184,7 +266,6 @@ const BookResearch = React.memo(() => {
       
       // Log Amazon books API call
       const booksResponse = await fetch(`/api/amazon-books/search?keywords=${encodeURIComponent(keyword)}&page=${page}`)
-      console.log('Amazon books API response status:', booksResponse.status)
       const booksData = await booksResponse.json()
       
       // If it's page 1, fetch page 2 as well for complete data
@@ -202,7 +283,6 @@ const BookResearch = React.memo(() => {
       // Process the response to extract required information
       const processedBooks = combinedBooksData.SearchResult?.Items?.map((item: any) => {
         const publicationYear = item.ItemInfo.ContentInfo?.PublicationDate?.DisplayValue?.split('T')[0] || "unknown";
-        console.log('product info : ', item.ItemInfo.ContentInfo)
 
         const publisher = item.ItemInfo.ByLineInfo.Manufacturer?.DisplayValue || 'Unknown Publisher';
         const isIndie = publisher.toLowerCase().includes("independently published") ||
@@ -264,6 +344,8 @@ const BookResearch = React.memo(() => {
             });
 
             await saveUserSearch(user.uid, keyword, processedBooks, validTrendData);
+            // Start polling for insights after saving the search
+            startPollingForInsights(user.uid, keyword);
           } catch (error) {
             console.error("Error saving search:", error);
           }
@@ -315,6 +397,11 @@ const BookResearch = React.memo(() => {
     return Math.min(...book.bsr.map((rank) => rank.rank))
   }
 
+  const getEstimatedSales = (book: AmazonBook) => {
+    const bsr = getOverallBSR(book);
+    return formatSales(estimateMonthlySales(bsr));
+  }
+
   const openAmazonPage = (book: AmazonBook) => {
     window.open(`https://www.amazon.com/dp/${book.id}`, "_blank")
   }
@@ -324,13 +411,13 @@ const BookResearch = React.memo(() => {
     : books;
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
+      <div className="mb-6">
         <h1 className="text-2xl font-semibold text-gray-900">Book Market Research</h1>
       </div>
 
-      <Card className="bg-white shadow-sm p-0">
-        <div className="flex gap-4 p-4">
+      <Card className="bg-white shadow-md p-4 sm:p-6 border border-gray-200 mb-6">
+        <div className="flex gap-4">
           <TextInput
             placeholder="Enter a topic or keyword for your book..."
             value={keyword}
@@ -349,139 +436,177 @@ const BookResearch = React.memo(() => {
       </Card>
 
       {data && (
-        <Card className="bg-white shadow-sm p-6">
-          <div className="flex items-center mb-6">
-            <TrendingUp className="w-6 h-6 text-primary mr-2" />
-            <h2 className="text-lg font-semibold text-primary">Interest over time</h2>
-          </div>
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="w-full">
-              {loading ? (
-                <div className="flex items-center justify-center h-[400px]">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        <div className="grid grid-cols-12 gap-6">
+          <div className="col-span-12 lg:col-span-8">
+            <Card className="bg-white shadow-md p-4 sm:p-6 border border-gray-200 hover:border-primary/20 transition-colors duration-200 h-full">
+              <div className="flex items-center mb-6">
+                <TrendingUp className="w-6 h-6 text-primary mr-2" />
+                <h2 className="text-lg font-semibold text-primary">Interest over time</h2>
+              </div>
+              <div className="flex flex-col h-[calc(100%-3rem)]">
+                <div className="w-full flex-grow">
+                  {loading ? (
+                    <div className="flex items-center justify-center h-full min-h-[500px]">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                    </div>
+                  ) : (
+                    (data.webSearch?.timelineData?.length > 0 || data.youtube?.timelineData?.length > 0) && (
+                      <div className="w-full h-full min-h-[500px] relative">
+                        <div className="absolute inset-0">
+                          <Plot
+                            data={[
+                              ...(data.webSearch?.timelineData?.length > 0 ? [{
+                                x: data.webSearch.timelineData.map(point => 
+                                  new Date(parseInt(point.time) * 1000)
+                                ),
+                                y: data.webSearch.timelineData.map(point => point.value[0]),
+                                type: "scatter",
+                                mode: "lines",
+                                name: "Web Search",
+                                line: {
+                                  shape: "spline",
+                                  smoothing: 1.3,
+                                  width: 3,
+                                  color: '#2563eb'
+                                }
+                              }] as any : []),
+                              ...(data.youtube?.timelineData?.length > 0 ? [{
+                                x: data.youtube.timelineData.map(point => 
+                                  new Date(parseInt(point.time) * 1000)
+                                ),
+                                y: data.youtube.timelineData.map(point => point.value[0]),
+                                type: "scatter",
+                                mode: "lines",
+                                name: "YouTube Search",
+                                line: {
+                                  shape: "spline",
+                                  smoothing: 1.3,
+                                  width: 3,
+                                  color: '#dc2626'
+                                }
+                              }] as any : [])
+                            ]}
+                            layout={{
+                              autosize: true,
+                              margin: { t: 30, r: 40, b: 70, l: 60 },
+                              xaxis: {
+                                title: '',
+                                showgrid: false,
+                                gridcolor: '#f3f4f6',
+                                zeroline: false,
+                                tickformat: '%b %Y',
+                                dtick: 'M2',
+                                tickangle: -45,
+                                tickfont: {
+                                  size: 12,
+                                  color: '#6b7280'
+                                },
+                                range: [
+                                  new Date(Date.now() - 6 * 30 * 24 * 60 * 60 * 1000).toISOString(),
+                                  new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+                                ],
+                                automargin: true
+                              },
+                              yaxis: {
+                                title: 'Search Interest',
+                                titlefont: {
+                                  size: 13,
+                                  color: '#6b7280'
+                                },
+                                showgrid: false,
+                                gridcolor: '#f3f4f6',
+                                zeroline: false,
+                                range: [0, 100],
+                                ticksuffix: '%',
+                                tickfont: {
+                                  size: 12,
+                                  color: '#6b7280'
+                                },
+                                rangemode: 'tozero',
+                                automargin: true
+                              },
+                              plot_bgcolor: 'white',
+                              paper_bgcolor: 'white',
+                              showlegend: true,
+                              legend: {
+                                orientation: 'h',
+                                yanchor: 'bottom',
+                                y: -0.35,
+                                xanchor: 'center',
+                                x: 0.5,
+                                font: {
+                                  size: 12,
+                                  color: '#6b7280'
+                                },
+                                bgcolor: 'rgba(255,255,255,0.9)',
+                                bordercolor: 'rgba(0,0,0,0.1)',
+                                borderwidth: 1,
+                                traceorder: 'normal'
+                              },
+                              hovermode: 'x unified',
+                              hoverlabel: {
+                                bgcolor: 'white',
+                                bordercolor: '#e5e7eb',
+                                font: {
+                                  size: 12,
+                                  color: '#374151'
+                                }
+                              }
+                            } as PlotlyLayout}
+                            config={{
+                              displayModeBar: false,
+                              responsive: true,
+                              scrollZoom: false
+                            } as PlotlyConfig}
+                          />
+                        </div>
+                      </div>
+                    )
+                  )}
                 </div>
-              ) : (
-                (data.webSearch?.timelineData?.length > 0 || data.youtube?.timelineData?.length > 0) && (
-                  <Plot
-                    data={[
-                      ...(data.webSearch?.timelineData?.length > 0 ? [{
-                        x: data.webSearch.timelineData.map(point => 
-                          new Date(parseInt(point.time) * 1000)
-                        ),
-                        y: data.webSearch.timelineData.map(point => point.value[0]),
-                        type: "scatter",
-                        mode: "lines",
-                        name: "Web Search",
-                        line: {
-                          shape: "spline",
-                          smoothing: 1.3,
-                        },
-                        hovertemplate: 'Web: %{y:.0f}%<extra></extra>'
-                      }] : []),
-                      ...(data.youtube?.timelineData?.length > 0 ? [{
-                        x: data.youtube.timelineData.map(point => 
-                          new Date(parseInt(point.time) * 1000)
-                        ),
-                        y: data.youtube.timelineData.map(point => point.value[0]),
-                        type: "scatter",
-                        mode: "lines",
-                        name: "YouTube Search",
-                        line: {
-                          shape: "spline",
-                          smoothing: 1.3,
-                        },
-                        hovertemplate: 'YouTube: %{y:.0f}%<extra></extra>'
-                      }] : [])
-                    ]}
-                    layout={{
-                      height: 400,
-                      margin: { t: 10, r: 30, b: 40, l: 40 },
-                      xaxis: {
-                        title: '',
-                        showgrid: false,
-                        zeroline: false,
-                        tickformat: '%b %Y',
-                        dtick: 'M1',
-                        tickangle: 0,
-                        tickfont: {
-                          size: 12,
-                          color: '#666'
-                        },
-                        range: [
-                          new Date(Date.now() - 6 * 30 * 24 * 60 * 60 * 1000).toISOString(),
-                          new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
-                        ],
-                        automargin: true
-                      },
-                      yaxis: {
-                        title: '',
-                        showgrid: true,
-                        gridcolor: '#f0f0f0',
-                        zeroline: false,
-                        range: [0, 100],
-                        ticksuffix: '',
-                        tickfont: {
-                          size: 12,
-                          color: '#666'
-                        },
-                        rangemode: 'tozero',
-                        automargin: true
-                      },
-                      plot_bgcolor: 'white',
-                      paper_bgcolor: 'white',
-                      showlegend: true,
-                      legend: {
-                        orientation: 'h',
-                        yanchor: 'bottom',
-                        y: -0.2,
-                        xanchor: 'center',
-                        x: 0.5,
-                        font: {
-                          size: 12,
-                          color: '#666'
-                        },
-                        bgcolor: 'rgba(255,255,255,0.9)',
-                        bordercolor: 'rgba(0,0,0,0.1)',
-                        borderwidth: 1
-                      },
-                      hovermode: 'x unified',
-                      autosize: true,
-                      shapes: [
-                        {
-                          type: 'rect',
-                          xref: 'paper',
-                          yref: 'paper',
-                          x0: 0,
-                          y0: 0,
-                          x1: 1,
-                          y1: 1,
-                          line: {
-                            color: 'rgba(0,0,0,0.1)',
-                            width: 1,
-                          },
-                          layer: 'below'
-                        }
-                      ]
-                    } as PlotlyLayout}
-                    config={{
-                      displayModeBar: false,
-                      responsive: true,
-                      scrollZoom: false
-                    } as PlotlyConfig}
-                    style={{
-                      width: '100%',
-                      minHeight: '400px'
-                    }}
-                  />
-                )
-              )}
-            </div>
+              </div>
+            </Card>
           </div>
-        </Card>
+
+          <div className="col-span-12 lg:col-span-4">
+            <Card className="bg-white shadow-md p-4 sm:p-6 border border-gray-200 hover:border-primary/20 transition-colors duration-200 h-full">
+              <div className="flex items-center mb-6">
+                <Filter className="w-6 h-6 text-primary mr-2" />
+                <h2 className="text-lg font-semibold text-primary">Market Insights</h2>
+              </div>
+              
+              <div className="space-y-4">
+                {insightsLoading ? (
+                  <div className="flex items-center justify-center h-[400px]">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                    <span className="ml-3 text-gray-500">Generating market insights...</span>
+                  </div>
+                ) : insights.length > 0 ? (
+                  <div className="space-y-3">
+                    {insights.map((insight, index) => (
+                      <div 
+                        key={index}
+                        className="p-4 bg-primary/5 rounded-lg border border-primary/10"
+                      >
+                        {insight}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center text-gray-500 py-8">
+                    {keyword 
+                      ? "AI is analyzing the market data. Insights will appear here automatically."
+                      : "Enter a keyword and click Analyze to get started"}
+                  </div>
+                )}
+              </div>
+            </Card>
+          </div>
+        </div>
       )}
 
       {filteredBooks.length > 0 && (
-        <Card className="bg-white shadow-sm p-6">
+        <Card className="bg-white shadow-md p-6 border border-gray-200">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-4">
               <div className="flex items-center">
@@ -519,7 +644,7 @@ const BookResearch = React.memo(() => {
 
           <div className="space-y-4">
             {filteredBooks.map((book) => (
-              <div key={book.id} className="flex gap-4 p-4 border rounded-lg hover:bg-primary/5 transition-colors duration-200">
+              <div key={book.id} className="flex gap-4 p-4 border border-gray-100 rounded-lg hover:bg-primary/5 hover:border-primary/20 transition-colors duration-200">
                 <div className="relative w-24 h-32 flex-shrink-0">
                   <Image
                     src={book.image}
@@ -548,12 +673,12 @@ const BookResearch = React.memo(() => {
                       <span className="truncate">{book.author}</span>
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-xs text-gray-500">Rating</span>
-                      <span>{book.rating.toFixed(1)} ({book.reviewCount} reviews)</span>
+                      <span className="text-xs text-gray-500">Est. Monthly Sales</span>
+                      <span>{getEstimatedSales(book)} copies</span>
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-xs text-gray-500">Rank</span>
-                      <span>{getOverallBSR(book)}</span>
+                      <span className="text-xs text-gray-500">BSR</span>
+                      <span>#{getOverallBSR(book).toLocaleString()}</span>
                     </div>
                     <div className="flex flex-col">
                       <span className="text-xs text-gray-500">Price</span>
