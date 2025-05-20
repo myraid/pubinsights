@@ -30,19 +30,24 @@ export interface TrendData {
 }
 
 export interface AmazonBook {
-  id: string;
-  title: string;
-  author: string;
+  position: number;
+  url: string;
+  asin: string;
   price: number;
-  image: string;
-  bsr: Array<{
-    rank: number;
-    category: string;
-  }>;
-  categories: string[];
+  title: string;
   rating: number;
-  reviewCount: number;
-  publisher: string;
-  publicationYear?: number;
-  isIndie: boolean;
+  image_url: string;
+  categories: string[];
+  bsr: number;
+  publication_date: string;
+  publisher: string | null;
+  manufacturer: string | null;
+  description: string;
+  product_details: any | null;
+  reviews: any[];
+  reviews_count: number;
+  rating_stars_distribution: any[];
+  review_ai_summary: string | null;
+  currency: string;
+  is_prime: boolean;
 } 

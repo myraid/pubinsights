@@ -6,36 +6,49 @@ const RAPIDAPI_HOST = 'amazon-product-info2.p.rapidapi.com';
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const keywords = searchParams.get('keywords');
-  const page = searchParams.get('page');
 
   if (!keywords) {
     return NextResponse.json({ error: 'Keywords are required' }, { status: 400 });
   }
 
   if (!RAPIDAPI_KEY) {
+    console.error('RapidAPI key is missing from environment variables');
     return NextResponse.json({ error: 'RapidAPI key is not configured' }, { status: 500 });
   }
 
   try {
-    const response = await fetch(
-      `https://${RAPIDAPI_HOST}/Amazon/search.php?keywords=${encodeURIComponent(keywords)}&sortBy=Relevance&itemPage=${page}&searchIndex=Books`,
+    console.log('Making request to my API with keywords:', keywords);
+
+
+    const response = await fetch(`http://127.0.0.1:8000/search?keywords=${keywords}`,
       {
         headers: {
-          'x-rapidapi-host': RAPIDAPI_HOST,
-          'x-rapidapi-key': RAPIDAPI_KEY,
+          'Content-Type': 'application/json', 
+          //add api key for our API
         },
+        method: "POST",
+        body: JSON.stringify({
+          "keyword": keywords,
+        }),
       }
     );
 
     if (!response.ok) {
-      throw new Error('Failed to fetch from RapidAPI');
+      const errorText = await response.text();
+      console.error('RapidAPI response error:', {
+        status: response.status,
+        statusText: response.statusText,
+        body: errorText
+      });
+      throw new Error(`Failed to fetch from RapidAPI: ${response.status} ${response.statusText}`);
     }
+    
     const data = await response.json();
     return NextResponse.json(data);
   } catch (error) {
     console.error('Error fetching Amazon books:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch books from Amazon' },
+      { error: 'Failed to fetch books from Amazon', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
   }

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Card, TextInput, Button as TremorButton } from "@tremor/react"
 import React from "react"
-import { Star, ChevronDown, TrendingUp, ShoppingCart, Filter } from "lucide-react"
+import { Star, ChevronDown, TrendingUp, ShoppingCart, Filter, Brain, Lightbulb, ThumbsUp, ThumbsDown, BarChart3, BookOpen } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
@@ -14,7 +14,7 @@ import axios from 'axios'
 import dynamic from 'next/dynamic'
 import type { TrendData, AmazonBook } from "@/app/types/index"
 import { useAuth } from "../context/AuthContext"
-import { getUserProjects, saveUserSearch, addBooksToProject, getKeywordInsights } from "../lib/firebase/services"
+import { getUserProjects, saveUserSearch, addMarketResearchToProject, getKeywordInsights } from "../lib/firebase/services"
 import type { Project } from "../types/firebase"
 import { estimateMonthlySales, formatSales } from "../utils/bsrCalculations"
 
@@ -127,6 +127,81 @@ const wellKnownPublishers = [
   "Houghton Mifflin Harcourt",
 ]
 
+interface BookCardProps {
+  book: AmazonBook;
+}
+
+const BookCard: React.FC<BookCardProps> = ({ book }) => {
+  console.log('Rendering BookCard with book:', book); // Debug log
+  return (
+    <Card className="p-4 mb-4 hover:shadow-lg transition-shadow hover:border-primary/50 hover:bg-primary/5">
+      <div className="flex gap-4">
+        <div 
+          className="relative w-32 h-48 flex-shrink-0 cursor-pointer"
+          onClick={() => window.open(book.url, '_blank')}
+        >
+          <Image
+            src={book.image_url}
+            alt={book.title}
+            fill
+            className="object-contain"
+          />
+        </div>
+        <div className="flex-1">
+          <h3 className="text-lg font-semibold mb-2 text-primary">{book.title}</h3>
+          <p className="text-sm text-gray-600 mb-4">
+            {book.manufacturer || 'Unknown'}
+          </p>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            <div>
+              <p className="text-sm text-gray-600">
+                <span className="font-medium block">Price</span>
+                ${book.price.toFixed(2)}
+              </p>
+            </div>
+            <div>
+              <p className="text-sm text-gray-600">
+                <span className="font-medium block">Rating</span>
+                {book.rating}
+              </p>
+            </div>
+            <div>
+              <p className="text-sm text-gray-600">
+                <span className="font-medium block">Reviews</span>
+                {book.reviews_count?.toLocaleString() || 0}
+              </p>
+            </div>
+            <div>
+              <p className="text-sm text-gray-600">
+                <span className="font-medium block">BSR</span>
+                {book.bsr.toLocaleString()}
+              </p>
+            </div>
+            <div>
+              <p className="text-sm text-gray-600">
+                <span className="font-medium block">Published</span>
+                {book.publication_date || 'N/A'}
+              </p>
+            </div>
+            <div>
+              <p className="text-sm text-gray-600">
+                <span className="font-medium block">Publisher</span>
+                {book.publisher || 'Unknown'}
+              </p>
+            </div>
+            <div>
+              <p className="text-sm">
+                <span className="font-medium block text-primary">Est. Monthly Sales</span>
+                <span className="text-primary font-semibold">{formatSales(estimateMonthlySales(book.bsr))}</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Card>
+  );
+};
+
 const BookResearch = React.memo(() => {
   const { user } = useAuth()
   const [keyword, setKeyword] = useState("")
@@ -137,9 +212,15 @@ const BookResearch = React.memo(() => {
   const [currentPage, setCurrentPage] = useState(1)
   const [hasMore, setHasMore] = useState(true)
   const [showIndieOnly, setShowIndieOnly] = useState(false)
-  const [insights, setInsights] = useState<string[]>([])
   const [insightsLoading, setInsightsLoading] = useState(false)
-  const [pollingTimeout, setPollingTimeout] = useState<NodeJS.Timeout | null>(null)
+  const [insights, setInsights] = useState<string[]>([])
+  const [insightsData, setInsightsData] = useState<{
+    rating?: number;
+    pros?: string[];
+    cons?: string[];
+    insights?: string[];
+    title_suggestion?: string;
+  }>({})
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -172,67 +253,6 @@ const BookResearch = React.memo(() => {
 
     fetchProjects();
   }, [user]);
-
-  // Function to check for insights
-  const checkForInsights = async (userId: string, searchKeyword: string) => {
-    try {
-      const insightsData = await getKeywordInsights(userId, searchKeyword);
-      
-      if (insightsData?.insights) {
-        const insightsArray = Array.isArray(insightsData.insights) 
-          ? insightsData.insights 
-          : [insightsData.insights];
-        setInsights(insightsArray);
-        return true; // Insights found
-      }
-      return false; // No insights yet
-    } catch (error) {
-      console.error('Error checking insights:', error);
-      return false;
-    }
-  };
-
-  // Start polling for insights
-  const startPollingForInsights = (userId: string, searchKeyword: string) => {
-    setInsightsLoading(true);
-    let attempts = 0;
-    const maxAttempts = 10; // Maximum 10 attempts (50 seconds)
-    
-    const poll = async () => {
-      attempts++;
-      const hasInsights = await checkForInsights(userId, searchKeyword);
-      
-      if (hasInsights) {
-        setInsightsLoading(false);
-        if (pollingTimeout) {
-          clearTimeout(pollingTimeout);
-          setPollingTimeout(null);
-        }
-      } else if (attempts < maxAttempts) {
-        // Continue polling every 5 seconds
-        const timeout = setTimeout(() => poll(), 5000);
-        setPollingTimeout(timeout);
-      } else {
-        // Stop polling after max attempts
-        setInsightsLoading(false);
-        if (pollingTimeout) {
-          clearTimeout(pollingTimeout);
-          setPollingTimeout(null);
-        }
-      }
-    };
-
-    poll();
-  };
-
-  // Cleanup polling on unmount or when keyword changes
-  useEffect(() => {
-    return () => {
-      if (pollingTimeout) {
-        clearTimeout(pollingTimeout);
-      }
-    };
-  }, [pollingTimeout]);
 
   const fetchData = async (keyword: string, page: number = 1) => {
     try {
@@ -268,93 +288,51 @@ const BookResearch = React.memo(() => {
       const booksResponse = await fetch(`/api/amazon-books/search?keywords=${encodeURIComponent(keyword)}&page=${page}`)
       const booksData = await booksResponse.json()
       
-      // If it's page 1, fetch page 2 as well for complete data
-      let combinedBooksData = booksData;
-      if (page === 1) {
-        const page2Response = await fetch(`/api/amazon-books/search?keywords=${encodeURIComponent(keyword)}&page=2`)
-        const page2Data = await page2Response.json()
-        combinedBooksData = {
-          SearchResult: {
-            Items: [...(booksData.SearchResult?.Items || []), ...(page2Data.SearchResult?.Items || [])]
-          }
-        }
-      }
+      console.log('Raw books data:', booksData); // Debug log
       
-      // Process the response to extract required information
-      const processedBooks = combinedBooksData.SearchResult?.Items?.map((item: any) => {
-        const publicationYear = item.ItemInfo.ContentInfo?.PublicationDate?.DisplayValue?.split('T')[0] || "unknown";
-
-        const publisher = item.ItemInfo.ByLineInfo.Manufacturer?.DisplayValue || 'Unknown Publisher';
-        const isIndie = publisher.toLowerCase().includes("independently published") ||
-                       publisher.toLowerCase().includes("self-published") ||
-                       publisher.toLowerCase().includes("self-published") ||
-                       publisher.toLowerCase().includes("unknown publisher");
-        // Get the first listing's merchant info
-        const firstListing = item.Offers?.Listings?.[0];
-        const merchantInfo = firstListing?.MerchantInfo;
-        
-        // Get the first contributor as author
-        const author = item.ItemInfo.ByLineInfo.Contributors?.[0]?.Name || 'Unknown Author';
-        
-        // Get the first price amount
-        const price = firstListing?.Price?.Amount || 0;
-        
-        // Get the first image URL
-        const image = item.Images?.Primary?.Large?.URL || '/images/cover.jpg';
-        
-        // Get BSR data
-        const bsr = item.BrowseNodeInfo.WebsiteSalesRank?.SalesRank ? [{
-          rank: item.BrowseNodeInfo.WebsiteSalesRank.SalesRank,
-          category: item.BrowseNodeInfo.BrowseNodes[0]?.ContextFreeName || 'General'
-        }] : [];
-        
-        // Get categories
-        const categories = item.BrowseNodeInfo.BrowseNodes.map((node: any) => node.DisplayName) || [];
-        
-        // Get rating and review count from the first listing's merchant info
-        console.log('merchantInfo : ', merchantInfo);
-        const rating = merchantInfo?.FeedbackRating || 0;
-        const reviewCount = merchantInfo?.FeedbackCount || 0;
-
-        return {
-          id: item.ASIN,
-          title: item.ItemInfo.Title.DisplayValue,
-          author,
-          price,
-          image,
-          bsr,
-          categories,
-          rating,
-          reviewCount,
-          publisher,
-          publicationYear,
-          isIndie
-        }
-      }) || []
-
-      if (page === 1) {
-        setBooks(processedBooks);
-        // Save search results to history
-        if (user?.uid) {
-          try {
-            console.log('Saving search to history:', {
-              keyword,
-              booksCount: processedBooks.length,
-              trendDataExists: !!validTrendData
-            });
-
-            await saveUserSearch(user.uid, keyword, processedBooks, validTrendData);
-            // Start polling for insights after saving the search
-            startPollingForInsights(user.uid, keyword);
-          } catch (error) {
-            console.error("Error saving search:", error);
-          }
-        }
-      } else {
-        setBooks(prev => [...prev, ...processedBooks]);
-      }
-
+      // The books data is already in the correct format, no need for complex mapping
+      setBooks(booksData);
       setCurrentPage(page);
+
+      // Trigger market insights after getting both trends and books data
+      if (user?.uid) {
+        // Save the search first with all required data
+        const searchData = {
+          userId: user.uid,
+          keyword,
+          books: booksData,
+          trendData: validTrendData,
+          timestamp: Date.now()
+        };
+        
+        await saveUserSearch(user.uid, keyword, booksData, validTrendData);
+        
+        // Call insights API directly
+        setInsightsLoading(true);
+        try {
+          const insightsResponse = await fetch('/api/insights', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(searchData),
+          });
+
+          if (!insightsResponse.ok) {
+            throw new Error('Failed to get insights');
+          }
+
+          const insightsData = await insightsResponse.json();
+          if (insightsData.insights) {
+            setInsights(Array.isArray(insightsData.insights) ? insightsData.insights : [insightsData.insights]);
+            setInsightsData(insightsData);
+          }
+        } catch (error) {
+          console.error('Error getting insights:', error);
+        } finally {
+          setInsightsLoading(false);
+        }
+      }
     } catch (error) {
       console.error('Error in fetchData:', error)
     } finally {
@@ -367,34 +345,45 @@ const BookResearch = React.memo(() => {
     await fetchData(keyword, 1)
   }
 
-  const handleAddBooksToProject = async (projectId: string) => {
+  const handleAddMarketResearchToProject = async (projectId: string) => {
     if (!user) {
       alert('Please sign in to add research to a project');
       return;
     }
 
     try {
-      if (!books.length) {
-        alert('No books available to add to project');
+      if (!books.length || !data) {
+        alert('No research data available to add to project');
         return;
       }
 
-      await addBooksToProject(projectId, keyword, books);
-      
+      const researchData = {
+        keyword,
+        books,
+        trendData: data,
+        insights: insightsData,
+        timestamp: Date.now(),
+      };
+
+      await addMarketResearchToProject(projectId, researchData);
+
       const project = projectBooks.find((p) => p.id === projectId);
-      alert(`Books added to project: ${project?.name}`);
+      alert(`Market research added to project: ${project?.name}`);
     } catch (error) {
-      console.error("Error adding books to project:", error);
-      alert('Failed to add books to project. Please try again.');
+      console.error("Error adding market research to project:", error);
+      alert('Failed to add market research to project. Please try again.');
     }
   };
 
   const isIndieAuthor = (book: AmazonBook) => {
-    return book.isIndie;
+    return !wellKnownPublishers.some(publisher => 
+      book.publisher?.toLowerCase().includes(publisher.toLowerCase()) ||
+      book.manufacturer?.toLowerCase().includes(publisher.toLowerCase())
+    );
   }
 
   const getOverallBSR = (book: AmazonBook) => {
-    return Math.min(...book.bsr.map((rank) => rank.rank))
+    return book.bsr;
   }
 
   const getEstimatedSales = (book: AmazonBook) => {
@@ -403,7 +392,7 @@ const BookResearch = React.memo(() => {
   }
 
   const openAmazonPage = (book: AmazonBook) => {
-    window.open(`https://www.amazon.com/dp/${book.id}`, "_blank")
+    window.open(book.url, "_blank")
   }
 
   const filteredBooks = showIndieOnly 
@@ -412,8 +401,26 @@ const BookResearch = React.memo(() => {
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
-      <div className="mb-6">
+      <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-semibold text-gray-900">Book Market Research</h1>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="flex items-center gap-2">
+              Add to Project
+              <ChevronDown className="w-4 h-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            {projectBooks.map((project) => (
+              <DropdownMenuItem
+                key={project.id}
+                onClick={() => handleAddMarketResearchToProject(project.id)}
+              >
+                {project.name}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       <Card className="bg-white shadow-md p-4 sm:p-6 border border-gray-200 mb-6">
@@ -436,173 +443,284 @@ const BookResearch = React.memo(() => {
       </Card>
 
       {data && (
-        <div className="grid grid-cols-12 gap-6">
-          <div className="col-span-12 lg:col-span-8">
-            <Card className="bg-white shadow-md p-4 sm:p-6 border border-gray-200 hover:border-primary/20 transition-colors duration-200 h-full">
-              <div className="flex items-center mb-6">
-                <TrendingUp className="w-6 h-6 text-primary mr-2" />
-                <h2 className="text-lg font-semibold text-primary">Interest over time</h2>
+        <>
+          {/* Trends Graph - Full Width */}
+          <Card className="bg-white shadow-md p-4 sm:p-6 border border-gray-200 hover:border-primary/20 transition-colors duration-200 mb-6">
+            <div className="flex items-center mb-6">
+              <TrendingUp className="w-6 h-6 text-primary mr-2" />
+              <h2 className="text-lg font-semibold text-primary">Interest over time</h2>
+            </div>
+            <div className="w-full h-[500px]">
+              {loading ? (
+                <div className="flex items-center justify-center h-full">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                </div>
+              ) : (
+                (data.webSearch?.timelineData?.length > 0 || data.youtube?.timelineData?.length > 0) && (
+                  <Plot
+                    data={[
+                      ...(data.webSearch?.timelineData?.length > 0 ? [{
+                        x: data.webSearch.timelineData.map(point => 
+                          new Date(parseInt(point.time) * 1000)
+                        ),
+                        y: data.webSearch.timelineData.map(point => point.value[0]),
+                        type: "scatter",
+                        mode: "lines",
+                        name: "Web Search",
+                        line: {
+                          shape: "spline",
+                          smoothing: 1.3,
+                          width: 3,
+                          color: '#2563eb'
+                        }
+                      }] as any : []),
+                      ...(data.youtube?.timelineData?.length > 0 ? [{
+                        x: data.youtube.timelineData.map(point => 
+                          new Date(parseInt(point.time) * 1000)
+                        ),
+                        y: data.youtube.timelineData.map(point => point.value[0]),
+                        type: "scatter",
+                        mode: "lines",
+                        name: "YouTube Search",
+                        line: {
+                          shape: "spline",
+                          smoothing: 1.3,
+                          width: 3,
+                          color: '#dc2626'
+                        }
+                      }] as any : [])
+                    ]}
+                    layout={{
+                      autosize: true,
+                      height: 500,
+                      width: null,
+                      margin: { t: 30, r: 40, b: 70, l: 60 },
+                      xaxis: {
+                        title: '',
+                        showgrid: false,
+                        gridcolor: '#f3f4f6',
+                        zeroline: false,
+                        tickformat: '%b %Y',
+                        dtick: 'M2',
+                        tickangle: -45,
+                        tickfont: {
+                          size: 12,
+                          color: '#6b7280'
+                        },
+                        range: [
+                          new Date(Date.now() - 6 * 30 * 24 * 60 * 60 * 1000).toISOString(),
+                          new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+                        ],
+                        automargin: true
+                      },
+                      yaxis: {
+                        title: 'Search Interest',
+                        titlefont: {
+                          size: 13,
+                          color: '#6b7280'
+                        },
+                        showgrid: false,
+                        gridcolor: '#f3f4f6',
+                        zeroline: false,
+                        range: [0, 100],
+                        ticksuffix: '%',
+                        tickfont: {
+                          size: 12,
+                          color: '#6b7280'
+                        },
+                        rangemode: 'tozero',
+                        automargin: true
+                      },
+                      plot_bgcolor: 'white',
+                      paper_bgcolor: 'white',
+                      showlegend: true,
+                      legend: {
+                        orientation: 'h',
+                        yanchor: 'bottom',
+                        y: -0.2,
+                        xanchor: 'center',
+                        x: 0.5,
+                        font: {
+                          size: 12,
+                          color: '#6b7280'
+                        },
+                        bgcolor: 'rgba(255,255,255,0.9)',
+                        bordercolor: 'rgba(0,0,0,0.1)',
+                        borderwidth: 1,
+                        traceorder: 'normal'
+                      },
+                      hovermode: 'x unified',
+                      hoverlabel: {
+                        bgcolor: 'white',
+                        bordercolor: '#e5e7eb',
+                        font: {
+                          size: 12,
+                          color: '#374151'
+                        }
+                      }
+                    } as PlotlyLayout}
+                    config={{
+                      displayModeBar: false,
+                      responsive: true,
+                      scrollZoom: false
+                    } as PlotlyConfig}
+                  />
+                )
+              )}
+            </div>
+          </Card>
+
+          {/* Market Intelligence Section */}
+          <Card className="bg-white shadow-md p-6 border border-gray-200 mb-6">
+            <div className="flex items-center mb-6">
+              <Brain className="w-6 h-6 text-primary mr-2" />
+              <h2 className="text-xl font-semibold text-primary">Market Intelligence</h2>
+            </div>
+            
+            <div className="grid grid-cols-1 gap-6">
+              {/* First Row: Market Score and Key Insights */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Market Score Section */}
+                <div>
+                  <div className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-xl p-6 h-full">
+                    <h3 className="text-lg font-semibold text-primary mb-4 flex items-center">
+                      <BarChart3 className="w-5 h-5 mr-2" />
+                      Market Score
+                    </h3>
+                    {insightsLoading ? (
+                      <div className="flex items-center justify-center h-[200px]">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center justify-center">
+                        <div className="relative w-32 h-32 mb-4">
+                          <svg className="w-full h-full" viewBox="0 0 100 100">
+                            <circle
+                              className="text-gray-200"
+                              strokeWidth="10"
+                              stroke="currentColor"
+                              fill="transparent"
+                              r="40"
+                              cx="50"
+                              cy="50"
+                            />
+                            <circle
+                              className="text-primary"
+                              strokeWidth="10"
+                              strokeDasharray={`${(insightsData?.rating || 0) * 251.2} 251.2`}
+                              strokeLinecap="round"
+                              stroke="currentColor"
+                              fill="transparent"
+                              r="40"
+                              cx="50"
+                              cy="50"
+                            />
+                          </svg>
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <span className="text-3xl font-bold text-primary">
+                              {insightsData?.rating || 0}
+                            </span>
+                          </div>
+                        </div>
+                        <p className="text-sm text-gray-600 text-center">
+                          Market Opportunity Score
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Key Insights Section */}
+                <div>
+                  <div className="bg-primary/5 rounded-xl p-6 border border-primary/10 h-full">
+                    <h3 className="text-lg font-semibold text-primary mb-4 flex items-center">
+                      <Lightbulb className="w-5 h-5 mr-2" />
+                      Key Insights
+                    </h3>
+                    {insightsLoading ? (
+                      <div className="flex items-center justify-center h-[200px]">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        {insightsData?.insights?.map((insight: string, index: number) => (
+                          <div key={index} className="flex items-start gap-2">
+                            <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0"></div>
+                            <p className="text-sm text-gray-800">{insight}</p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
-              <div className="flex flex-col h-[calc(100%-3rem)]">
-                <div className="w-full flex-grow">
-                  {loading ? (
-                    <div className="flex items-center justify-center h-full min-h-[500px]">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+
+              {/* Second Row: Pros and Cons */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Pros */}
+                <div className="bg-green-50/50 rounded-xl p-6 border border-green-100">
+                  <h3 className="text-lg font-semibold text-green-700 mb-4 flex items-center">
+                    <ThumbsUp className="w-5 h-5 mr-2" />
+                    Pros
+                  </h3>
+                  {insightsLoading ? (
+                    <div className="flex items-center justify-center h-[200px]">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
                     </div>
                   ) : (
-                    (data.webSearch?.timelineData?.length > 0 || data.youtube?.timelineData?.length > 0) && (
-                      <div className="w-full h-full min-h-[500px] relative">
-                        <div className="absolute inset-0">
-                          <Plot
-                            data={[
-                              ...(data.webSearch?.timelineData?.length > 0 ? [{
-                                x: data.webSearch.timelineData.map(point => 
-                                  new Date(parseInt(point.time) * 1000)
-                                ),
-                                y: data.webSearch.timelineData.map(point => point.value[0]),
-                                type: "scatter",
-                                mode: "lines",
-                                name: "Web Search",
-                                line: {
-                                  shape: "spline",
-                                  smoothing: 1.3,
-                                  width: 3,
-                                  color: '#2563eb'
-                                }
-                              }] as any : []),
-                              ...(data.youtube?.timelineData?.length > 0 ? [{
-                                x: data.youtube.timelineData.map(point => 
-                                  new Date(parseInt(point.time) * 1000)
-                                ),
-                                y: data.youtube.timelineData.map(point => point.value[0]),
-                                type: "scatter",
-                                mode: "lines",
-                                name: "YouTube Search",
-                                line: {
-                                  shape: "spline",
-                                  smoothing: 1.3,
-                                  width: 3,
-                                  color: '#dc2626'
-                                }
-                              }] as any : [])
-                            ]}
-                            layout={{
-                              autosize: true,
-                              margin: { t: 30, r: 40, b: 70, l: 60 },
-                              xaxis: {
-                                title: '',
-                                showgrid: false,
-                                gridcolor: '#f3f4f6',
-                                zeroline: false,
-                                tickformat: '%b %Y',
-                                dtick: 'M2',
-                                tickangle: -45,
-                                tickfont: {
-                                  size: 12,
-                                  color: '#6b7280'
-                                },
-                                range: [
-                                  new Date(Date.now() - 6 * 30 * 24 * 60 * 60 * 1000).toISOString(),
-                                  new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
-                                ],
-                                automargin: true
-                              },
-                              yaxis: {
-                                title: 'Search Interest',
-                                titlefont: {
-                                  size: 13,
-                                  color: '#6b7280'
-                                },
-                                showgrid: false,
-                                gridcolor: '#f3f4f6',
-                                zeroline: false,
-                                range: [0, 100],
-                                ticksuffix: '%',
-                                tickfont: {
-                                  size: 12,
-                                  color: '#6b7280'
-                                },
-                                rangemode: 'tozero',
-                                automargin: true
-                              },
-                              plot_bgcolor: 'white',
-                              paper_bgcolor: 'white',
-                              showlegend: true,
-                              legend: {
-                                orientation: 'h',
-                                yanchor: 'bottom',
-                                y: -0.35,
-                                xanchor: 'center',
-                                x: 0.5,
-                                font: {
-                                  size: 12,
-                                  color: '#6b7280'
-                                },
-                                bgcolor: 'rgba(255,255,255,0.9)',
-                                bordercolor: 'rgba(0,0,0,0.1)',
-                                borderwidth: 1,
-                                traceorder: 'normal'
-                              },
-                              hovermode: 'x unified',
-                              hoverlabel: {
-                                bgcolor: 'white',
-                                bordercolor: '#e5e7eb',
-                                font: {
-                                  size: 12,
-                                  color: '#374151'
-                                }
-                              }
-                            } as PlotlyLayout}
-                            config={{
-                              displayModeBar: false,
-                              responsive: true,
-                              scrollZoom: false
-                            } as PlotlyConfig}
-                          />
+                    <div className="space-y-3">
+                      {insightsData?.pros?.map((pro: string, index: number) => (
+                        <div key={index} className="flex items-start gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-green-600 mt-2 flex-shrink-0"></div>
+                          <p className="text-sm text-green-800">{pro}</p>
                         </div>
-                      </div>
-                    )
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Cons */}
+                <div className="bg-red-50/50 rounded-xl p-6 border border-red-100">
+                  <h3 className="text-lg font-semibold text-red-700 mb-4 flex items-center">
+                    <ThumbsDown className="w-5 h-5 mr-2" />
+                    Cons
+                  </h3>
+                  {insightsLoading ? (
+                    <div className="flex items-center justify-center h-[200px]">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-600"></div>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {insightsData?.cons?.map((con: string, index: number) => (
+                        <div key={index} className="flex items-start gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-red-600 mt-2 flex-shrink-0"></div>
+                          <p className="text-sm text-red-800">{con}</p>
+                        </div>
+                      ))}
+                    </div>
                   )}
                 </div>
               </div>
-            </Card>
-          </div>
 
-          <div className="col-span-12 lg:col-span-4">
-            <Card className="bg-white shadow-md p-4 sm:p-6 border border-gray-200 hover:border-primary/20 transition-colors duration-200 h-full">
-              <div className="flex items-center mb-6">
-                <Filter className="w-6 h-6 text-primary mr-2" />
-                <h2 className="text-lg font-semibold text-primary">Market Insights</h2>
-              </div>
-              
-              <div className="space-y-4">
+              {/* Title Suggestion Row */}
+              <div className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-xl p-6">
+                <h3 className="text-lg font-semibold text-primary mb-4 flex items-center">
+                  <BookOpen className="w-5 h-5 mr-2" />
+                  Suggested Title
+                </h3>
                 {insightsLoading ? (
-                  <div className="flex items-center justify-center h-[400px]">
+                  <div className="flex items-center justify-center h-[100px]">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-                    <span className="ml-3 text-gray-500">Generating market insights...</span>
-                  </div>
-                ) : insights.length > 0 ? (
-                  <div className="space-y-3">
-                    {insights.map((insight, index) => (
-                      <div 
-                        key={index}
-                        className="p-4 bg-primary/5 rounded-lg border border-primary/10"
-                      >
-                        {insight}
-                      </div>
-                    ))}
                   </div>
                 ) : (
-                  <div className="text-center text-gray-500 py-8">
-                    {keyword 
-                      ? "AI is analyzing the market data. Insights will appear here automatically."
-                      : "Enter a keyword and click Analyze to get started"}
-                  </div>
+                  <p className="text-lg text-gray-800 font-medium">
+                    {insightsData?.title_suggestion || 'No title suggestion available'}
+                  </p>
                 )}
               </div>
-            </Card>
-          </div>
-        </div>
+            </div>
+          </Card>
+        </>
       )}
 
       {filteredBooks.length > 0 && (
@@ -622,89 +740,11 @@ const BookResearch = React.memo(() => {
                 <Label htmlFor="indie-filter">Indie Authors Only</Label>
               </div>
             </div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="flex items-center gap-2">
-                  Add to Project
-                  <ChevronDown className="w-4 h-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                {projectBooks.map((project) => (
-                  <DropdownMenuItem
-                    key={project.id}
-                    onClick={() => handleAddBooksToProject(project.id)}
-                  >
-                    {project.name}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
           </div>
 
           <div className="space-y-4">
             {filteredBooks.map((book) => (
-              <div key={book.id} className="flex gap-4 p-4 border border-gray-100 rounded-lg hover:bg-primary/5 hover:border-primary/20 transition-colors duration-200">
-                <div className="relative w-24 h-32 flex-shrink-0">
-                  <Image
-                    src={book.image}
-                    alt={book.title}
-                    fill
-                    className="object-cover rounded"
-                  />
-                </div>
-                <div className="flex-grow">
-                  <div className="flex items-center gap-2 mb-2">
-                    <h3 
-                      className="font-semibold text-lg text-black hover:text-primary cursor-pointer"
-                      onClick={() => openAmazonPage(book)}
-                    >
-                      {book.title}
-                    </h3>
-                    {isIndieAuthor(book) && (
-                      <span className="bg-primary/10 text-primary px-2 py-1 rounded text-xs font-medium">
-                        Indie Author
-                      </span>
-                    )}
-                  </div>
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 text-sm text-gray-600 mb-2">
-                    <div className="flex flex-col">
-                      <span className="text-xs text-gray-500">Author</span>
-                      <span className="truncate">{book.author}</span>
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-xs text-gray-500">Est. Monthly Sales</span>
-                      <span>{getEstimatedSales(book)} copies</span>
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-xs text-gray-500">BSR</span>
-                      <span>#{getOverallBSR(book).toLocaleString()}</span>
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-xs text-gray-500">Price</span>
-                      <span>${book.price.toFixed(2)}</span>
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-xs text-gray-500">Publisher</span>
-                      <span className="truncate">{book.publisher}</span>
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-xs text-gray-500">Release</span>
-                      <span>{book.publicationYear}</span>
-                    </div>
-                  </div>
-                  <div className="flex flex-wrap gap-1">
-                    {book.categories.slice(0, 3).map((category, idx) => (
-                      <span
-                        key={idx}
-                        className="text-xs bg-gray-100 px-2 py-1 rounded"
-                      >
-                        {category}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
+              <BookCard key={book.asin} book={book} />
             ))}
           </div>
         </Card>

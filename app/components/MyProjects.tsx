@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useEffect } from "react"
-import { PlusCircle, Book, Trash2, FileText, Share2, TrendingUp, ShoppingCart } from "lucide-react"
+import { PlusCircle, Book, Trash2, FileText, Share2, TrendingUp, ShoppingCart, BarChart3 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
@@ -53,6 +53,7 @@ const MyProjects: React.FC = () => {
   const [newProjectTitle, setNewProjectTitle] = useState("")
   const [loading, setLoading] = useState(true)
   const [isAddingProject, setIsAddingProject] = useState(false)
+  const [activeCard, setActiveCard] = useState<'competing' | 'market' | 'trends' | 'outline' | null>(null)
 
   const renderValue = (value: unknown): React.ReactNode => {
     if (Array.isArray(value)) {
@@ -173,7 +174,7 @@ const MyProjects: React.FC = () => {
   }
 
   const getOverallBSR = (book: AmazonBook) => {
-    return Math.min(...book.bsr.map((rank) => rank.rank))
+    return book.bsr;
   }
 
   if (!user) {
@@ -225,7 +226,10 @@ const MyProjects: React.FC = () => {
               className={`flex items-center justify-between p-2 rounded cursor-pointer ${
                 selectedProject?.id === project.id ? "bg-purple-100 text-purple-800" : "text-purple-800 hover:bg-purple-50"
               }`}
-              onClick={() => setSelectedProject(project)}
+              onClick={() => {
+                setSelectedProject(project)
+                setActiveCard(null)
+              }}
             >
               <div className="flex items-center">
                 <Book className="w-4 h-4 mr-2" />
@@ -245,156 +249,158 @@ const MyProjects: React.FC = () => {
               <p className="text-gray-600 mb-4">{selectedProject.description}</p>
             )}
 
-            {/* Book Outlines Section */}
-            {selectedProject.outlines && selectedProject.outlines.length > 0 && (
-              <Card className="p-4">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center">
-                    <FileText className="w-5 h-5 mr-2" />
-                    <h3 className="text-lg font-semibold text-purple-800">Book Outline</h3>
+            {/* Cards Section */}
+            <div className="grid grid-cols-4 gap-4 mb-6">
+              {/* Competing Books Card */}
+              {selectedProject.research?.some(r => r.books?.length > 0) && (
+                <Card 
+                  className={`p-4 cursor-pointer transition-all duration-200 ${
+                    activeCard === 'competing' ? 'bg-purple-50 border-purple-300' : 'hover:bg-purple-50'
+                  }`}
+                  onClick={() => setActiveCard(activeCard === 'competing' ? null : 'competing')}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <ShoppingCart className="w-5 h-5 mr-2 text-purple-600" />
+                      <h3 className="text-lg font-semibold text-purple-800">Competing Books</h3>
+                    </div>
+                    <span className="text-sm text-gray-500">
+                      {selectedProject.research?.reduce((acc, curr) => acc + curr.books.length, 0) || 0} books
+                    </span>
                   </div>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="text-purple-800 hover:text-purple-900"
-                    onClick={() => {
-                      if (!selectedProject?.outlines?.[0]?.outline) return;
-                      const outline = selectedProject.outlines[0].outline;
-                      const formattedOutline = `${outline.Title}\n\n${outline.Chapters.map(chapter => {
-                        const chapterContent = Object.entries(chapter)
-                          .filter(([key]) => !['Chapter', 'Title'].includes(key))
-                          .map(([key, value]) => {
-                            const formattedKey = key.replace(/([A-Z])/g, ' $1').trim();
-                            if (Array.isArray(value)) {
-                              return `${formattedKey}:\n${value.map(item => `• ${item}`).join('\n')}`;
-                            }
-                            return `${formattedKey}: ${value}`;
-                          }).join('\n\n');
-                        
-                        return `Chapter ${chapter.Chapter}: ${chapter.Title}\n\n${chapterContent}`;
-                      }).join('\n\n')}`;
-                      
-                      navigator.clipboard.writeText(formattedOutline);
-                      showToast('Outline copied to clipboard!');
-                    }}
-                  >
-                    Copy Outline
-                  </Button>
-                </div>
-                <div className="prose prose-sm max-w-none">
-                  {selectedProject.outlines[0].outline && (
-                    <>
-                      <h3 className="text-2xl font-bold mb-4">{selectedProject.outlines[0].outline.Title}</h3>
-                      {selectedProject.outlines[0].outline.Chapters && selectedProject.outlines[0].outline.Chapters.length > 0 ? (
-                        selectedProject.outlines[0].outline.Chapters.map((chapter) => (
-                          <div key={chapter.Chapter} className="mt-6">
-                            <h4 className="text-xl text-black font-bold mb-2">
-                              Chapter {chapter.Chapter}: {chapter.Title}
-                            </h4>
-                            <div className="ml-4 space-y-2">
-                              {Object.entries(chapter)
-                                .filter(([key]) => !['Chapter', 'Title'].includes(key))
-                                .map(([key, value]) => (
-                                  <div key={key} className="mb-4">
-                                    <h5 className="font-semibold text-gray-800 mb-2">
-                                      {key.replace(/([A-Z])/g, ' $1').trim()}
-                                    </h5>
-                                    {Array.isArray(value) ? (
-                                      <ul className="list-disc list-inside text-gray-700 space-y-1">
-                                        {value.map((item, index) => (
-                                          <li key={index} className="text-gray-700">{item}</li>
-                                        ))}
-                                      </ul>
-                                    ) : (
-                                      <p className="text-gray-700">{value}</p>
-                                    )}
-                                  </div>
-                                ))}
-                            </div>
-                          </div>
-                        ))
-                      ) : (
-                        <p className="text-gray-600">No chapters available in this outline.</p>
-                      )}
-                    </>
-                  )}
-                </div>
-              </Card>
-            )}
+                </Card>
+              )}
 
-            {/* Research Section */}
-            {selectedProject.research && selectedProject.research.length > 0 && (
+              {/* Market Intelligence Card */}
+              {selectedProject.research?.some(r => r.trendData) && (
+                <Card 
+                  className={`p-4 cursor-pointer transition-all duration-200 ${
+                    activeCard === 'market' ? 'bg-purple-50 border-purple-300' : 'hover:bg-purple-50'
+                  }`}
+                  onClick={() => setActiveCard(activeCard === 'market' ? null : 'market')}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <TrendingUp className="w-5 h-5 mr-2 text-purple-600" />
+                      <h3 className="text-lg font-semibold text-purple-800">Market Intelligence</h3>
+                    </div>
+                    <span className="text-sm text-gray-500">
+                      {selectedProject.research?.length || 0} analyses
+                    </span>
+                  </div>
+                </Card>
+              )}
+
+              {/* Trends Data Card */}
+              {selectedProject.research?.some(r => r.trendData?.webSearch || r.trendData?.youtube) && (
+                <Card 
+                  className={`p-4 cursor-pointer transition-all duration-200 ${
+                    activeCard === 'trends' ? 'bg-purple-50 border-purple-300' : 'hover:bg-purple-50'
+                  }`}
+                  onClick={() => setActiveCard(activeCard === 'trends' ? null : 'trends')}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <BarChart3 className="w-5 h-5 mr-2 text-purple-600" />
+                      <h3 className="text-lg font-semibold text-purple-800">Trends Data</h3>
+                    </div>
+                    <span className="text-sm text-gray-500">
+                      {selectedProject.research?.length || 0} trends
+                    </span>
+                  </div>
+                </Card>
+              )}
+
+              {/* Book Outline Card */}
+              {selectedProject.outlines && selectedProject.outlines.length > 0 && (
+                <Card 
+                  className={`p-4 cursor-pointer transition-all duration-200 ${
+                    activeCard === 'outline' ? 'bg-purple-50 border-purple-300' : 'hover:bg-purple-50'
+                  }`}
+                  onClick={() => setActiveCard(activeCard === 'outline' ? null : 'outline')}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <FileText className="w-5 h-5 mr-2 text-purple-600" />
+                      <h3 className="text-lg font-semibold text-purple-800">Book Outline</h3>
+                    </div>
+                    <span className="text-sm text-gray-500">
+                      {selectedProject.outlines?.length || 0} outline{selectedProject.outlines?.length !== 1 ? 's' : ''}
+                    </span>
+                  </div>
+                </Card>
+              )}
+            </div>
+
+            {/* Content Sections */}
+            {activeCard === 'competing' && selectedProject.research && selectedProject.research.length > 0 && (
               <Card className="p-4">
-                <h3 className="text-lg font-semibold text-purple-800 mb-2 flex items-center">
-                  <TrendingUp className="w-5 h-5 mr-2" /> Market Research
-                </h3>
+                <h3 className="text-lg font-semibold text-purple-800 mb-4">Competing Books Analysis</h3>
                 <div className="space-y-6">
                   {selectedProject.research.map((research, index) => (
                     <div key={index} className="space-y-4">
-                      <h4 className="font-medium text-gray-900">Research for "{research.keyword}"</h4>
+                      <h4 className="font-medium text-gray-900">Books for "{research.keyword}"</h4>
                       <div className="space-y-4">
                         {research.books.map((book) => (
-                          <div key={book.id} className="flex gap-4 p-4 border rounded-lg hover:bg-primary/5 transition-colors duration-200">
-                            <div className="relative w-24 h-32 flex-shrink-0">
-                              <Image
-                                src={book.image}
-                                alt={book.title}
-                                fill
-                                className="object-cover rounded"
-                              />
-                            </div>
-                            <div className="flex-grow">
-                              <div className="flex items-center gap-2 mb-2">
-                                <h5 
-                                  className="font-semibold text-lg text-black hover:text-primary cursor-pointer"
-                                  onClick={() => window.open(`https://www.amazon.com/dp/${book.id}`, "_blank")}
-                                >
-                                  {book.title}
-                                </h5>
-                                {book.isIndie && (
-                                  <span className="bg-primary/10 text-primary px-2 py-1 rounded text-xs font-medium">
-                                    Indie Author
-                                  </span>
-                                )}
+                          <Card key={book.asin} className="p-4 mb-4 hover:shadow-lg transition-shadow hover:border-primary/50 hover:bg-primary/5">
+                            <div className="flex gap-4">
+                              <div 
+                                className="relative w-32 h-48 flex-shrink-0 cursor-pointer"
+                                onClick={() => window.open(book.url, '_blank')}
+                              >
+                                <Image
+                                  src={book.image_url}
+                                  alt={book.title}
+                                  fill
+                                  className="object-contain"
+                                />
                               </div>
-                              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 text-sm text-gray-600 mb-2">
-                                <div className="flex flex-col">
-                                  <span className="text-xs text-gray-500">Author</span>
-                                  <span className="truncate">{book.author}</span>
+                              <div className="flex-1">
+                                <h3 className="text-lg font-semibold mb-2 text-primary">{book.title}</h3>
+                                <p className="text-sm text-gray-600 mb-4">
+                                  {book.manufacturer || 'Unknown'}
+                                </p>
+                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                                  <div>
+                                    <p className="text-sm text-gray-600">
+                                      <span className="font-medium block">Price</span>
+                                      ${book.price.toFixed(2)}
+                                    </p>
+                                  </div>
+                                  <div>
+                                    <p className="text-sm text-gray-600">
+                                      <span className="font-medium block">Rating</span>
+                                      {book.rating}
+                                    </p>
+                                  </div>
+                                  <div>
+                                    <p className="text-sm text-gray-600">
+                                      <span className="font-medium block">Reviews</span>
+                                      {book.reviews_count?.toLocaleString() || 0}
+                                    </p>
+                                  </div>
+                                  <div>
+                                    <p className="text-sm text-gray-600">
+                                      <span className="font-medium block">BSR</span>
+                                      {book.bsr.toLocaleString()}
+                                    </p>
+                                  </div>
+                                  <div>
+                                    <p className="text-sm text-gray-600">
+                                      <span className="font-medium block">Published</span>
+                                      {book.publication_date || 'N/A'}
+                                    </p>
+                                  </div>
+                                  <div>
+                                    <p className="text-sm text-gray-600">
+                                      <span className="font-medium block">Publisher</span>
+                                      {book.publisher || 'Unknown'}
+                                    </p>
+                                  </div>
                                 </div>
-                                <div className="flex flex-col">
-                                  <span className="text-xs text-gray-500">Rating</span>
-                                  <span>{book.rating.toFixed(1)} ({book.reviewCount} reviews)</span>
-                                </div>
-                                <div className="flex flex-col">
-                                  <span className="text-xs text-gray-500">Rank</span>
-                                  <span>{Math.min(...book.bsr.map((rank: { rank: number }) => rank.rank))}</span>
-                                </div>
-                                <div className="flex flex-col">
-                                  <span className="text-xs text-gray-500">Price</span>
-                                  <span>${book.price.toFixed(2)}</span>
-                                </div>
-                                <div className="flex flex-col">
-                                  <span className="text-xs text-gray-500">Publisher</span>
-                                  <span className="truncate">{book.publisher}</span>
-                                </div>
-                                <div className="flex flex-col">
-                                  <span className="text-xs text-gray-500">Release</span>
-                                  <span>{book.publicationYear}</span>
-                                </div>
-                              </div>
-                              <div className="flex flex-wrap gap-1">
-                                {book.categories.slice(0, 3).map((category: string, idx: number) => (
-                                  <span
-                                    key={idx}
-                                    className="text-xs bg-gray-100 px-2 py-1 rounded"
-                                  >
-                                    {category}
-                                  </span>
-                                ))}
                               </div>
                             </div>
-                          </div>
+                          </Card>
                         ))}
                       </div>
                     </div>
@@ -403,31 +409,221 @@ const MyProjects: React.FC = () => {
               </Card>
             )}
 
-            {/* Related Books Section */}
-            {selectedProject.relatedBooks && selectedProject.relatedBooks.length > 0 && (
+            {activeCard === 'market' && selectedProject.research && selectedProject.research.length > 0 && (
               <Card className="p-4">
-                <h3 className="text-lg font-semibold text-purple-800 mb-2 flex items-center">
-                  <ShoppingCart className="w-5 h-5 mr-2" /> Related Books
+                <h3 className="text-2xl font-semibold text-purple-700 mb-6 flex items-center">
+                  <span className="mr-2"><TrendingUp className="w-6 h-6 text-purple-700" /></span>
+                  Market Intelligence
                 </h3>
-                <div className="space-y-4">
-                  {selectedProject.relatedBooks.map((book, index) => (
-                    <div key={book.id || index} className="bg-gray-50 p-3 rounded">
-                      <h4 className="font-semibold">{book.title}</h4>
-                      <p className="text-sm text-gray-600">By {book.author}</p>
-                      <p className="text-sm mt-2">{book.description}</p>
+                {(() => {
+                  const research = selectedProject.research[0];
+                  const insights = (research as any)?.generatedContent || (research as any)?.insights || {};
+                  return (
+                    <>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        {/* Market Score */}
+                        <div className="bg-purple-50 rounded-xl p-6 flex flex-col items-center justify-center">
+                          <h4 className="text-lg font-semibold text-purple-700 mb-4 flex items-center">
+                            <BarChart3 className="w-5 h-5 mr-2" />
+                            Market Score
+                          </h4>
+                          <div className="relative w-32 h-32 mb-2 flex items-center justify-center">
+                            <svg className="w-full h-full" viewBox="0 0 100 100">
+                              <circle
+                                className="text-purple-200"
+                                strokeWidth="10"
+                                stroke="currentColor"
+                                fill="transparent"
+                                r="40"
+                                cx="50"
+                                cy="50"
+                              />
+                              <circle
+                                className="text-purple-600"
+                                strokeWidth="10"
+                                strokeDasharray={`${(insights?.rating || 0) * 251.2} 251.2`}
+                                strokeLinecap="round"
+                                stroke="currentColor"
+                                fill="transparent"
+                                r="40"
+                                cx="50"
+                                cy="50"
+                              />
+                            </svg>
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <span className="text-3xl font-bold text-purple-700">
+                                {insights?.rating || 0}
+                              </span>
+                            </div>
+                          </div>
+                          <p className="text-sm text-gray-600 text-center mt-2">Market Opportunity Score</p>
+                        </div>
+                        {/* Key Insights */}
+                        <div className="bg-purple-50 rounded-xl p-6 border border-purple-100">
+                          <h4 className="text-lg font-semibold text-purple-700 mb-4 flex items-center">
+                            <span className="mr-2"><span className="inline-block"><svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.07-7.07l-1.41 1.41M6.34 17.66l-1.41 1.41m12.02 0l1.41-1.41M6.34 6.34L4.93 4.93" stroke="#9333ea" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg></span></span>
+                            Key Insights
+                          </h4>
+                          <ul className="list-disc list-inside text-purple-900 space-y-2">
+                            {(insights?.insights || []).map((insight: string, idx: number) => (
+                              <li key={idx} className="text-sm">{insight}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        {/* Pros */}
+                        <div className="bg-green-50 rounded-xl p-6 border border-green-100">
+                          <h4 className="text-lg font-semibold text-green-700 mb-4 flex items-center">
+                            <span className="mr-2"><svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke="#16a34a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg></span>
+                            Pros
+                          </h4>
+                          <ul className="list-disc list-inside text-green-900 space-y-2">
+                            {(insights?.pros || []).map((pro: string, idx: number) => (
+                              <li key={idx} className="text-sm">{pro}</li>
+                            ))}
+                          </ul>
+                        </div>
+                        {/* Cons */}
+                        <div className="bg-red-50 rounded-xl p-6 border border-red-100">
+                          <h4 className="text-lg font-semibold text-red-700 mb-4 flex items-center">
+                            <span className="mr-2"><svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M19 13l-4 4-4-4M5 7l4 4 4-4" stroke="#dc2626" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg></span>
+                            Cons
+                          </h4>
+                          <ul className="list-disc list-inside text-red-900 space-y-2">
+                            {(insights?.cons || []).map((con: string, idx: number) => (
+                              <li key={idx} className="text-sm">{con}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                      {/* Suggested Title */}
+                      <div className="bg-purple-50 rounded-xl p-6 border border-purple-100">
+                        <h4 className="text-lg font-semibold text-purple-700 mb-4 flex items-center">
+                          <span className="mr-2"><span className="inline-block"><svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.07-7.07l-1.41 1.41M6.34 17.66l-1.41 1.41m12.02 0l1.41-1.41M6.34 6.34L4.93 4.93" stroke="#9333ea" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg></span></span>
+                          Suggested Title
+                        </h4>
+                        <p className="text-lg text-gray-800 font-medium">
+                          {insights?.title_suggestion || 'No title suggestion available'}
+                        </p>
+                      </div>
+                    </>
+                  );
+                })()}
+              </Card>
+            )}
+
+            {activeCard === 'trends' && selectedProject.research && selectedProject.research.length > 0 && (
+              <Card className="p-4">
+                <h3 className="text-lg font-semibold text-purple-800 mb-4">Trends Data</h3>
+                <div className="space-y-6">
+                  {selectedProject.research.map((research, index) => (
+                    <div key={index} className="space-y-4">
+                      <h4 className="font-medium text-gray-900">Trends for "{research.keyword}"</h4>
+                      {research.trendData && (
+                        <div className="space-y-4">
+                          <div className="p-4 bg-gray-50 rounded-lg">
+                            <h5 className="font-semibold mb-2">Web Search Trends</h5>
+                            <div className="h-48">
+                              {research.trendData.webSearch?.timelineData?.length > 0 ? (
+                                <div className="space-y-2">
+                                  {research.trendData.webSearch.timelineData.map((point, idx) => (
+                                    <div key={idx} className="flex justify-between text-sm">
+                                      <span className="text-gray-600">
+                                        {new Date(parseInt(point.time) * 1000).toLocaleDateString()}
+                                      </span>
+                                      <span className="text-purple-600 font-medium">
+                                        Interest: {point.value[0]}
+                                      </span>
+                                    </div>
+                                  ))}
+                                </div>
+                              ) : (
+                                <p className="text-sm text-gray-600">No web search trend data available</p>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="p-4 bg-gray-50 rounded-lg">
+                            <h5 className="font-semibold mb-2">YouTube Trends</h5>
+                            <div className="h-48">
+                              {research.trendData.youtube?.timelineData?.length > 0 ? (
+                                <div className="space-y-2">
+                                  {research.trendData.youtube.timelineData.map((point, idx) => (
+                                    <div key={idx} className="flex justify-between text-sm">
+                                      <span className="text-gray-600">
+                                        {new Date(parseInt(point.time) * 1000).toLocaleDateString()}
+                                      </span>
+                                      <span className="text-red-600 font-medium">
+                                        Interest: {point.value[0]}
+                                      </span>
+                                    </div>
+                                  ))}
+                                </div>
+                              ) : (
+                                <p className="text-sm text-gray-600">No YouTube trend data available</p>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
               </Card>
             )}
 
-            {(!selectedProject.outlines || selectedProject.outlines.length === 0) &&
-             (!selectedProject.relatedBooks || selectedProject.relatedBooks.length === 0) &&
-             (!selectedProject.research || selectedProject.research.length === 0) && (
-              <p className="text-gray-600">
-                No content has been added to this project yet. Use the Book Research, Book Outline, or Social Media features to
-                add content.
-              </p>
+            {activeCard === 'outline' && selectedProject.outlines && selectedProject.outlines.length > 0 && (
+              <Card className="p-4">
+                <h3 className="text-lg font-semibold text-purple-800 mb-4">Book Outline</h3>
+                <div className="space-y-6">
+                  {selectedProject.outlines.map((outline, index) => (
+                    <div key={index} className="space-y-4">
+                      <h4 className="font-medium text-gray-900">{outline.title}</h4>
+                      <div className="prose prose-sm max-w-none">
+                        <h3 className="text-2xl font-bold mb-2">{outline.outline.Title}</h3>
+                        {outline.outline.Chapters && outline.outline.Chapters.length > 0 ? (
+                          outline.outline.Chapters.map((chapter) => (
+                            <div key={chapter.Chapter} className="mt-6">
+                              <h4 className="text-xl text-black font-bold mb-2">
+                                Chapter {chapter.Chapter}: {chapter.Title}
+                              </h4>
+                              <div className="ml-4 space-y-2">
+                                {Object.entries(chapter)
+                                  .filter(([key]) => !['Chapter', 'Title'].includes(key))
+                                  .map(([key, value]) => (
+                                    <div key={key} className="mb-4">
+                                      <h5 className="font-semibold text-gray-800 mb-2">
+                                        {key.replace(/([A-Z])/g, ' $1').trim()}
+                                      </h5>
+                                      {Array.isArray(value) ? (
+                                        <ul className="list-disc list-inside text-gray-700 space-y-1">
+                                          {value.map((item, index) => (
+                                            <li key={index} className="text-gray-700">{item}</li>
+                                          ))}
+                                        </ul>
+                                      ) : (
+                                        <p className="text-gray-700">{value}</p>
+                                      )}
+                                    </div>
+                                  ))}
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <p className="text-gray-600">No chapters available in this outline.</p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            )}
+
+            {!activeCard && (
+              <div className="text-center text-gray-600 py-8">
+                Select a card above to view detailed information
+              </div>
             )}
           </div>
         ) : (

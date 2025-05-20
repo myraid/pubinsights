@@ -129,9 +129,14 @@ export default function BookOutline({ title: initialTitle }: { title: string }) 
         return;
       }
 
-      await addOutlineToProject(projectId, title, outline);
-      
+      // Check if the project already has an outline
       const project = projectOutline.find((p) => p.id === projectId);
+      if (project && Array.isArray((project as any).outlines) && (project as any).outlines.length > 0) {
+        const confirmReplace = window.confirm('This project already has an outline. Adding a new outline will override the existing one. Do you want to continue?');
+        if (!confirmReplace) return;
+      }
+
+      await addOutlineToProject(projectId, title, outline);
       showToast(`Outline added to project: ${project?.name}`);
     } catch (error) {
       console.error("Error adding outline to project:", error);

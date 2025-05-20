@@ -340,35 +340,10 @@ export const saveOutlineHistory = async (userId: string, outline: any) => {
       updatedAt: Timestamp.now()
     };
 
-    // Add new outline to history collection
+    // Add new outline to history collection`
     await addDoc(outlineHistoryRef, newOutline);
 
-    // Get current history - just filter by userId, no ordering needed for index
-    const q = query(
-      outlineHistoryRef,
-      where('userId', '==', userId)
-    );
-    
-    const querySnapshot = await getDocs(q);
-    const history = querySnapshot.docs
-      .map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }))
-      // Sort in memory instead of in query
-      .sort((a, b) => b.createdAt.seconds - a.createdAt.seconds);
-
-    // Delete older documents if we have more than 10
-    if (history.length > 10) {
-      // Delete the oldest ones (after index 9)
-      const toDelete = history.slice(10);
-      for (const doc of toDelete) {
-        await deleteDoc(doc(outlineHistoryRef, doc.id));
-      }
-    }
-
-    // Return only the 10 most recent
-    return history.slice(0, 10);
+   
   } catch (error) {
     console.error('Error saving outline history:', error);
     throw error;
@@ -464,6 +439,33 @@ export const addOutlineToProject = async (projectId: string, title: string, outl
     return true;
   } catch (error) {
     console.error('Error adding outline to project:', error);
+    throw error;
+  }
+};
+
+export const addMarketResearchToProject = async (projectId: string, researchData: any) => {
+  try {
+    const projectRef = doc(db, 'projects', projectId);
+    const projectDoc = await getDoc(projectRef);
+
+    if (!projectDoc.exists()) throw new Error('Project not found');
+
+    const projectData = projectDoc.data();
+    const research = projectData.research || [];
+
+    research.push({
+      ...researchData,
+      createdAt: Timestamp.now(),
+    });
+
+    await updateDoc(projectRef, {
+      research,
+      updatedAt: Timestamp.now(),
+    });
+
+    return true;
+  } catch (error) {
+    console.error('Error adding market research to project:', error);
     throw error;
   }
 }; 
