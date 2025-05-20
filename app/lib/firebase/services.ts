@@ -178,6 +178,19 @@ export const getRecentBookOutlines = async (userId: string) => {
 };
 
 // Search History Services
+interface SearchHistoryItem {
+  id: string;
+  userId: string;
+  keyword: string;
+  timestamp: number;
+  books: AmazonBook[];
+  trendData: TrendData;
+  searchType: string;
+  generatedContent: any;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
+}
+
 export const saveUserSearch = async (userId: string, keyword: string, books: AmazonBook[], trendData: TrendData) => {
   try {
     const searchHistoryRef = collection(db, 'searchHistory');
@@ -194,16 +207,8 @@ export const saveUserSearch = async (userId: string, keyword: string, books: Ama
     };
 
     // Add to searchHistory collection
-    await addDoc(searchHistoryRef, searchData);
-
-    // Also save to user's searches for quick access
-    const userSearchRef = doc(db, 'users', userId, 'searches', keyword);
-    await setDoc(userSearchRef, {
-      ...searchData,
-      lastAccessed: Timestamp.now()
-    });
-
-    return searchData;
+    const docRef = await addDoc(searchHistoryRef, searchData);
+    return { id: docRef.id, ...searchData } as SearchHistoryItem;
   } catch (error) {
     console.error('Error saving search:', error);
     throw error;
@@ -289,13 +294,6 @@ export const addRelatedBook = async (
   return { id: docRef.id, ...relatedBookData };
 };
 
-interface SearchHistoryItem {
-  keyword: string;
-  timestamp: number;
-  books: AmazonBook[];
-  trendData: TrendData;
-}
-
 export const addBooksToProject = async (projectId: string, keyword: string, books: AmazonBook[]) => {
   try {
     const projectRef = doc(db, 'projects', projectId);
@@ -340,10 +338,9 @@ export const saveOutlineHistory = async (userId: string, outline: any) => {
       updatedAt: Timestamp.now()
     };
 
-    // Add new outline to history collection`
-    await addDoc(outlineHistoryRef, newOutline);
-
-   
+    // Add new outline to history collection
+    const docRef = await addDoc(outlineHistoryRef, newOutline);
+    return { id: docRef.id, ...newOutline };
   } catch (error) {
     console.error('Error saving outline history:', error);
     throw error;
@@ -355,17 +352,16 @@ export const getOutlineHistory = async (userId: string) => {
     const outlineHistoryRef = collection(db, 'outlineHistory');
     const q = query(
       outlineHistoryRef,
-      where('userId', '==', userId)
+      where('userId', '==', userId),
+      orderBy('createdAt', 'desc'),
+      limit(10)
     );
     
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs
-      .map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }))
-      .sort((a, b) => b.createdAt.seconds - a.createdAt.seconds)
-      .slice(0, 10);
+    return querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
   } catch (error) {
     console.error('Error getting outline history:', error);
     throw error;
@@ -385,19 +381,24 @@ export const deleteOutlineFromHistory = async (userId: string, outlineId: string
 
 export const getKeywordInsights = async (userId: string, keyword: string) => {
   try {
-    // Get the user's search document for this keyword
-    const userSearchRef = doc(db, 'users', userId, 'searches', keyword);
-    const searchDoc = await getDoc(userSearchRef);
+    // Get the search document from searchHistory collection
+    const searchHistoryRef = collection(db, 'searchHistory');
+    const q = query(
+      searchHistoryRef,
+      where('userId', '==', userId),
+      where('keyword', '==', keyword)
+    );
     
-    if (!searchDoc.exists()) {
+    const querySnapshot = await getDocs(q);
+    if (querySnapshot.empty) {
       return null;
     }
 
-    const data = searchDoc.data();
+    const data = querySnapshot.docs[0].data();
     return {
       insights: data.generatedContent || [],
       timestamp: data.timestamp,
-      lastAccessed: data.lastAccessed?.toDate()
+      lastAccessed: data.updatedAt?.toDate()
     };
   } catch (error) {
     console.error('Error fetching insights:', error);
@@ -466,6 +467,49 @@ export const addMarketResearchToProject = async (projectId: string, researchData
     return true;
   } catch (error) {
     console.error('Error adding market research to project:', error);
+    throw error;
+  }
+};
+
+// Migration function to move data from user subcollections to main collections
+export const migrateToMainCollections = async (userId: string) => {
+  try {
+    // Migrate searches
+    const userSearchesRef = collection(db, 'users', userId, 'searches');
+    const searchesSnapshot = await getDocs(userSearchesRef);
+    
+    const searchPromises = searchesSnapshot.docs.map(async (docSnapshot) => {
+      const data = docSnapshot.data();
+      const searchHistoryRef = collection(db, 'searchHistory');
+      await addDoc(searchHistoryRef, {
+        ...data,
+        userId,
+        createdAt: Timestamp.now(),
+        updatedAt: Timestamp.now()
+      });
+      await deleteDoc(docSnapshot.ref);
+    });
+
+    // Migrate outlines
+    const userOutlinesRef = collection(db, 'users', userId, 'outlines');
+    const outlinesSnapshot = await getDocs(userOutlinesRef);
+    
+    const outlinePromises = outlinesSnapshot.docs.map(async (docSnapshot) => {
+      const data = docSnapshot.data();
+      const outlineHistoryRef = collection(db, 'outlineHistory');
+      await addDoc(outlineHistoryRef, {
+        ...data,
+        userId,
+        createdAt: Timestamp.now(),
+        updatedAt: Timestamp.now()
+      });
+      await deleteDoc(docSnapshot.ref);
+    });
+
+    await Promise.all([...searchPromises, ...outlinePromises]);
+    return true;
+  } catch (error) {
+    console.error('Error migrating to main collections:', error);
     throw error;
   }
 }; 

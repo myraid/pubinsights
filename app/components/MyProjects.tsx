@@ -11,6 +11,7 @@ import type { Project, BookOutline, RelatedBook } from "../types/firebase"
 import type { TrendData, AmazonBook } from "@/app/types/index"
 import Image from "next/image"
 import { toast } from "sonner"
+import dynamic from "next/dynamic"
 
 interface BookContent {
   research: {
@@ -45,6 +46,85 @@ interface ProjectWithContent extends Project {
     books: AmazonBook[];
   }[];
 }
+
+// Add Plotly types
+interface PlotlyLayout {
+  height?: number;
+  margin?: { t: number; r: number; b: number; l: number };
+  xaxis?: {
+    title?: string;
+    showgrid?: boolean;
+    zeroline?: boolean;
+    tickformat?: string;
+    dtick?: string;
+    tickangle?: number;
+    tickfont?: {
+      size?: number;
+      color?: string;
+    };
+    range?: string[];
+    automargin?: boolean;
+  };
+  yaxis?: {
+    title?: string;
+    showgrid?: boolean;
+    gridcolor?: string;
+    zeroline?: boolean;
+    range?: number[];
+    ticksuffix?: string;
+    tickfont?: {
+      size?: number;
+      color?: string;
+    };
+    rangemode?: string;
+    automargin?: boolean;
+  };
+  plot_bgcolor?: string;
+  paper_bgcolor?: string;
+  showlegend?: boolean;
+  legend?: {
+    orientation?: string;
+    yanchor?: string;
+    y?: number;
+    xanchor?: string;
+    x?: number;
+    font?: {
+      size?: number;
+      color?: string;
+    };
+    bgcolor?: string;
+    bordercolor?: string;
+    borderwidth?: number;
+  };
+  hovermode?: string;
+  autosize?: boolean;
+}
+
+interface PlotlyConfig {
+  displayModeBar?: boolean;
+  responsive?: boolean;
+  scrollZoom?: boolean;
+}
+
+type PlotData = {
+  x: Date[];
+  y: number[];
+  type: string;
+  mode: string;
+  name: string;
+  line: {
+    shape: string;
+    smoothing: number;
+    width: number;
+    color: string;
+  };
+}[];
+
+// Dynamically import Plotly with no SSR
+const Plot = dynamic(() => import('react-plotly.js'), {
+  ssr: false,
+  loading: () => <div>Loading Plot...</div>
+})
 
 const MyProjects: React.FC = () => {
   const { user } = useAuth()
@@ -523,45 +603,116 @@ const MyProjects: React.FC = () => {
                       {research.trendData && (
                         <div className="space-y-4">
                           <div className="p-4 bg-gray-50 rounded-lg">
-                            <h5 className="font-semibold mb-2">Web Search Trends</h5>
-                            <div className="h-48">
-                              {research.trendData.webSearch?.timelineData?.length > 0 ? (
-                                <div className="space-y-2">
-                                  {research.trendData.webSearch.timelineData.map((point, idx) => (
-                                    <div key={idx} className="flex justify-between text-sm">
-                                      <span className="text-gray-600">
-                                        {new Date(parseInt(point.time) * 1000).toLocaleDateString()}
-                                      </span>
-                                      <span className="text-purple-600 font-medium">
-                                        Interest: {point.value[0]}
-                                      </span>
-                                    </div>
-                                  ))}
-                                </div>
-                              ) : (
-                                <p className="text-sm text-gray-600">No web search trend data available</p>
-                              )}
-                            </div>
-                          </div>
-
-                          <div className="p-4 bg-gray-50 rounded-lg">
-                            <h5 className="font-semibold mb-2">YouTube Trends</h5>
-                            <div className="h-48">
-                              {research.trendData.youtube?.timelineData?.length > 0 ? (
-                                <div className="space-y-2">
-                                  {research.trendData.youtube.timelineData.map((point, idx) => (
-                                    <div key={idx} className="flex justify-between text-sm">
-                                      <span className="text-gray-600">
-                                        {new Date(parseInt(point.time) * 1000).toLocaleDateString()}
-                                      </span>
-                                      <span className="text-red-600 font-medium">
-                                        Interest: {point.value[0]}
-                                      </span>
-                                    </div>
-                                  ))}
-                                </div>
-                              ) : (
-                                <p className="text-sm text-gray-600">No YouTube trend data available</p>
+                            <h5 className="font-semibold mb-2">Interest over time</h5>
+                            <div className="h-[400px]">
+                              {(research.trendData.webSearch?.timelineData?.length > 0 || research.trendData.youtube?.timelineData?.length > 0) && (
+                                <Plot
+                                  data={[
+                                    ...(research.trendData.webSearch?.timelineData?.length > 0 ? [{
+                                      x: research.trendData.webSearch.timelineData.map(point => 
+                                        new Date(parseInt(point.time) * 1000)
+                                      ),
+                                      y: research.trendData.webSearch.timelineData.map(point => point.value[0]),
+                                      type: "scatter",
+                                      mode: "lines",
+                                      name: "Web Search",
+                                      line: {
+                                        shape: "spline",
+                                        smoothing: 1.3,
+                                        width: 3,
+                                        color: '#2563eb'
+                                      }
+                                    }] : []),
+                                    ...(research.trendData.youtube?.timelineData?.length > 0 ? [{
+                                      x: research.trendData.youtube.timelineData.map(point => 
+                                        new Date(parseInt(point.time) * 1000)
+                                      ),
+                                      y: research.trendData.youtube.timelineData.map(point => point.value[0]),
+                                      type: "scatter",
+                                      mode: "lines",
+                                      name: "YouTube Search",
+                                      line: {
+                                        shape: "spline",
+                                        smoothing: 1.3,
+                                        width: 3,
+                                        color: '#dc2626'
+                                      }
+                                    }] : [])
+                                  ] as any}
+                                  layout={{
+                                    autosize: true,
+                                    height: 400,
+                                    width: null,
+                                    margin: { t: 30, r: 40, b: 70, l: 60 },
+                                    xaxis: {
+                                      title: '',
+                                      showgrid: false,
+                                      gridcolor: '#f3f4f6',
+                                      zeroline: false,
+                                      tickformat: '%b %Y',
+                                      dtick: 'M2',
+                                      tickangle: -45,
+                                      tickfont: {
+                                        size: 12,
+                                        color: '#6b7280'
+                                      },
+                                      range: [
+                                        new Date(Date.now() - 6 * 30 * 24 * 60 * 60 * 1000).toISOString(),
+                                        new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+                                      ],
+                                      automargin: true
+                                    },
+                                    yaxis: {
+                                      title: 'Search Interest',
+                                      titlefont: {
+                                        size: 13,
+                                        color: '#6b7280'
+                                      },
+                                      showgrid: false,
+                                      gridcolor: '#f3f4f6',
+                                      zeroline: false,
+                                      range: [0, 100],
+                                      ticksuffix: '%',
+                                      tickfont: {
+                                        size: 12,
+                                        color: '#6b7280'
+                                      },
+                                      rangemode: 'tozero',
+                                      automargin: true
+                                    },
+                                    plot_bgcolor: 'white',
+                                    paper_bgcolor: 'white',
+                                    showlegend: true,
+                                    legend: {
+                                      orientation: 'h',
+                                      yanchor: 'bottom',
+                                      y: -0.2,
+                                      xanchor: 'center',
+                                      x: 0.5,
+                                      font: {
+                                        size: 12,
+                                        color: '#6b7280'
+                                      },
+                                      bgcolor: 'rgba(255,255,255,0.9)',
+                                      bordercolor: 'rgba(0,0,0,0.1)',
+                                      borderwidth: 1
+                                    },
+                                    hovermode: 'x unified',
+                                    hoverlabel: {
+                                      bgcolor: 'white',
+                                      bordercolor: '#e5e7eb',
+                                      font: {
+                                        size: 12,
+                                        color: '#374151'
+                                      }
+                                    }
+                                  } as PlotlyLayout}
+                                  config={{
+                                    displayModeBar: false,
+                                    responsive: true,
+                                    scrollZoom: false
+                                  } as PlotlyConfig}
+                                />
                               )}
                             </div>
                           </div>
