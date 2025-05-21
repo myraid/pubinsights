@@ -187,11 +187,30 @@ interface SearchHistoryItem {
   trendData: TrendData;
   searchType: string;
   generatedContent: any;
+  marketIntelligence: {
+    rating: number;
+    insights: string[];
+    pros: string[];
+    cons: string[];
+    title_suggestion: string;
+  } | null;
   createdAt: Timestamp;
   updatedAt: Timestamp;
 }
 
-export const saveUserSearch = async (userId: string, keyword: string, books: AmazonBook[], trendData: TrendData) => {
+export const saveUserSearch = async (
+  userId: string, 
+  keyword: string, 
+  books: AmazonBook[], 
+  trendData: TrendData, 
+  marketIntelligence?: {
+    rating: number;
+    insights: string[];
+    pros: string[];
+    cons: string[];
+    title_suggestion: string;
+  } | null
+) => {
   try {
     const searchHistoryRef = collection(db, 'searchHistory');
     const searchData = {
@@ -202,6 +221,7 @@ export const saveUserSearch = async (userId: string, keyword: string, books: Ama
       trendData,
       searchType: trendData.searchType || 'general',
       generatedContent: trendData.generatedContent || null,
+      marketIntelligence: marketIntelligence || null,
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now()
     };
@@ -397,6 +417,7 @@ export const getKeywordInsights = async (userId: string, keyword: string) => {
     const data = querySnapshot.docs[0].data();
     return {
       insights: data.generatedContent || [],
+      marketIntelligence: data.marketIntelligence || null,
       timestamp: data.timestamp,
       lastAccessed: data.updatedAt?.toDate()
     };
@@ -444,26 +465,45 @@ export const addOutlineToProject = async (projectId: string, title: string, outl
   }
 };
 
-export const addMarketResearchToProject = async (projectId: string, researchData: any) => {
+export const addMarketResearchToProject = async (projectId: string, researchData: {
+  keyword: string;
+  trendData: TrendData;
+  books: AmazonBook[];
+  marketIntelligence?: {
+    rating: number;
+    insights: string[];
+    pros: string[];
+    cons: string[];
+    title_suggestion: string;
+  } | null;
+}) => {
   try {
     const projectRef = doc(db, 'projects', projectId);
     const projectDoc = await getDoc(projectRef);
 
-    if (!projectDoc.exists()) throw new Error('Project not found');
+    if (!projectDoc.exists()) {
+      console.error('Project not found:', projectId);
+      throw new Error('Project not found');
+    }
 
     const projectData = projectDoc.data();
-    const research = projectData.research || [];
+    console.log('Current project data:', projectData);
 
-    research.push({
+    // Create new research array with updated data
+    const updatedResearch = [{
       ...researchData,
-      createdAt: Timestamp.now(),
-    });
+      createdAt: Timestamp.now()
+    }];
 
+    console.log('Attempting to update project with research:', updatedResearch);
+
+    // Update project with new research array
     await updateDoc(projectRef, {
-      research,
-      updatedAt: Timestamp.now(),
+      research: updatedResearch,
+      updatedAt: Timestamp.now()
     });
 
+    console.log('Successfully updated project research');
     return true;
   } catch (error) {
     console.error('Error adding market research to project:', error);

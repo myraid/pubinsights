@@ -296,17 +296,6 @@ const BookResearch = React.memo(() => {
 
       // Trigger market insights after getting both trends and books data
       if (user?.uid) {
-        // Save the search first with all required data
-        const searchData = {
-          userId: user.uid,
-          keyword,
-          books: booksData,
-          trendData: validTrendData,
-          timestamp: Date.now()
-        };
-        
-        await saveUserSearch(user.uid, keyword, booksData, validTrendData);
-        
         // Call insights API directly
         setInsightsLoading(true);
         try {
@@ -315,7 +304,13 @@ const BookResearch = React.memo(() => {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify(searchData),
+            body: JSON.stringify({
+              userId: user.uid,
+              keyword,
+              books: booksData,
+              trendData: validTrendData,
+              timestamp: Date.now()
+            }),
           });
 
           if (!insightsResponse.ok) {
@@ -326,6 +321,15 @@ const BookResearch = React.memo(() => {
           if (insightsData.insights) {
             setInsights(Array.isArray(insightsData.insights) ? insightsData.insights : [insightsData.insights]);
             setInsightsData(insightsData);
+            
+            // Save the search with market insights
+            await saveUserSearch(
+              user.uid,
+              keyword,
+              booksData,
+              validTrendData,
+              insightsData
+            );
           }
         } catch (error) {
           console.error('Error getting insights:', error);
@@ -357,21 +361,58 @@ const BookResearch = React.memo(() => {
         return;
       }
 
+      const project = projectBooks.find((p) => p.id === projectId);
+      if (!project) {
+        throw new Error('Project not found');
+      }
+
+      // Check if project has any research data
+      const hasExistingResearch = project.research && project.research.length > 0;
+      if (hasExistingResearch) {
+        const confirmReplace = window.confirm(
+          `This project already has market research data. Adding new research will replace the existing data. Do you want to continue?`
+        );
+        if (!confirmReplace) {
+          return;
+        }
+      }
+
+      console.log('Preparing research data:', {
+        keyword,
+        booksCount: books.length,
+        hasTrendData: !!data,
+        hasMarketIntelligence: !!insightsData
+      });
+
       const researchData = {
         keyword,
         books,
         trendData: data,
-        insights: insightsData,
+        marketIntelligence: {
+          rating: insightsData.rating || 0,
+          insights: insightsData.insights || [],
+          pros: insightsData.pros || [],
+          cons: insightsData.cons || [],
+          title_suggestion: insightsData.title_suggestion || ''
+        },
         timestamp: Date.now(),
       };
 
       await addMarketResearchToProject(projectId, researchData);
-
-      const project = projectBooks.find((p) => p.id === projectId);
-      alert(`Market research added to project: ${project?.name}`);
+      alert(`Market research for "${keyword}" has been ${hasExistingResearch ? 'updated' : 'added'} to project: ${project.name}`);
     } catch (error) {
-      console.error("Error adding market research to project:", error);
-      alert('Failed to add market research to project. Please try again.');
+      console.error("Detailed error in handleAddMarketResearchToProject:", {
+        error,
+        projectId,
+        hasBooks: !!books.length,
+        hasTrendData: !!data,
+        hasInsights: !!insightsData
+      });
+      
+      const errorMessage = error instanceof Error 
+        ? `Failed to add market research: ${error.message}`
+        : 'Failed to add market research to project. Please try again.';
+      alert(errorMessage);
     }
   };
 

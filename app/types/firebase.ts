@@ -31,8 +31,15 @@ export interface Project {
   books?: string[];
   research?: {
     keyword: string;
-    trendData: any;
-    books: any[];
+    trendData: TrendData;
+    books: AmazonBook[];
+    marketIntelligence?: {
+      rating: number;
+      insights: string[];
+      pros: string[];
+      cons: string[];
+      title_suggestion: string;
+    } | null;
   }[];
 }
 
@@ -78,6 +85,13 @@ export interface SearchHistoryItem {
   timestamp: number;
   books: AmazonBook[];
   trendData: TrendData;
+  marketIntelligence?: {
+    rating: number;
+    insights: string[];
+    pros: string[];
+    cons: string[];
+    title_suggestion: string;
+  } | null;
 }
 
 export interface OutlineHistoryItem {

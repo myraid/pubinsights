@@ -496,8 +496,7 @@ const MyProjects: React.FC = () => {
                   Market Intelligence
                 </h3>
                 {(() => {
-                  const research = selectedProject.research[0];
-                  const insights = (research as any)?.generatedContent || (research as any)?.insights || {};
+                  const insights = selectedProject.research[0].marketIntelligence;
                   return (
                     <>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
