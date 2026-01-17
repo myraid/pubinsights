@@ -23,13 +23,17 @@ export async function POST(request: Request) {
 
 
 
-    const webhookUrl = 'https://hook.us2.make.com/qpajwk8cez0x1isu4issavnrg7lwpd97';
+    const webhookUrl = process.env.INSIGHTS_WEBHOOK_URL || 'https://hook.us2.make.com/qpajwk8cez0x1isu4issavnrg7lwpd97';
     if (!webhookUrl) {
       console.error('Webhook URL not configured');
       return NextResponse.json(
         { error: 'Webhook URL not configured' },
         { status: 500 }
       );
+    }
+
+    if (!process.env.INSIGHTS_WEBHOOK_URL) {
+      console.warn('INSIGHTS_WEBHOOK_URL environment variable not set, using default')
     }
 
     // Call the webhook with the raw data

@@ -3,12 +3,12 @@
 import { useState } from "react"
 import { useAuth } from "./context/AuthContext"
 import { Card } from "@/components/ui/card"
-import BookResearch from "./components/BookResearch"
-import BookOutline from "./components/BookOutline"
-import SocialMedia from "./components/SocialMedia"
-import MyProjects from "./components/MyProjects"
-import LandingPage from "./components/LandingPage"
-import Header from "./components/Header"
+import BookResearch from "@/components/sections/BookResearch"
+import BookOutline from "@/components/sections/BookOutline"
+import SocialMedia from "@/components/sections/SocialMedia"
+import MyProjects from "@/components/sections/MyProjects"
+import LandingPage from "@/components/sections/LandingPage"
+import Header from "@/components/sections/Header"
 import { SearchIcon as BookSearch, PenTool, Share2, FolderKanban } from "lucide-react"
 
 export default function Home() {
