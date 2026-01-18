@@ -14,7 +14,7 @@ export async function POST(request: Request) {
     
     if (contentType && contentType.includes('application/json')) {
       // Handle book ad generation request
-      const { title, price, coverUrl, author, description } = await request.json()
+      const { title, price, coverUrl, author, description, adGoal, adFormat } = await request.json()
 
       if (!title || !price || !coverUrl) {
         return NextResponse.json(
@@ -33,6 +33,8 @@ export async function POST(request: Request) {
           author: author || 'Unknown Author',
           description: description || 'Unknown Description'
         },
+        adGoal: adGoal || 'ebook_promo',
+        adFormat: adFormat || 'auto',
         timestamp: new Date().toISOString()
       }
 
@@ -52,18 +54,26 @@ export async function POST(request: Request) {
 
         clearTimeout(timeoutId)
 
+        const responseText = await webhookResponse.text()
+
         if (!webhookResponse.ok) {
-          const errorText = await webhookResponse.text()
-          throw new Error(`Webhook returned ${webhookResponse.status}: ${errorText}`)
+          throw new Error(`Webhook returned ${webhookResponse.status}: ${responseText || "Unknown error"}`)
         }
 
-        const webhookData = await webhookResponse.json()
+        let webhookData: any = null
+        if (responseText) {
+          try {
+            webhookData = JSON.parse(responseText)
+          } catch {
+            webhookData = null
+          }
+        }
         const template = getTemplateById(DEFAULT_TEMPLATE_ID)
 
         return NextResponse.json({
           success: true,
           message: 'Book ad generation request sent successfully',
-          requestId: webhookData.requestId || Date.now().toString(),
+          requestId: webhookData?.requestId || Date.now().toString(),
           template: {
             id: template.id,
             name: template.name,
@@ -130,17 +140,25 @@ export async function POST(request: Request) {
 
         clearTimeout(timeoutId)
 
+        const responseText = await webhookResponse.text()
+
         if (!webhookResponse.ok) {
-          const errorText = await webhookResponse.text()
-          throw new Error(`Webhook returned ${webhookResponse.status}: ${errorText}`)
+          throw new Error(`Webhook returned ${webhookResponse.status}: ${responseText || "Unknown error"}`)
         }
 
-        const webhookData = await webhookResponse.json()
+        let webhookData: any = null
+        if (responseText) {
+          try {
+            webhookData = JSON.parse(responseText)
+          } catch {
+            webhookData = null
+          }
+        }
 
         return NextResponse.json({ 
           success: true, 
           message: 'Data successfully sent to webhook',
-          requestId: webhookData.requestId || Date.now().toString()
+          requestId: webhookData?.requestId || Date.now().toString()
         })
       } catch (fetchError) {
         clearTimeout(timeoutId)

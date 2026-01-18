@@ -25,9 +25,45 @@ interface OutlineResponse {
   outline: OutlineData;
 }
 
-export default function BookOutline({ title: initialTitle }: { title: string }) {
+const renderOutlineValue = (value: unknown) => {
+  if (value === null || value === undefined) {
+    return <p className="text-gray-500">No details available.</p>
+  }
+
+  if (Array.isArray(value)) {
+    const items = value
+      .map((item) => (typeof item === "string" || typeof item === "number" ? String(item) : ""))
+      .filter(Boolean)
+
+    if (!items.length) {
+      return <p className="text-gray-500">No details available.</p>
+    }
+
+    return (
+      <ul className="list-disc list-inside text-gray-700 space-y-1">
+        {items.map((item, index) => (
+          <li key={index} className="text-gray-700">
+            {item}
+          </li>
+        ))}
+      </ul>
+    )
+  }
+
+  if (typeof value === "object") {
+    return (
+      <pre className="whitespace-pre-wrap text-sm text-gray-700 bg-gray-50 border border-gray-200 rounded-md p-3">
+        {JSON.stringify(value, null, 2)}
+      </pre>
+    )
+  }
+
+  return <p className="text-gray-700">{String(value)}</p>
+}
+
+export default function BookOutline({ title: initialTitle }: { title?: string }) {
   const { user } = useAuth()
-  const [title, setTitle] = useState(initialTitle)
+  const [title, setTitle] = useState(initialTitle ?? "")
   const [outline, setOutline] = useState<OutlineResponse | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -66,7 +102,7 @@ export default function BookOutline({ title: initialTitle }: { title: string }) 
   }, [user]);
 
   useEffect(() => {
-    setTitle(initialTitle)
+    setTitle(initialTitle ?? "")
   }, [initialTitle])
 
   const generateOutline = async () => {
@@ -248,15 +284,7 @@ export default function BookOutline({ title: initialTitle }: { title: string }) 
                               <h5 className="font-semibold text-gray-800 mb-2">
                                 {key.replace(/([A-Z])/g, ' $1').trim()}
                               </h5>
-                              {Array.isArray(value) ? (
-                                <ul className="list-disc list-inside text-gray-700 space-y-1">
-                                  {value.map((item, index) => (
-                                    <li key={index} className="text-gray-700">{item}</li>
-                                  ))}
-                                </ul>
-                              ) : (
-                                <p className="text-gray-700">{value}</p>
-                              )}
+                              {renderOutlineValue(value)}
                             </div>
                           ))}
                       </div>

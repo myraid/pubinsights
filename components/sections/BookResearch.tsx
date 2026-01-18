@@ -222,6 +222,14 @@ const BookResearch = React.memo(() => {
     title_suggestion?: string;
   }>({})
 
+  const exampleKeywords = [
+    "habit change for busy professionals",
+    "meal prep for beginners",
+    "personal finance for millennials",
+    "home organization for small spaces",
+    "mindfulness for anxiety"
+  ]
+
   useEffect(() => {
     const fetchProjects = async () => {
       if (!user) {
@@ -442,8 +450,13 @@ const BookResearch = React.memo(() => {
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-gray-900">Book Market Research</h1>
+      <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div>
+          <h1 className="text-2xl font-semibold text-gray-900">Book Market Research</h1>
+          <p className="text-sm text-gray-600 mt-1">
+            Explore demand trends and discover top-performing titles in your niche.
+          </p>
+        </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="flex items-center gap-2">
@@ -465,23 +478,69 @@ const BookResearch = React.memo(() => {
       </div>
 
       <Card className="bg-white shadow-md p-4 sm:p-6 border border-gray-200 mb-6">
-        <div className="flex gap-4">
-          <TextInput
-            placeholder="Enter a topic or keyword for your book..."
-            value={keyword}
-            onChange={(e) => setKeyword(e.target.value)}
-            className="flex-grow tr-input"
-            onKeyDown={(e) => e.key === 'Enter' && analyzeKeyword()}
-          />
-          <TremorButton
-            onClick={analyzeKeyword}
-            loading={loading}
-            className="bg-primary text-white hover:bg-primary/90 px-8"
-          >
-            Analyze
-          </TremorButton>
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col lg:flex-row gap-4">
+            <TextInput
+              placeholder="Enter a topic or keyword for your book..."
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+              className="flex-grow tr-input"
+              onKeyDown={(e) => e.key === 'Enter' && analyzeKeyword()}
+            />
+            <TremorButton
+              onClick={analyzeKeyword}
+              loading={loading}
+              className="bg-primary text-white hover:bg-primary/90 px-8"
+            >
+              Analyze
+            </TremorButton>
+          </div>
+          <div className="flex flex-wrap items-center gap-2 text-sm text-gray-600">
+            <span className="font-medium text-gray-700">Try:</span>
+            {exampleKeywords.map((example) => (
+              <button
+                key={example}
+                type="button"
+                onClick={() => setKeyword(example)}
+                className="rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-gray-700 hover:border-primary/40 hover:text-primary transition-colors"
+              >
+                {example}
+              </button>
+            ))}
+            <span className="text-xs text-gray-500">Tip: keep it broad (genre or problem) for better trends.</span>
+          </div>
         </div>
       </Card>
+
+      {!data && !loading && (
+        <Card className="bg-white shadow-sm p-6 border border-gray-200 mb-6">
+          <div className="flex items-start gap-4">
+            <div className="rounded-full bg-purple-50 p-3">
+              <Lightbulb className="w-5 h-5 text-primary" />
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900 mb-1">How to use this page</h2>
+              <p className="text-sm text-gray-600 mb-3">
+                Enter a keyword to see demand trends and the top books currently ranking for that topic.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm text-gray-600">
+                <div className="rounded-lg border border-gray-100 bg-gray-50 p-3">
+                  <span className="font-medium text-gray-800">Step 1</span>
+                  <p className="mt-1">Search a nonfiction topic or reader problem.</p>
+                </div>
+                <div className="rounded-lg border border-gray-100 bg-gray-50 p-3">
+                  <span className="font-medium text-gray-800">Step 2</span>
+                  <p className="mt-1">Review trend lines for demand.</p>
+                </div>
+                <div className="rounded-lg border border-gray-100 bg-gray-50 p-3">
+                  <span className="font-medium text-gray-800">Step 3</span>
+                  <p className="mt-1">Scan top books to validate competition.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Card>
+      )}
 
       {data && (
         <>
