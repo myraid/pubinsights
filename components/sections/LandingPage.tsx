@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { BookOpen, TrendingUp, Share2, BarChart2 } from "lucide-react"
 import LoginForm from "./LoginForm"
-import SubscriptionPlans from "./SubscriptionPlans"
 import type React from "react"
 import Image from "next/image"
 
@@ -82,7 +81,48 @@ export default function LandingPage() {
         </div>
 
         <div className="mb-16">
-          <SubscriptionPlans />
+          <div className="text-center mb-8">
+            <h2 className="text-3xl md:text-4xl font-bold text-primary mb-3">Choose a plan that fits you</h2>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              Flexible options for nonfiction creators at every stage.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <PlanCard
+              title="Freemium"
+              price="Free"
+              description="Try the platform with a small monthly allowance."
+              features={[
+                "5 book requests / month",
+                "3 outline generations / month",
+                "No social media ads"
+              ]}
+              cta="Start Free"
+            />
+            <PlanCard
+              title="Creator"
+              price="25 requests"
+              description="Validate topics and build your nonfiction pipeline."
+              features={[
+                "25 book requests / month",
+                "25 outline generations / month",
+                "Email support"
+              ]}
+              cta="Choose Creator"
+              highlight
+            />
+            <PlanCard
+              title="Pro"
+              price="100 requests"
+              description="Scale your nonfiction catalog with pro tools."
+              features={[
+                "100 book requests / month",
+                "100 outline generations / month",
+                "Social media ad generation"
+              ]}
+              cta="Go Pro"
+            />
+          </div>
         </div>
 
         <div className="text-center">
@@ -124,6 +164,49 @@ function FeatureCard({ icon, title, description }: { icon: React.ReactNode; titl
         <h3 className="text-xl font-semibold">{title}</h3>
       </div>
       <p className="text-muted-foreground">{description}</p>
+    </Card>
+  )
+}
+
+function PlanCard({
+  title,
+  price,
+  description,
+  features,
+  cta,
+  highlight
+}: {
+  title: string
+  price: string
+  description: string
+  features: string[]
+  cta: string
+  highlight?: boolean
+}) {
+  return (
+    <Card className={`p-6 ${highlight ? "border-primary/40 shadow-md" : "border-gray-200"}`}>
+      <div className="flex items-center justify-between">
+        <div>
+          <h3 className="text-xl font-semibold text-gray-900">{title}</h3>
+          <p className="text-sm text-muted-foreground mt-1">{description}</p>
+        </div>
+        {highlight && (
+          <span className="text-xs font-semibold bg-primary/10 text-primary px-2 py-1 rounded-full">
+            Most Popular
+          </span>
+        )}
+      </div>
+      <div className="mt-6 text-3xl font-semibold text-gray-900">{price}</div>
+      <p className="text-sm text-gray-500 mt-1">Billed monthly</p>
+      <ul className="mt-6 space-y-3 text-sm text-gray-700">
+        {features.map((feature) => (
+          <li key={feature} className="flex items-start gap-2">
+            <span className="mt-0.5 h-2 w-2 rounded-full bg-primary"></span>
+            <span>{feature}</span>
+          </li>
+        ))}
+      </ul>
+      <Button className="mt-6 w-full">{cta}</Button>
     </Card>
   )
 }
