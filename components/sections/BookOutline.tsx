@@ -6,7 +6,7 @@ import { FileText, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { useAuth } from "@/app/context/AuthContext"
-import { getUserProjects, createBookOutline, addOutlineToProject, saveOutlineHistory } from "@/app/lib/firebase/services"
+import { getUserProjects, addOutlineToProject, saveOutlineHistory } from "@/app/lib/firebase/services"
 import type { Project } from "@/app/types/firebase"
 import { toast } from "sonner"
 
@@ -118,7 +118,7 @@ export default function BookOutline({ title: initialTitle }: { title?: string })
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ title })
+        body: JSON.stringify({ title, userId: user?.uid })
       })
 
       const data = await response.json()
@@ -167,29 +167,17 @@ export default function BookOutline({ title: initialTitle }: { title?: string })
 
       // Check if the project already has an outline
       const project = projectOutline.find((p) => p.id === projectId);
-      if (project && Array.isArray((project as any).outlines) && (project as any).outlines.length > 0) {
+      const outlines = (project as { outlines?: unknown[] } | undefined)?.outlines;
+      if (project && Array.isArray(outlines) && outlines.length > 0) {
         const confirmReplace = window.confirm('This project already has an outline. Adding a new outline will override the existing one. Do you want to continue?');
         if (!confirmReplace) return;
       }
 
-      await addOutlineToProject(projectId, title, outline);
+      await addOutlineToProject(projectId, title, outline as unknown as { outline?: { Title?: string; Chapters?: Array<Record<string, unknown> | { Chapter: number; Title: string }> } });
       showToast(`Outline added to project: ${project?.name}`);
     } catch (error) {
       console.error("Error adding outline to project:", error);
       showToast('Failed to add outline to project. Please try again.');
-    }
-  };
-
-  const handleSaveToProject = async (projectId: string) => {
-    if (!user || !outline) return;
-
-    try {
-      const outlineContent = JSON.stringify(outline.outline, null, 2);
-      await createBookOutline(user.uid, outlineContent, projectId);
-      showToast('Outline saved to project successfully!');
-    } catch (error) {
-      console.error('Error saving outline to project:', error);
-      showToast('Failed to save outline to project. Please try again.');
     }
   };
 
@@ -296,7 +284,7 @@ export default function BookOutline({ title: initialTitle }: { title?: string })
               </div>
             ) : (
               <div className="flex items-center justify-center h-full text-gray-500">
-                Enter a book title above and click "Generate Outline" to get started
+                Enter a book title above and click &quot;Generate Outline&quot; to get started
               </div>
             )}
           </div>

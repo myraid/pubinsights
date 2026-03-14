@@ -1,77 +1,58 @@
 import { NextResponse } from 'next/server';
+import { generateInsights } from '@/app/lib/agents/insights-agent';
+import { logGeneration } from '@/app/lib/agents/generation-logger';
 
 export async function POST(request: Request) {
   try {
     const data = await request.json();
-    const { userId, keyword, books, trendData,  timestamp} = data;
+    const { userId, keyword, books, trendData } = data;
 
-    console.log('Received insights request:', { userId, keyword, booksCount: books?.length });  
+    console.log('Received insights request:', { userId, keyword, booksCount: books?.length });
 
-    // Validate required fields
-    if (!userId || !keyword || !trendData || !books) {
-      console.error('Missing required fields:', { userId, keyword, hasTrendData: !!trendData, booksCount: books?.length });
+    if (!userId || !keyword) {
+      console.error('Missing required fields:', { userId, keyword });
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { error: 'Missing required fields: userId and keyword are required' },
         { status: 400 }
       );
     }
-    // Create a copy of books without description and reviews fields
-    const books_stripped = books.map((books: any) => {
-      const { description, reviews, ...bookWithoutDescriptionAndReviews } = books;
-      return bookWithoutDescriptionAndReviews;
-    });
 
+    const enrichedBooks = books?.length
+      ? (books as Array<Record<string, unknown>>).map((book) => {
+          const desc = typeof book.description === 'string' ? book.description.slice(0, 500) : null;
+          const reviews = Array.isArray(book.reviews)
+            ? book.reviews.slice(0, 5).map((r: Record<string, unknown>) => ({
+                title: r.title,
+                rating: r.rating,
+                content: typeof r.content === 'string' ? r.content.slice(0, 300) : '',
+                is_verified: r.is_verified,
+              }))
+            : [];
+          return {
+            title: book.title,
+            asin: book.asin,
+            price: book.price,
+            rating: book.rating,
+            reviews_count: book.reviews_count,
+            bsr: book.bsr,
+            publisher: book.publisher,
+            manufacturer: book.manufacturer,
+            publication_date: book.publication_date,
+            categories: book.categories,
+            is_prime: book.is_prime,
+            description: desc,
+            review_ai_summary: book.review_ai_summary || null,
+            rating_stars_distribution: book.rating_stars_distribution || [],
+            top_reviews: reviews,
+          };
+        })
+      : [];
 
+    const result = await generateInsights(keyword, enrichedBooks, trendData);
 
-    const webhookUrl = process.env.INSIGHTS_WEBHOOK_URL || 'https://hook.us2.make.com/qpajwk8cez0x1isu4issavnrg7lwpd97';
-    if (!webhookUrl) {
-      console.error('Webhook URL not configured');
-      return NextResponse.json(
-        { error: 'Webhook URL not configured' },
-        { status: 500 }
-      );
-    }
+    logGeneration(userId, 'insights', { keyword, booksCount: enrichedBooks.length }, result as unknown as Record<string, unknown>, 'gpt-4o');
 
-    if (!process.env.INSIGHTS_WEBHOOK_URL) {
-      console.warn('INSIGHTS_WEBHOOK_URL environment variable not set, using default')
-    }
-
-    // Call the webhook with the raw data
-    console.log('Calling webhook with data...');
-    const response = await fetch(webhookUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        userId,
-        keyword,
-        timestamp,
-        trendData,
-        books: books_stripped  
-      }),
-    });
-
-    if (!response.ok) {
-      console.error('Webhook call failed:', response.status, response.statusText);
-      throw new Error('Failed to call webhook');
-    }
-
-    const webhookData = await response.json();
-    console.log('Raw webhook response:', JSON.stringify(webhookData, null, 2));
-
-    // Process the webhook response to ensure we have the required fields
-    const processedData = {
-      ...webhookData,
-      insights: webhookData.insights || webhookData.key_insights || [],
-      title_suggestion: webhookData.title_suggestion || webhookData.keyword_optimized_title_suggestion || webhookData.suggested_title || '',
-      rating: webhookData.rating || 0,
-      analysis: webhookData.analysis || '',
-      pros: webhookData.pros || [],
-      cons: webhookData.cons || []
-    };
-
-    return NextResponse.json(processedData);
+    return NextResponse.json(result);
   } catch (error) {
     console.error('Error in insights API:', error);
     return NextResponse.json(
@@ -79,4 +60,4 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
-} 
+}

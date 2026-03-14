@@ -1,11 +1,16 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, TextInput, Title, Textarea } from "@tremor/react"
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
-import { ShoppingCart, Share2 } from "lucide-react"
+import { ShoppingCart, Share2, ChevronDown } from "lucide-react"
+import Image from "next/image"
 import GeneratedContent from "./GeneratedContent"
+import { useAuth } from "@/app/context/AuthContext"
+import { getUserProjects, addSocialContentToProject } from "@/app/lib/firebase/services"
+import type { Project } from "@/app/types/firebase"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
 interface ContentGeneratorProps {
   bookDetails: {
@@ -18,16 +23,34 @@ interface ContentGeneratorProps {
   };
 }
 
+interface ContentItem {
+  type: 'post' | 'ad'
+  platform: string
+  content: string
+}
+
 export default function ContentGenerator({ bookDetails }: ContentGeneratorProps) {
+  const { user } = useAuth()
   const [activeTab, setActiveTab] = useState<'ad' | 'post'>('ad')
   const [loading, setLoading] = useState(false)
-  const [requestId, setRequestId] = useState<string | null>(null)
-  
-  // Ad specific state
+  const [generatedItems, setGeneratedItems] = useState<ContentItem[]>([])
+  const [projects, setProjects] = useState<Project[]>([])
+
   const [salePrice, setSalePrice] = useState("")
-  
-  // Post specific state
   const [postInfo, setPostInfo] = useState("")
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      if (!user?.uid) return
+      try {
+        const userProjects = await getUserProjects(user.uid)
+        setProjects(userProjects)
+      } catch (error) {
+        console.error("Error fetching projects:", error)
+      }
+    }
+    fetchProjects()
+  }, [user])
 
   const handleSubmit = async () => {
     if (activeTab === 'ad' && !salePrice) {
@@ -41,12 +64,14 @@ export default function ContentGenerator({ bookDetails }: ContentGeneratorProps)
     }
 
     setLoading(true)
+    setGeneratedItems([])
     try {
       const formDataToSend = new FormData()
       formDataToSend.append("title", bookDetails.title)
       formDataToSend.append("bookDescription", bookDetails.description)
       formDataToSend.append("contentType", activeTab)
-      
+      if (user?.uid) formDataToSend.append("userId", user.uid)
+
       if (activeTab === 'ad') {
         formDataToSend.append("salePrice", salePrice)
       } else {
@@ -67,18 +92,41 @@ export default function ContentGenerator({ bookDetails }: ContentGeneratorProps)
       }
 
       const data = await response.json()
-      setRequestId(data.requestId)
-      
-      // Clear form after successful submission
+
+      if (data.generatedContent) {
+        setGeneratedItems(data.generatedContent)
+      }
+
       setSalePrice("")
       setPostInfo("")
 
-      toast.success("Content generation started")
+      toast.success("Content generated successfully")
     } catch (error) {
       console.error("Error generating content:", error)
       toast.error("Failed to generate content")
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleAddToProject = async (projectId: string) => {
+    if (!generatedItems.length) {
+      toast.error("No generated content to add")
+      return
+    }
+
+    try {
+      await addSocialContentToProject(projectId, {
+        title: bookDetails.title,
+        contentType: activeTab,
+        items: generatedItems,
+      })
+
+      const project = projects.find(p => p.id === projectId)
+      toast.success(`Content added to project: ${project?.name}`)
+    } catch (error) {
+      console.error("Error adding to project:", error)
+      toast.error("Failed to add content to project")
     }
   }
 
@@ -102,7 +150,6 @@ export default function ContentGenerator({ bookDetails }: ContentGeneratorProps)
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Book Details Card */}
         <Card className="bg-white shadow-sm">
           <Title className="mb-4">Book Information</Title>
           <div className="space-y-4">
@@ -121,17 +168,19 @@ export default function ContentGenerator({ bookDetails }: ContentGeneratorProps)
             {bookDetails.coverImage && (
               <div>
                 <p className="text-sm font-medium text-gray-500">Cover Image</p>
-                <img
+                <Image
                   src={URL.createObjectURL(bookDetails.coverImage)}
                   alt="Book cover"
+                  width={128}
+                  height={160}
                   className="w-32 h-40 object-cover rounded-lg mt-2"
+                  unoptimized
                 />
               </div>
             )}
           </div>
         </Card>
 
-        {/* Content Generation Card */}
         <Card className="bg-white shadow-sm">
           <Title className="mb-4">
             {activeTab === 'ad' ? 'Create Ad' : 'Create Post'}
@@ -177,7 +226,33 @@ export default function ContentGenerator({ bookDetails }: ContentGeneratorProps)
         </Card>
       </div>
 
-      {requestId && <GeneratedContent requestId={requestId} />}
+      {generatedItems.length > 0 && (
+        <>
+          {user && projects.length > 0 && (
+            <div className="flex justify-end">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="text-primary border-primary">
+                    Add to Project
+                    <ChevronDown className="w-4 h-4 ml-2" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  {projects.map((project) => (
+                    <DropdownMenuItem
+                      key={project.id}
+                      onClick={() => handleAddToProject(project.id)}
+                    >
+                      {project.name}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          )}
+          <GeneratedContent items={generatedItems} />
+        </>
+      )}
     </div>
   )
-} 
+}

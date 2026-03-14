@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 
 export async function POST(request: Request) {
-  const { bookTitle, authorName, content } = await request.json()
+  const { bookTitle, authorName } = await request.json()
 
   // In a real application, this is where you would generate the static website
   // For this example, we'll just return a success message

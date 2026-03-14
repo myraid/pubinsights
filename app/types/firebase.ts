@@ -1,15 +1,10 @@
 import { Timestamp } from 'firebase/firestore';
-import type { AmazonBook, TrendData } from './index';
+import type { AmazonBook, TrendData } from '@/types';
 
 interface Chapter {
   Title: string;
   Content: string[];
   Chapter: number;
-}
-
-interface OutlineData {
-  Title: string;
-  Chapters: Chapter[];
 }
 
 export interface User {
@@ -19,6 +14,22 @@ export interface User {
   searches?: string[];
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface SocialContentItem {
+  type: 'post' | 'ad';
+  platform: string;
+  content: string;
+}
+
+export interface ProjectSocialContent {
+  title: string;
+  contentType: 'ad' | 'post';
+  items: SocialContentItem[];
+  createdAt: {
+    seconds: number;
+    nanoseconds: number;
+  };
 }
 
 export interface Project {
@@ -41,6 +52,7 @@ export interface Project {
       title_suggestion: string;
     } | null;
   }[];
+  socialContent?: ProjectSocialContent[];
 }
 
 export interface BookOutline {
@@ -66,8 +78,8 @@ export interface SearchHistory {
   id: string;
   userId: string;
   query: string;
-  trendsData: any;
-  booksData: any;
+  trendsData: unknown;
+  booksData: unknown;
   createdAt: Timestamp;
 }
 

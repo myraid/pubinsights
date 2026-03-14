@@ -1,9 +1,12 @@
 import { NextResponse } from 'next/server'
+import { generateOutline } from '@/app/lib/agents/outline-agent'
+import { logGeneration } from '@/app/lib/agents/generation-logger'
+import { MODEL } from '@/app/lib/agents/openai-client'
 
 interface ChapterContent {
   Chapter: number;
   Title: string;
-  [key: string]: any; // Allow for dynamic fields
+  [key: string]: unknown;
 }
 
 interface OutlineData {
@@ -13,28 +16,21 @@ interface OutlineData {
 
 function parseOutlineContent(title: string, content: string): OutlineData {
   try {
-    // Parse the JSON content
     const parsedContent = JSON.parse(content);
-    console.log('parsedContent', parsedContent);
-    
-    // Validate the structure
+
     if (!parsedContent.Title || !Array.isArray(parsedContent.Chapters)) {
       throw new Error('Invalid outline structure');
     }
 
-    // Process each chapter to ensure all required fields are present
-    const processedChapters = parsedContent.Chapters.map((chapter: any, index: number) => {
-      // Create a base chapter object with required fields
+    const processedChapters = parsedContent.Chapters.map((chapter: unknown, index: number) => {
+      const chapterData = typeof chapter === 'object' && chapter !== null ? (chapter as Record<string, unknown>) : {}
       const processedChapter: ChapterContent = {
-        Chapter: chapter.Chapter || index + 1,
-        Title: chapter.Title || 'Untitled Chapter'
+        Chapter: typeof chapterData.Chapter === 'number' ? chapterData.Chapter : index + 1,
+        Title: typeof chapterData.Title === 'string' ? chapterData.Title : 'Untitled Chapter'
       };
 
-      // Add all other fields from the chapter
-      Object.entries(chapter).forEach(([key, value]) => {
-        // Skip the fields we've already processed
+      Object.entries(chapterData).forEach(([key, value]) => {
         if (!['Chapter', 'Title'].includes(key)) {
-          // Handle different types of values
           if (Array.isArray(value)) {
             processedChapter[key] = value;
           } else if (typeof value === 'object' && value !== null) {
@@ -44,11 +40,9 @@ function parseOutlineContent(title: string, content: string): OutlineData {
           }
         }
       });
-      console.log('processedChapter', processedChapter);
       return processedChapter;
     });
 
-    // Sort chapters by chapter number
     processedChapters.sort((a: ChapterContent, b: ChapterContent) => a.Chapter - b.Chapter);
 
     return {
@@ -63,32 +57,19 @@ function parseOutlineContent(title: string, content: string): OutlineData {
 
 export async function POST(request: Request) {
   try {
-    const { title } = await request.json()
+    const { title, userId } = await request.json()
 
     if (!title) {
       return NextResponse.json({ error: 'Title is required' }, { status: 400 })
     }
 
-    const response = await fetch('https://hook.us2.make.com/7qrng21hu51qnn30m7k4q29wk826p88y', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ title })
-    })
-
-    if (!response.ok) {
-      throw new Error('Failed to generate outline')
-    }
-
-    const data = await response.json()
-    const content = data[0]?.message?.content
-
-    if (!content) {
-      throw new Error('Invalid response format')
-    }
-
+    const content = await generateOutline(title)
     const parsedOutline = parseOutlineContent(title, content)
+
+    if (userId) {
+      logGeneration(userId, 'outline', { title }, parsedOutline as unknown as Record<string, unknown>, MODEL);
+    }
+
     return NextResponse.json({ outline: parsedOutline })
 
   } catch (error) {
@@ -97,4 +78,3 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: errorMessage }, { status: 500 })
   }
 }
-

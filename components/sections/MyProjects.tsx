@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useEffect } from "react"
-import { PlusCircle, Book, Trash2, FileText, Share2, TrendingUp, ShoppingCart, BarChart3 } from "lucide-react"
+import { PlusCircle, Book, FileText, TrendingUp, ShoppingCart, BarChart3, Share2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
@@ -10,7 +10,6 @@ import { createProject, getUserProjects, getProject } from "@/app/lib/firebase/s
 import type { Project, BookOutline, RelatedBook } from "@/app/types/firebase"
 import type { TrendData, AmazonBook } from "@/types"
 import Image from "next/image"
-import { toast } from "sonner"
 import dynamic from "next/dynamic"
 
 interface BookContent {
@@ -19,32 +18,52 @@ interface BookContent {
     amazonBooks: AmazonBook[]
   } | null
   outline: BookOutline | null
-  socialMedia: any | null
+  socialMedia: unknown | null
+}
+
+interface SocialContentItem {
+  type: 'post' | 'ad';
+  platform: string;
+  content: string;
+}
+
+interface ProjectSocialContent {
+  title: string;
+  contentType: 'ad' | 'post';
+  items: SocialContentItem[];
+  createdAt: {
+    seconds: number;
+    nanoseconds: number;
+  };
 }
 
 interface ProjectWithContent extends Project {
   content?: BookContent;
   outlines?: {
-    title: string;
+    title?: string;
     outline: {
-      Title: string;
-      Chapters: {
-        Chapter: number;
-        Title: string;
-        [key: string]: string[] | string | number; // Allow dynamic content
-      }[];
+      Title?: string;
+      Chapters?: unknown[];
     };
     createdAt: {
       seconds: number;
       nanoseconds: number;
-    };
+    } | import("firebase/firestore").Timestamp;
   }[];
   relatedBooks?: RelatedBook[];
   research?: {
     keyword: string;
     trendData: TrendData;
     books: AmazonBook[];
+    marketIntelligence?: {
+      rating: number;
+      insights: string[];
+      pros: string[];
+      cons: string[];
+      title_suggestion: string;
+    } | null;
   }[];
+  socialContent?: ProjectSocialContent[];
 }
 
 // Add Plotly types
@@ -106,7 +125,7 @@ interface PlotlyConfig {
   scrollZoom?: boolean;
 }
 
-type PlotData = {
+type PlotTrace = {
   x: Date[];
   y: number[];
   type: string;
@@ -118,7 +137,7 @@ type PlotData = {
     width: number;
     color: string;
   };
-}[];
+};
 
 // Dynamically import Plotly with no SSR
 const Plot = dynamic(() => import('react-plotly.js'), {
@@ -133,29 +152,9 @@ const MyProjects: React.FC = () => {
   const [newProjectTitle, setNewProjectTitle] = useState("")
   const [loading, setLoading] = useState(true)
   const [isAddingProject, setIsAddingProject] = useState(false)
-  const [activeCard, setActiveCard] = useState<'competing' | 'market' | 'trends' | 'outline' | null>(null)
+  const [activeCard, setActiveCard] = useState<'competing' | 'market' | 'trends' | 'outline' | 'social' | null>(null)
 
-  const renderValue = (value: unknown): React.ReactNode => {
-    if (Array.isArray(value)) {
-      return (
-        <ul className="list-disc list-inside text-gray-700 space-y-1">
-          {value.map((item, index) => (
-            <li key={index} className="text-gray-700">{String(item)}</li>
-          ))}
-        </ul>
-      );
-    }
-    return <p className="text-gray-700">{String(value)}</p>;
-  };
-
-  const showToast = (message: string) => {
-    toast(message, {
-      className: "bg-purple-50 text-purple-800 border-purple-200",
-      style: {
-        border: "1px solid #e9d8fd",
-      },
-    });
-  };
+  // Note: helper functions removed (unused).
 
   // Fetch user's projects on component mount
   useEffect(() => {
@@ -216,7 +215,7 @@ const MyProjects: React.FC = () => {
             console.log('First outline structure:', projectDetails.outlines[0].outline)
             console.log('Chapters:', projectDetails.outlines[0].outline?.Chapters)
           }
-          setSelectedProject(projectDetails)
+          setSelectedProject(projectDetails as ProjectWithContent)
         }
       } catch (error) {
         console.error("Error fetching project details:", error)
@@ -253,9 +252,7 @@ const MyProjects: React.FC = () => {
     }
   }
 
-  const getOverallBSR = (book: AmazonBook) => {
-    return book.bsr;
-  }
+  // Note: getOverallBSR removed (unused).
 
   if (!user) {
     return (
@@ -410,6 +407,26 @@ const MyProjects: React.FC = () => {
                   </div>
                 </Card>
               )}
+
+              {/* Social Content Card */}
+              {selectedProject.socialContent && selectedProject.socialContent.length > 0 && (
+                <Card 
+                  className={`p-4 cursor-pointer transition-all duration-200 ${
+                    activeCard === 'social' ? 'bg-purple-50 border-purple-300' : 'hover:bg-purple-50'
+                  }`}
+                  onClick={() => setActiveCard(activeCard === 'social' ? null : 'social')}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <Share2 className="w-5 h-5 mr-2 text-purple-600" />
+                      <h3 className="text-lg font-semibold text-purple-800">Social Content</h3>
+                    </div>
+                    <span className="text-sm text-gray-500">
+                      {selectedProject.socialContent.length} set{selectedProject.socialContent.length !== 1 ? 's' : ''}
+                    </span>
+                  </div>
+                </Card>
+              )}
             </div>
 
             {/* Content Sections */}
@@ -419,7 +436,7 @@ const MyProjects: React.FC = () => {
                 <div className="space-y-6">
                   {selectedProject.research.map((research, index) => (
                     <div key={index} className="space-y-4">
-                      <h4 className="font-medium text-gray-900">Books for "{research.keyword}"</h4>
+                      <h4 className="font-medium text-gray-900">Books for &quot;{research.keyword}&quot;</h4>
                       <div className="space-y-4">
                         {research.books.map((book) => (
                           <Card key={book.asin} className="p-4 mb-4 hover:shadow-lg transition-shadow hover:border-primary/50 hover:bg-primary/5">
@@ -598,19 +615,19 @@ const MyProjects: React.FC = () => {
                 <div className="space-y-6">
                   {selectedProject.research.map((research, index) => (
                     <div key={index} className="space-y-4">
-                      <h4 className="font-medium text-gray-900">Trends for "{research.keyword}"</h4>
+                      <h4 className="font-medium text-gray-900">Trends for &quot;{research.keyword}&quot;</h4>
                       {research.trendData && (
                         <div className="space-y-4">
                           <div className="p-4 bg-gray-50 rounded-lg">
                             <h5 className="font-semibold mb-2">Interest over time</h5>
                             <div className="h-[400px]">
                               {(research.trendData.webSearch?.timelineData?.length > 0 || research.trendData.youtube?.timelineData?.length > 0) && (
-                                <Plot
-                                  data={[
-                                    ...(research.trendData.webSearch?.timelineData?.length > 0 ? [{
-                                      x: research.trendData.webSearch.timelineData.map(point => 
-                                        new Date(parseInt(point.time) * 1000)
-                                      ),
+                                (() => {
+                                  const traces: PlotTrace[] = []
+
+                                  if (research.trendData.webSearch?.timelineData?.length) {
+                                    traces.push({
+                                      x: research.trendData.webSearch.timelineData.map(point => new Date(parseInt(point.time) * 1000)),
                                       y: research.trendData.webSearch.timelineData.map(point => point.value[0]),
                                       type: "scatter",
                                       mode: "lines",
@@ -619,13 +636,14 @@ const MyProjects: React.FC = () => {
                                         shape: "spline",
                                         smoothing: 1.3,
                                         width: 3,
-                                        color: '#2563eb'
+                                        color: "#2563eb"
                                       }
-                                    }] : []),
-                                    ...(research.trendData.youtube?.timelineData?.length > 0 ? [{
-                                      x: research.trendData.youtube.timelineData.map(point => 
-                                        new Date(parseInt(point.time) * 1000)
-                                      ),
+                                    })
+                                  }
+
+                                  if (research.trendData.youtube?.timelineData?.length) {
+                                    traces.push({
+                                      x: research.trendData.youtube.timelineData.map(point => new Date(parseInt(point.time) * 1000)),
                                       y: research.trendData.youtube.timelineData.map(point => point.value[0]),
                                       type: "scatter",
                                       mode: "lines",
@@ -634,11 +652,15 @@ const MyProjects: React.FC = () => {
                                         shape: "spline",
                                         smoothing: 1.3,
                                         width: 3,
-                                        color: '#dc2626'
+                                        color: "#dc2626"
                                       }
-                                    }] : [])
-                                  ] as any}
-                                  layout={{
+                                    })
+                                  }
+
+                                  return (
+                                    <Plot
+                                      data={traces}
+                                      layout={{
                                     autosize: true,
                                     height: 400,
                                     width: null,
@@ -712,6 +734,8 @@ const MyProjects: React.FC = () => {
                                     scrollZoom: false
                                   } as PlotlyConfig}
                                 />
+                                  )
+                                })()
                               )}
                             </div>
                           </div>
@@ -733,36 +757,88 @@ const MyProjects: React.FC = () => {
                       <div className="prose prose-sm max-w-none">
                         <h3 className="text-2xl font-bold mb-2">{outline.outline.Title}</h3>
                         {outline.outline.Chapters && outline.outline.Chapters.length > 0 ? (
-                          outline.outline.Chapters.map((chapter) => (
-                            <div key={chapter.Chapter} className="mt-6">
-                              <h4 className="text-xl text-black font-bold mb-2">
-                                Chapter {chapter.Chapter}: {chapter.Title}
-                              </h4>
-                              <div className="ml-4 space-y-2">
-                                {Object.entries(chapter)
-                                  .filter(([key]) => !['Chapter', 'Title'].includes(key))
-                                  .map(([key, value]) => (
-                                    <div key={key} className="mb-4">
-                                      <h5 className="font-semibold text-gray-800 mb-2">
-                                        {key.replace(/([A-Z])/g, ' $1').trim()}
-                                      </h5>
-                                      {Array.isArray(value) ? (
-                                        <ul className="list-disc list-inside text-gray-700 space-y-1">
-                                          {value.map((item, index) => (
-                                            <li key={index} className="text-gray-700">{item}</li>
-                                          ))}
-                                        </ul>
-                                      ) : (
-                                        <p className="text-gray-700">{value}</p>
-                                      )}
-                                    </div>
-                                  ))}
+                          outline.outline.Chapters.map((chapter, index) => {
+                            const chapterData =
+                              typeof chapter === 'object' && chapter !== null
+                                ? (chapter as Record<string, unknown>)
+                                : {}
+                            const chapterNumber =
+                              typeof chapterData.Chapter === 'number' ? chapterData.Chapter : index + 1
+                            const chapterTitle =
+                              typeof chapterData.Title === 'string' ? chapterData.Title : 'Untitled Chapter'
+
+                            return (
+                              <div key={chapterNumber} className="mt-6">
+                                <h4 className="text-xl text-black font-bold mb-2">
+                                  Chapter {chapterNumber}: {chapterTitle}
+                                </h4>
+                                <div className="ml-4 space-y-2">
+                                  {Object.entries(chapterData)
+                                    .filter(([key]) => !['Chapter', 'Title'].includes(key))
+                                    .map(([key, value]) => (
+                                      <div key={key} className="mb-4">
+                                        <h5 className="font-semibold text-gray-800 mb-2">
+                                          {key.replace(/([A-Z])/g, ' $1').trim()}
+                                        </h5>
+                                        {Array.isArray(value) ? (
+                                          <ul className="list-disc list-inside text-gray-700 space-y-1">
+                                            {value.map((item, itemIndex) => (
+                                              <li key={itemIndex} className="text-gray-700">
+                                                {String(item)}
+                                              </li>
+                                            ))}
+                                          </ul>
+                                        ) : (
+                                          <p className="text-gray-700">{String(value)}</p>
+                                        )}
+                                      </div>
+                                    ))}
+                                </div>
                               </div>
-                            </div>
-                          ))
+                            )
+                          })
                         ) : (
                           <p className="text-gray-600">No chapters available in this outline.</p>
                         )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            )}
+
+            {activeCard === 'social' && selectedProject.socialContent && selectedProject.socialContent.length > 0 && (
+              <Card className="p-4">
+                <h3 className="text-lg font-semibold text-purple-800 mb-4">Social Content</h3>
+                <div className="space-y-6">
+                  {selectedProject.socialContent.map((entry, entryIndex) => (
+                    <div key={entryIndex} className="space-y-4">
+                      <div className="flex items-center gap-2">
+                        <h4 className="font-medium text-gray-900">{entry.title}</h4>
+                        <span className="px-2 py-0.5 bg-purple-100 text-purple-700 rounded text-xs font-medium">
+                          {entry.contentType}
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {entry.items.map((item: SocialContentItem, itemIndex: number) => (
+                          <Card key={itemIndex} className="p-4 bg-gray-50">
+                            <div className="flex items-center gap-2 mb-3">
+                              <span className="px-2 py-0.5 bg-primary/10 text-primary rounded text-xs font-medium">
+                                {item.platform}
+                              </span>
+                              <span className="px-2 py-0.5 bg-gray-200 rounded text-xs">
+                                {item.type}
+                              </span>
+                            </div>
+                            <p className="text-sm text-gray-700 whitespace-pre-wrap">{item.content}</p>
+                            <button
+                              onClick={() => navigator.clipboard.writeText(item.content)}
+                              className="mt-3 px-3 py-1 text-xs bg-gray-200 hover:bg-gray-300 rounded"
+                            >
+                              Copy
+                            </button>
+                          </Card>
+                        ))}
                       </div>
                     </div>
                   ))}

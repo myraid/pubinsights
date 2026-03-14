@@ -5,6 +5,7 @@ import { Card, TextInput, Title } from "@tremor/react"
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
 import { Link, Star, DollarSign, BookOpen } from "lucide-react"
+import Image from "next/image"
 
 interface BookDetailsProps {
   onBookDetailsFetched: (details: {
@@ -103,10 +104,13 @@ export default function BookDetails({ onBookDetailsFetched }: BookDetailsProps) 
           {/* Book Cover */}
           {bookData.coverImage && (
             <div className="flex-shrink-0">
-              <img
+              <Image
                 src={URL.createObjectURL(bookData.coverImage)}
                 alt={bookData.title}
+                width={192}
+                height={256}
                 className="w-48 h-64 object-cover rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+                unoptimized
               />
             </div>
           )}

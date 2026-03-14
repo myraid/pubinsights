@@ -9,8 +9,7 @@ import SocialMedia from "@/components/sections/SocialMedia"
 import MyProjects from "@/components/sections/MyProjects"
 import LandingPage from "@/components/sections/LandingPage"
 import Header from "@/components/sections/Header"
-import SubscriptionPlans from "@/components/sections/SubscriptionPlans"
-import { SearchIcon as BookSearch, PenTool, Share2, FolderKanban, CreditCard, type LucideIcon } from "lucide-react"
+import { SearchIcon as BookSearch, PenTool, Share2, FolderKanban, type LucideIcon } from "lucide-react"
 
 export default function Home() {
   const { user } = useAuth()
@@ -30,8 +29,8 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50/80 via-white to-white">
       <Header />
-      <main className="container mx-auto p-4 md:p-8 max-w-7xl">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <main className="container mx-auto p-3 md:p-5 max-w-7xl">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 mb-4">
           {sections.map((section) => (
             <Card
               key={section.name}
@@ -42,9 +41,9 @@ export default function Home() {
               }`}
               onClick={() => setActiveSection(section.name)}
             >
-              <div className="flex flex-col items-center justify-center p-4 space-y-2">
-                <section.icon className={`h-8 w-8 ${activeSection === section.name ? "text-white" : "text-primary"}`} />
-                <span className="font-medium text-center">{section.name}</span>
+              <div className="flex flex-col items-center justify-center p-3 space-y-1">
+                <section.icon className={`h-6 w-6 ${activeSection === section.name ? "text-white" : "text-primary"}`} />
+                <span className="text-sm font-medium text-center">{section.name}</span>
               </div>
             </Card>
           ))}

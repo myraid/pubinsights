@@ -11,11 +11,11 @@ import {
   limit,
   Timestamp,
   increment,
-  setDoc,
   deleteDoc
 } from 'firebase/firestore';
 import { db } from './config';
-import type { Project, BookOutline, RelatedBook, SearchHistory, ContentHistory, AmazonBook, TrendData } from '../types/firebase';
+import type { BookOutline, ContentHistory } from '../../types/firebase';
+import type { AmazonBook, TrendData } from '@/types';
 
 // Project Services
 export const createProject = async (userId: string, name: string, description?: string) => {
@@ -35,13 +35,14 @@ export const createProject = async (userId: string, name: string, description?: 
       throw new Error('A project with this name already exists');
     }
 
+    const createdAt = Timestamp.now()
     const projectData = {
       userId,
       name: name.trim(),
       bookOutlines: [],
       relatedBooks: [],
-      createdAt: Timestamp.now(),
-      updatedAt: Timestamp.now()
+      createdAt,
+      updatedAt: createdAt
     };
 
     if (description?.trim()) {
@@ -52,12 +53,14 @@ export const createProject = async (userId: string, name: string, description?: 
     const docRef = await addDoc(collection(db, 'projects'), projectData);
     console.log('Project created with ID:', docRef.id);
     
-    return { 
-      id: docRef.id, 
+    return {
+      id: docRef.id,
       ...projectData,
       bookOutlines: [], // Ensure arrays are initialized
-      relatedBooks: []
-    } as Project;
+      relatedBooks: [],
+      createdAt: createdAt.toDate(),
+      updatedAt: createdAt.toDate()
+    };
   } catch (error) {
     console.error('Error in createProject:', error);
     throw error;
@@ -70,20 +73,27 @@ export const getProject = async (projectId: string) => {
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       const data = docSnap.data();
-      return { 
-        id: docSnap.id, 
-        ...data,
-        outlines: data.outlines?.map((outline: any) => ({
+      const outlines = Array.isArray(data.outlines) ? data.outlines : [];
+      return {
+        id: docSnap.id,
+        name: typeof data.name === 'string' ? data.name : '',
+        description: typeof data.description === 'string' ? data.description : undefined,
+        userId: typeof data.userId === 'string' ? data.userId : '',
+        createdAt: data.createdAt?.toDate?.() ?? new Date(),
+        updatedAt: data.updatedAt?.toDate?.() ?? new Date(),
+        bookOutlines: data.bookOutlines || [],
+        relatedBooks: data.relatedBooks || [],
+        research: data.research || [],
+        socialContent: Array.isArray(data.socialContent) ? data.socialContent : [],
+        outlines: outlines.map((outline: Record<string, unknown>) => ({
           ...outline,
-          createdAt: outline.createdAt || Timestamp.now(),
-          outline: outline.outline || {
+          createdAt: (outline as { createdAt?: Timestamp }).createdAt || Timestamp.now(),
+          outline: (outline as { outline?: { Title?: string; Chapters?: unknown[] } }).outline || {
             Title: '',
             Chapters: []
           }
-        })) || [],
-        createdAt: data.createdAt?.toDate(),
-        updatedAt: data.updatedAt?.toDate()
-      } as Project;
+        }))
+      };
     }
     return null;
   } catch (error) {
@@ -115,12 +125,17 @@ export const getUserProjects = async (userId: string) => {
       console.log('Processing project:', doc.id, data);
       return {
         id: doc.id,
-        ...data,
-        createdAt: data.createdAt?.toDate(),
-        updatedAt: data.updatedAt?.toDate(),
+        name: typeof data.name === 'string' ? data.name : '',
+        description: typeof data.description === 'string' ? data.description : undefined,
+        userId: typeof data.userId === 'string' ? data.userId : '',
+        createdAt: data.createdAt?.toDate?.() ?? new Date(),
+        updatedAt: data.updatedAt?.toDate?.() ?? new Date(),
         bookOutlines: data.bookOutlines || [],
-        relatedBooks: data.relatedBooks || []
-      } as Project;
+        relatedBooks: data.relatedBooks || [],
+        research: data.research || [],
+        socialContent: Array.isArray(data.socialContent) ? data.socialContent : [],
+        outlines: Array.isArray(data.outlines) ? data.outlines : []
+      };
     });
     
     console.log('Processed all projects:', projects);
@@ -186,7 +201,7 @@ interface SearchHistoryItem {
   books: AmazonBook[];
   trendData: TrendData;
   searchType: string;
-  generatedContent: any;
+  generatedContent: unknown;
   marketIntelligence: {
     rating: number;
     insights: string[];
@@ -219,8 +234,8 @@ export const saveUserSearch = async (
       timestamp: Date.now(),
       books,
       trendData,
-      searchType: trendData.searchType || 'general',
-      generatedContent: trendData.generatedContent || null,
+      searchType: 'general',
+      generatedContent: null,
       marketIntelligence: marketIntelligence || null,
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now()
@@ -346,7 +361,15 @@ export const addBooksToProject = async (projectId: string, keyword: string, book
 };
 
 // Outline History Services
-export const saveOutlineHistory = async (userId: string, outline: any) => {
+type OutlinePayload = {
+  title?: string;
+  outline?: {
+    Title?: string;
+    Chapters?: Array<Record<string, unknown> | { Chapter: number; Title: string }>;
+  };
+};
+
+export const saveOutlineHistory = async (userId: string, outline: OutlinePayload) => {
   try {
     const outlineHistoryRef = collection(db, 'outlineHistory');
     
@@ -427,7 +450,7 @@ export const getKeywordInsights = async (userId: string, keyword: string) => {
   }
 };
 
-export const addOutlineToProject = async (projectId: string, title: string, outline: any) => {
+export const addOutlineToProject = async (projectId: string, title: string, outline: OutlinePayload) => {
   try {
     const projectRef = doc(db, 'projects', projectId);
     const projectDoc = await getDoc(projectRef);
@@ -437,13 +460,14 @@ export const addOutlineToProject = async (projectId: string, title: string, outl
     }
 
     // Replace existing outline with new one
+    const chapters = outline.outline?.Chapters ?? []
     const updatedOutlines = [{
       title,
       outline: {
-        Title: outline.outline.Title,
-        Chapters: outline.outline.Chapters.map((chapter: any) => ({
-          Chapter: chapter.Chapter,
-          Title: chapter.Title,
+        Title: outline.outline?.Title || title,
+        Chapters: chapters.map((chapter: Record<string, unknown>) => ({
+          Chapter: (chapter as { Chapter?: number }).Chapter ?? 0,
+          Title: (chapter as { Title?: string }).Title ?? '',
           ...Object.fromEntries(
             Object.entries(chapter).filter(([key]) => !['Chapter', 'Title'].includes(key))
           )
@@ -507,6 +531,43 @@ export const addMarketResearchToProject = async (projectId: string, researchData
     return true;
   } catch (error) {
     console.error('Error adding market research to project:', error);
+    throw error;
+  }
+};
+
+// Social Content Services
+export const addSocialContentToProject = async (
+  projectId: string,
+  contentData: {
+    title: string;
+    contentType: 'ad' | 'post';
+    items: { type: 'post' | 'ad'; platform: string; content: string }[];
+  }
+) => {
+  try {
+    const projectRef = doc(db, 'projects', projectId);
+    const projectDoc = await getDoc(projectRef);
+
+    if (!projectDoc.exists()) {
+      throw new Error('Project not found');
+    }
+
+    const projectData = projectDoc.data();
+    const existing = Array.isArray(projectData.socialContent) ? projectData.socialContent : [];
+
+    existing.push({
+      ...contentData,
+      createdAt: Timestamp.now()
+    });
+
+    await updateDoc(projectRef, {
+      socialContent: existing,
+      updatedAt: Timestamp.now()
+    });
+
+    return true;
+  } catch (error) {
+    console.error('Error adding social content to project:', error);
     throw error;
   }
 };

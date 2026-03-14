@@ -1,183 +1,88 @@
 import { NextResponse } from 'next/server'
-import { getTemplateById, DEFAULT_TEMPLATE_ID } from '../../config/bannerbear'
-
-const WEBHOOK_URL = process.env.SOCIAL_MEDIA_WEBHOOK_URL || 'https://hook.us2.make.com/32r31gedjy6b7wpqumi99eisb726lhqs'
-
-if (!process.env.SOCIAL_MEDIA_WEBHOOK_URL) {
-  console.warn('SOCIAL_MEDIA_WEBHOOK_URL environment variable not set, using default')
-}
+import { generateAdCopy, generateSocialPost } from '@/app/lib/agents/social-agent'
+import { logGeneration } from '@/app/lib/agents/generation-logger'
+import { MODEL } from '@/app/lib/agents/openai-client'
 
 export async function POST(request: Request) {
   try {
-    // Check if this is a book ad generation request or regular form submission
     const contentType = request.headers.get('content-type')
-    
+
     if (contentType && contentType.includes('application/json')) {
-      // Handle book ad generation request
-      const { title, price, coverUrl, author, description, adGoal, adFormat } = await request.json()
+      const { title, price, author, description, salePrice, userId } = await request.json()
 
-      if (!title || !price || !coverUrl) {
+      if (!title) {
         return NextResponse.json(
-          { error: 'Title, price, and cover URL are required' },
+          { error: 'Title is required' },
           { status: 400 }
         )
       }
 
-      // Create payload for book ad generation
-      const payload = {
-        type: 'book_ad_generation',
-        bookData: {
-          title,
-          price,
-          coverUrl,
-          author: author || 'Unknown Author',
-          description: description || 'Unknown Description'
-        },
-        adGoal: adGoal || 'ebook_promo',
-        adFormat: adFormat || 'auto',
-        timestamp: new Date().toISOString()
+      const generatedContent = await generateAdCopy(
+        { title, price, author, description },
+        salePrice || price || '0'
+      )
+
+      if (userId) {
+        logGeneration(userId, 'social_ad', { title, salePrice }, { generatedContent } as Record<string, unknown>, MODEL);
       }
 
-      // Send data to Make.com webhook with timeout
-      const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 30000) // 30 second timeout
-
-      try {
-        const webhookResponse = await fetch(WEBHOOK_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(payload),
-          signal: controller.signal,
-        })
-
-        clearTimeout(timeoutId)
-
-        const responseText = await webhookResponse.text()
-
-        if (!webhookResponse.ok) {
-          throw new Error(`Webhook returned ${webhookResponse.status}: ${responseText || "Unknown error"}`)
-        }
-
-        let webhookData: any = null
-        if (responseText) {
-          try {
-            webhookData = JSON.parse(responseText)
-          } catch {
-            webhookData = null
-          }
-        }
-        const template = getTemplateById(DEFAULT_TEMPLATE_ID)
-
-        return NextResponse.json({
-          success: true,
-          message: 'Book ad generation request sent successfully',
-          requestId: webhookData?.requestId || Date.now().toString(),
-          template: {
-            id: template.id,
-            name: template.name,
-            dimensions: template.dimensions,
-            platform: template.platform
-          }
-        })
-      } catch (fetchError) {
-        clearTimeout(timeoutId)
-        if (fetchError instanceof Error && fetchError.name === 'AbortError') {
-          throw new Error('Webhook request timed out after 30 seconds')
-        }
-        throw fetchError
-      }
-
+      return NextResponse.json({
+        success: true,
+        generatedContent,
+      })
     } else {
-      // Handle regular form submission (existing functionality)
       const formData = await request.formData()
-      
-      // Extract form data
-      const title = formData.get('title')
-      const postText = formData.get('postText')
-      const bookDescription = formData.get('bookDescription')
-      const bookCoverImage = formData.get('bookCoverImage')
 
-      if (!title || !postText || !bookDescription || !bookCoverImage) {
+      const title = formData.get('title') as string
+      const bookDescription = formData.get('bookDescription') as string
+      const contentTypeField = formData.get('contentType') as string
+      const salePrice = formData.get('salePrice') as string | null
+      const postInfo = formData.get('postInfo') as string | null
+      const userId = formData.get('userId') as string | null
+
+      if (!title || !bookDescription) {
         return NextResponse.json(
-          { error: 'Missing required fields' },
+          { error: 'Title and book description are required' },
           { status: 400 }
         )
       }
 
-      // Convert book cover image to base64 if it's a File
-      let bookCoverBase64 = null
-      if (bookCoverImage instanceof File) {
-        const arrayBuffer = await bookCoverImage.arrayBuffer()
-        const buffer = Buffer.from(arrayBuffer)
-        bookCoverBase64 = `data:${bookCoverImage.type};base64,${buffer.toString('base64')}`
+      let generatedContent;
+      let logType: 'social_ad' | 'social_post';
+
+      if (contentTypeField === 'ad') {
+        generatedContent = await generateAdCopy(
+          { title, description: bookDescription },
+          salePrice || '0'
+        )
+        logType = 'social_ad';
+      } else {
+        generatedContent = await generateSocialPost(
+          title,
+          bookDescription,
+          postInfo || ''
+        )
+        logType = 'social_post';
       }
 
-      // Create payload for the webhook
-      const payload = {
-        type: 'social_media_post',
-        title,
-        postText,
-        bookDescription,
-        bookCoverImage: bookCoverBase64,
-        timestamp: new Date().toISOString()
+      if (userId) {
+        logGeneration(userId, logType, { title, bookDescription, contentType: contentTypeField }, { generatedContent } as Record<string, unknown>, MODEL);
       }
 
-      // Send data to Make.com webhook with timeout
-      const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 30000) // 30 second timeout
-
-      try {
-        const webhookResponse = await fetch(WEBHOOK_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(payload),
-          signal: controller.signal,
-        })
-
-        clearTimeout(timeoutId)
-
-        const responseText = await webhookResponse.text()
-
-        if (!webhookResponse.ok) {
-          throw new Error(`Webhook returned ${webhookResponse.status}: ${responseText || "Unknown error"}`)
-        }
-
-        let webhookData: any = null
-        if (responseText) {
-          try {
-            webhookData = JSON.parse(responseText)
-          } catch {
-            webhookData = null
-          }
-        }
-
-        return NextResponse.json({ 
-          success: true, 
-          message: 'Data successfully sent to webhook',
-          requestId: webhookData?.requestId || Date.now().toString()
-        })
-      } catch (fetchError) {
-        clearTimeout(timeoutId)
-        if (fetchError instanceof Error && fetchError.name === 'AbortError') {
-          throw new Error('Webhook request timed out after 30 seconds')
-        }
-        throw fetchError
-      }
+      return NextResponse.json({
+        success: true,
+        generatedContent,
+      })
     }
-
   } catch (error) {
     console.error('Error in social-media API route:', error)
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: 'Failed to process request',
         details: error instanceof Error ? error.message : 'Unknown error'
-      }, 
+      },
       { status: 500 }
     )
   }
-} 
+}

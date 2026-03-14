@@ -8,7 +8,7 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { updateProfile } from "firebase/auth"
 import { doc, setDoc } from "firebase/firestore"
-import { auth, db } from "@/app/lib/firebase/config"
+import { db } from "@/app/lib/firebase/config"
 
 export default function LoginForm({ initialMode = "login" }: { initialMode?: "login" | "signup" }) {
   const [isLogin, setIsLogin] = useState(initialMode === "login")
