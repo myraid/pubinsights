@@ -12,6 +12,11 @@ export interface User {
   email: string;
   name?: string;
   searches?: string[];
+  subscriptionTier: 'free' | 'creator';
+  subscriptionStatus?: 'active' | 'trialing' | 'past_due' | 'unpaid' | 'canceled';
+  stripeCustomerId?: string;
+  stripeSubscriptionId?: string;
+  usage?: Record<string, { insights?: number; outlines?: number }>;
   createdAt: Date;
   updatedAt: Date;
 }

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { generateOutline } from '@/app/lib/agents/outline-agent'
 import { logGeneration } from '@/app/lib/agents/generation-logger'
 import { MODEL } from '@/app/lib/agents/openai-client'
+import { checkAndIncrementUsage } from '@/app/lib/billing/usage'
 
 interface ChapterContent {
   Chapter: number;
@@ -61,6 +62,27 @@ export async function POST(request: Request) {
 
     if (!title) {
       return NextResponse.json({ error: 'Title is required' }, { status: 400 })
+    }
+
+    if (!userId) {
+      return NextResponse.json({ error: 'userId is required' }, { status: 400 })
+    }
+
+    try {
+      const usageCheck = await checkAndIncrementUsage(userId, 'outlines')
+      if (!usageCheck.allowed) {
+        return NextResponse.json(
+          {
+            error: 'usage_limit_exceeded',
+            tier: usageCheck.tier,
+            current: usageCheck.current,
+            limit: usageCheck.limit,
+          },
+          { status: 429 }
+        )
+      }
+    } catch (usageError) {
+      console.error('Usage check failed (non-blocking):', usageError)
     }
 
     const content = await generateOutline(title)

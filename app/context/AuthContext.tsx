@@ -45,6 +45,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             email: user.email,
             displayName: user.displayName,
             isPremium: false,
+            subscriptionTier: 'free',
             operationsCount: 0,
             createdAt: new Date(),
             updatedAt: new Date()

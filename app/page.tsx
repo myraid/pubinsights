@@ -7,9 +7,10 @@ import BookResearch from "@/components/sections/BookResearch"
 import BookOutline from "@/components/sections/BookOutline"
 import SocialMedia from "@/components/sections/SocialMedia"
 import MyProjects from "@/components/sections/MyProjects"
+import Pricing from "@/components/sections/Pricing"
 import LandingPage from "@/components/sections/LandingPage"
 import Header from "@/components/sections/Header"
-import { SearchIcon as BookSearch, PenTool, Share2, FolderKanban, type LucideIcon } from "lucide-react"
+import { SearchIcon as BookSearch, PenTool, Share2, FolderKanban, Crown, type LucideIcon } from "lucide-react"
 
 export default function Home() {
   const { user } = useAuth()
@@ -24,13 +25,14 @@ export default function Home() {
     { name: "Book Research", icon: BookSearch, component: BookResearch },
     { name: "Book Outline", icon: PenTool, component: BookOutline },
     { name: "Social Media", icon: Share2, component: SocialMedia },
+    { name: "Upgrade", icon: Crown, component: Pricing },
   ]
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50/80 via-white to-white">
       <Header />
       <main className="container mx-auto p-3 md:p-5 max-w-7xl">
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 mb-4">
+        <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 mb-4">
           {sections.map((section) => (
             <Card
               key={section.name}
@@ -49,7 +51,7 @@ export default function Home() {
           ))}
         </div>
 
-        <Card className="overflow-hidden bg-white/90 shadow-sm p-4">
+        <Card className="overflow-hidden bg-white/90 shadow-sm">
           {sections.map((section) => (
             <div key={section.name} style={{ display: activeSection === section.name ? "block" : "none" }}>
               <section.component />

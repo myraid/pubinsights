@@ -1,55 +1,79 @@
 import { NextResponse } from "next/server"
 import Stripe from "stripe"
+import { adminDb } from "@/app/lib/firebase/admin"
+import { FieldValue } from "firebase-admin/firestore"
 
-const stripeSecretKey = process.env.STRIPE_SECRET_KEY
-
-if (!stripeSecretKey) {
+if (!process.env.STRIPE_SECRET_KEY) {
   console.warn("STRIPE_SECRET_KEY is not set")
 }
 
-const stripe = stripeSecretKey ? new Stripe(stripeSecretKey, { apiVersion: "2024-06-20" }) : null
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const stripe = process.env.STRIPE_SECRET_KEY
+  ? new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2024-06-20' })
+  : null
 
-const planToPriceId = (planId: string) => {
-  switch (planId) {
-    case "creator":
-      return process.env.STRIPE_PRICE_CREATOR
-    case "pro":
-      return process.env.STRIPE_PRICE_PRO
-    default:
-      return null
+async function getOrCreateStripeCustomer(userId: string, email: string): Promise<string> {
+  const userDoc = await adminDb.collection('users').doc(userId).get()
+  const data = userDoc.data() ?? {}
+
+  if (data.stripeCustomerId) {
+    return data.stripeCustomerId as string
   }
+
+  const customer = await stripe!.customers.create({
+    email,
+    metadata: { userId },
+  })
+
+  await adminDb.collection('users').doc(userId).update({
+    stripeCustomerId: customer.id,
+    updatedAt: FieldValue.serverTimestamp(),
+  })
+
+  return customer.id
 }
 
 export async function POST(request: Request) {
   try {
-    const { planId } = await request.json()
+    const { planId, userId, email } = await request.json()
 
     if (!planId) {
       return NextResponse.json({ error: "planId is required" }, { status: 400 })
     }
 
-    if (planId === "freemium") {
+    if (planId === "free") {
       return NextResponse.json({ url: "/" })
+    }
+
+    if (planId !== "creator") {
+      return NextResponse.json({ error: "Invalid planId" }, { status: 400 })
+    }
+
+    if (!userId || !email) {
+      return NextResponse.json({ error: "userId and email are required" }, { status: 400 })
     }
 
     if (!stripe) {
       return NextResponse.json({ error: "Stripe is not configured" }, { status: 500 })
     }
 
-    const priceId = planToPriceId(planId)
+    const priceId = process.env.STRIPE_PRICE_CREATOR
     if (!priceId) {
-      return NextResponse.json({ error: "Invalid planId or missing price ID" }, { status: 400 })
+      return NextResponse.json({ error: "STRIPE_PRICE_CREATOR is not configured" }, { status: 500 })
     }
+
+    const stripeCustomerId = await getOrCreateStripeCustomer(userId, email)
 
     const successUrl = process.env.STRIPE_SUCCESS_URL || "http://localhost:3000/?checkout=success"
     const cancelUrl = process.env.STRIPE_CANCEL_URL || "http://localhost:3000/?checkout=cancel"
 
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
-      payment_method_types: ["card"],
+      customer: stripeCustomerId,
       line_items: [{ price: priceId, quantity: 1 }],
       success_url: successUrl,
-      cancel_url: cancelUrl
+      cancel_url: cancelUrl,
+      metadata: { userId },
     })
 
     return NextResponse.json({ url: session.url })

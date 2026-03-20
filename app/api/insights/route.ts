@@ -1,6 +1,21 @@
 import { NextResponse } from 'next/server';
 import { generateInsights } from '@/app/lib/agents/insights-agent';
 import { logGeneration } from '@/app/lib/agents/generation-logger';
+import { checkAndIncrementUsage } from '@/app/lib/billing/usage';
+
+// Mirrors the indie detection logic from the frontend
+function isIndieBook(publisher: unknown, manufacturer: unknown): boolean {
+  const pub    = (typeof publisher    === 'string' ? publisher    : '').toLowerCase().trim();
+  const author = (typeof manufacturer === 'string' ? manufacturer : '').toLowerCase().trim();
+  if (pub.includes('independently published')) return true;
+  if (!pub || !author) return false;
+  const norm = (s: string) => s.replace(/[^a-z0-9\s]/g, '').trim();
+  const np = norm(pub); const na = norm(author);
+  if (np === na || np.includes(na) || na.includes(np)) return true;
+  const wordsP = np.split(/\s+/).filter(w => w.length > 3);
+  const wordsA = na.split(/\s+/).filter(w => w.length > 3);
+  return wordsP.some(w => wordsA.includes(w));
+}
 
 export async function POST(request: Request) {
   try {
@@ -17,6 +32,25 @@ export async function POST(request: Request) {
       );
     }
 
+    try {
+      const usageCheck = await checkAndIncrementUsage(userId, 'insights');
+      if (!usageCheck.allowed) {
+        return NextResponse.json(
+          {
+            error: 'usage_limit_exceeded',
+            tier: usageCheck.tier,
+            current: usageCheck.current,
+            limit: usageCheck.limit,
+          },
+          { status: 429 }
+        );
+      }
+    } catch (usageError) {
+      // Billing check failure must not block the core feature.
+      // Log and continue — the AI call proceeds regardless.
+      console.error('Usage check failed (non-blocking):', usageError);
+    }
+
     const enrichedBooks = books?.length
       ? (books as Array<Record<string, unknown>>).map((book) => {
           const desc = typeof book.description === 'string' ? book.description.slice(0, 500) : null;
@@ -30,16 +64,15 @@ export async function POST(request: Request) {
             : [];
           return {
             title: book.title,
-            asin: book.asin,
             price: book.price,
             rating: book.rating,
             reviews_count: book.reviews_count,
             bsr: book.bsr,
             publisher: book.publisher,
             manufacturer: book.manufacturer,
+            is_indie: isIndieBook(book.publisher, book.manufacturer),
             publication_date: book.publication_date,
             categories: book.categories,
-            is_prime: book.is_prime,
             description: desc,
             review_ai_summary: book.review_ai_summary || null,
             rating_stars_distribution: book.rating_stars_distribution || [],
