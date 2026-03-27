@@ -1,0 +1,59 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Users — only the authenticated owner can read their own doc.
+    // Billing fields (subscriptionTier, stripeCustomerId, etc.) are server-write only.
+    match /users/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow create: if request.auth != null && request.auth.uid == userId
+        && !('subscriptionTier' in request.resource.data)
+        && !('stripeCustomerId' in request.resource.data)
+        && !('stripeSubscriptionId' in request.resource.data)
+        && !('subscriptionStatus' in request.resource.data)
+        && !('usage' in request.resource.data);
+      allow update: if request.auth != null && request.auth.uid == userId
+        && !('subscriptionTier' in request.resource.data)
+        && !('stripeCustomerId' in request.resource.data)
+        && !('stripeSubscriptionId' in request.resource.data)
+        && !('subscriptionStatus' in request.resource.data)
+        && !('usage' in request.resource.data);
+    }
+
+    // Projects — owner only
+    match /projects/{projectId} {
+      allow read, write: if request.auth != null
+        && request.auth.uid == resource.data.userId;
+      allow create: if request.auth != null
+        && request.auth.uid == request.resource.data.userId;
+    }
+
+    // Search history — owner only
+    match /searchHistory/{docId} {
+      allow read, write: if request.auth != null
+        && request.auth.uid == resource.data.userId;
+      allow create: if request.auth != null
+        && request.auth.uid == request.resource.data.userId;
+    }
+
+    // Outline history — owner only
+    match /outlineHistory/{docId} {
+      allow read, write: if request.auth != null
+        && request.auth.uid == resource.data.userId;
+      allow create: if request.auth != null
+        && request.auth.uid == request.resource.data.userId;
+    }
+
+    // Generation logs — owner read, server write only
+    match /generationLogs/{docId} {
+      allow read: if request.auth != null
+        && request.auth.uid == resource.data.userId;
+    }
+
+    // Deny everything else
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
