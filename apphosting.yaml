@@ -16,8 +16,6 @@ env:
     secret: STRIPE_SECRET_KEY
   - variable: STRIPE_PRICE_CREATOR
     secret: STRIPE_PRICE_CREATOR
-  - variable: STRIPE_WEBHOOK_SECRET
-    secret: STRIPE_WEBHOOK_SECRET
   - variable: STRIPE_SUCCESS_URL
     secret: STRIPE_SUCCESS_URL
   - variable: STRIPE_CANCEL_URL
