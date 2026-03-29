@@ -12,11 +12,11 @@ import { doc, setDoc } from "firebase/firestore"
 import { db } from "@/app/lib/firebase/config"
 
 const BRAND = {
-  deep: "#8400B8",
+  deep: "#7000A0",
   primary: "#9900CC",
   bg: "#F5EEFF",
   gray: "#6E6E6E",
-  accent: "#AA00DD",
+  accent: "#BB00EE",
 } as const
 
 export default function LoginForm({ initialMode = "login" }: { initialMode?: "login" | "signup" }) {
@@ -97,14 +97,16 @@ export default function LoginForm({ initialMode = "login" }: { initialMode?: "lo
           style={{ background: "#FFFFFF" }}
         />
 
-        {/* Logo */}
-        <Image
-          src="/images/logo.png"
-          alt="PubInsights"
-          width={800}
-          height={240}
-          className="w-auto h-12 brightness-0 invert relative z-10"
-        />
+        {/* Logo — white card so the purple stamp reads cleanly against the gradient */}
+        <div className="bg-white rounded-2xl p-3 inline-block shadow-lg relative z-10">
+          <Image
+            src="/images/Logo-1.png"
+            alt="PubInsights"
+            width={240}
+            height={240}
+            className="w-auto h-24 block"
+          />
+        </div>
 
         {/* Hero copy */}
         <div className="relative z-10">
@@ -149,13 +151,15 @@ export default function LoginForm({ initialMode = "login" }: { initialMode?: "lo
       >
         {/* Mobile logo */}
         <div className="lg:hidden mb-8">
-          <Image
-            src="/images/logo.png"
-            alt="PubInsights"
-            width={800}
-            height={240}
-            className="w-auto h-12"
-          />
+          <div className="rounded-xl overflow-hidden shadow-md inline-block">
+            <Image
+              src="/images/Logo-1.png"
+              alt="PubInsights"
+              width={240}
+              height={240}
+              className="w-auto h-16 block"
+            />
+          </div>
         </div>
 
         {/* Auth card */}

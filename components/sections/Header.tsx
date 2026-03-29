@@ -6,11 +6,11 @@ import { Button } from "@/components/ui/button"
 import { LogOut } from "lucide-react"
 
 const BRAND = {
-  deep: "#8400B8",
+  deep: "#7000A0",
   primary: "#9900CC",
   bg: "#F5EEFF",
   gray: "#6E6E6E",
-  accent: "#AA00DD",
+  accent: "#BB00EE",
 } as const
 
 function getInitial(user: { displayName?: string | null; email?: string | null }): string {
@@ -35,14 +35,16 @@ export default function Header() {
 
           {/* Logo — left anchor */}
           <div className="flex items-center flex-shrink-0">
-            <Image
-              src="/images/logo.png"
-              alt="Publisher Insights"
-              width={600}
-              height={240}
-              className="w-auto h-10 md:h-14 drop-shadow-sm"
-              priority
-            />
+            <div className="rounded-xl overflow-hidden shadow-md flex-shrink-0">
+              <Image
+                src="/images/Logo-1.png"
+                alt="Publisher Insights"
+                width={240}
+                height={240}
+                className="w-auto h-10 md:h-12 block"
+                priority
+              />
+            </div>
           </div>
 
           {/* User controls — right anchor */}

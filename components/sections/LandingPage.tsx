@@ -2,17 +2,17 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { BookOpen, TrendingUp, Share2, BarChart2, ArrowRight, Sparkles, Search } from "lucide-react"
+import { BookOpen, TrendingUp, Share2, BarChart2, ArrowRight, Sparkles, Search, Tag, List, FileText, Video, Zap } from "lucide-react"
 import LoginForm from "./LoginForm"
 import type React from "react"
 import Image from "next/image"
 
 const BRAND = {
-  deep: "#8400B8",
+  deep: "#7000A0",
   primary: "#9900CC",
   bg: "#F5EEFF",
   gray: "#6E6E6E",
-  accent: "#AA00DD",
+  accent: "#BB00EE",
 } as const
 
 export default function LandingPage() {
@@ -31,13 +31,15 @@ export default function LandingPage() {
       {/* ─── Nav ─────────────────────────────────────────────────── */}
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b" style={{ borderColor: "#EEE0F8" }}>
         <div className="container mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          <Image
-            src="/images/logo.png"
-            alt="PubInsights"
-            width={800}
-            height={240}
-            className="w-auto h-10"
-          />
+          <div className="rounded-xl overflow-hidden shadow-md flex-shrink-0">
+            <Image
+              src="/images/Logo-1.png"
+              alt="Publisher Insights"
+              width={240}
+              height={240}
+              className="w-auto h-10 md:h-12 block"
+            />
+          </div>
           <div className="flex items-center gap-3">
             <button
               className="text-sm font-medium transition-colors"
@@ -184,6 +186,141 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ─── Market Research section ─────────────────────────────── */}
+      <div className="h-1 w-full" style={{ background: `linear-gradient(90deg, ${BRAND.deep}, ${BRAND.primary}, ${BRAND.accent})` }} />
+      <section>
+        {/* Header band */}
+        <div className="px-4 py-12 text-center" style={{ background: BRAND.primary }}>
+          <h2
+            className="text-2xl sm:text-3xl font-bold text-white mb-3 [font-family:var(--font-playfair,Georgia,serif)]"
+          >
+            Everything you need to research your next book topic.
+          </h2>
+          <p className="text-sm text-white/80 max-w-xl mx-auto" style={{ fontFamily: "var(--font-dm-sans, system-ui, sans-serif)" }}>
+            Unlock unmatched insights into trends to discover your perfect niche
+          </p>
+        </div>
+        {/* Cards */}
+        <div className="py-14 px-4" style={{ background: "#FFFFFF" }}>
+          <div className="container mx-auto max-w-5xl">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <SectionFeatureCard
+                icon={<Search className="w-7 h-7" />}
+                title="Find Your Unique Niche"
+                description="Research your book topic by analyzing keyword trends across multiple platforms"
+                iconBg={BRAND.bg}
+                iconColor={BRAND.primary}
+              />
+              <SectionFeatureCard
+                icon={<TrendingUp className="w-7 h-7" />}
+                title="Market Analysis"
+                description="Access real-time BSR (Best Seller Rank), daily and monthly sales figures for books related to your niche"
+                iconBg={BRAND.bg}
+                iconColor={BRAND.primary}
+              />
+              <SectionFeatureCard
+                icon={<Tag className="w-7 h-7" />}
+                title="Keyword Suggestions"
+                description="Discover related keywords based on competitor analysis to improve your book's discoverability"
+                iconBg={BRAND.bg}
+                iconColor={BRAND.primary}
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── AI Writing Assistant section ────────────────────────── */}
+      <div className="h-1 w-full" style={{ background: `linear-gradient(90deg, ${BRAND.deep}, ${BRAND.primary}, ${BRAND.accent})` }} />
+      <section>
+        {/* Header band */}
+        <div className="px-4 py-12 text-center" style={{ background: "#FFFFFF" }}>
+          <h2
+            className="text-2xl sm:text-3xl font-bold mb-3 [font-family:var(--font-playfair,Georgia,serif)]"
+            style={{ color: BRAND.deep }}
+          >
+            AI-Powered Writing Assistant: Create with Confidence
+          </h2>
+          <p className="text-sm max-w-2xl mx-auto" style={{ color: BRAND.gray, fontFamily: "var(--font-dm-sans, system-ui, sans-serif)" }}>
+            Crafting your book has never been easier. PubInsights leverages AI to assist you at every stage of the writing process
+          </p>
+        </div>
+        {/* Cards */}
+        <div className="py-14 px-4" style={{ background: BRAND.bg }}>
+          <div className="container mx-auto max-w-5xl">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <SectionFeatureCard
+                icon={<BookOpen className="w-7 h-7" />}
+                title="Book Title Generator"
+                description="Let AI analyze your niche, discover high-demand keywords, and suggest a winning book title"
+                iconBg={BRAND.primary}
+                iconColor="#FFFFFF"
+              />
+              <SectionFeatureCard
+                icon={<List className="w-7 h-7" />}
+                title="Book Outline"
+                description="Our AI-generated outlines help you organize your ideas, present insights effectively, and engage readers from cover to cover"
+                iconBg={BRAND.primary}
+                iconColor="#FFFFFF"
+              />
+              <SectionFeatureCard
+                icon={<FileText className="w-7 h-7" />}
+                title="Book Description"
+                description="Create a book description packed with the right keywords for SEO optimization"
+                iconBg={BRAND.primary}
+                iconColor="#FFFFFF"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Social Media Promotion section ──────────────────────── */}
+      <div className="h-1 w-full" style={{ background: `linear-gradient(90deg, ${BRAND.deep}, ${BRAND.primary}, ${BRAND.accent})` }} />
+      <section>
+        {/* Header band */}
+        <div className="px-4 py-12 text-center" style={{ background: BRAND.bg }}>
+          <h2
+            className="text-2xl sm:text-3xl font-bold mb-3 [font-family:var(--font-playfair,Georgia,serif)]"
+            style={{ color: BRAND.deep }}
+          >
+            Effortless Book Promotion Across Social Media using AI
+          </h2>
+          <p className="text-sm max-w-2xl mx-auto" style={{ color: BRAND.gray, fontFamily: "var(--font-dm-sans, system-ui, sans-serif)" }}>
+            Generate ready-to-publish social media posts to engage readers and grow your audience across Facebook, Instagram, and TikTok
+          </p>
+        </div>
+        {/* Cards */}
+        <div className="py-14 px-4" style={{ background: "#FFFFFF" }}>
+          <div className="container mx-auto max-w-5xl">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <SectionFeatureCard
+                icon={<Share2 className="w-7 h-7" />}
+                title="Generate Social Media Posts"
+                description="With one click, create posts for Facebook, Instagram, and TikTok that highlight your book's key selling points, quotes, or exciting snippets"
+                iconBg={BRAND.bg}
+                iconColor={BRAND.primary}
+              />
+              <SectionFeatureCard
+                icon={<Video className="w-7 h-7" />}
+                title="Video Script Generator"
+                description="Use AI to create captivating video scripts for Reels, TikTok videos, and other short-form content"
+                iconBg={BRAND.bg}
+                iconColor={BRAND.primary}
+              />
+              <SectionFeatureCard
+                icon={<Zap className="w-7 h-7" />}
+                title="Maximize Reach & Engagement"
+                description="Our app analyzes current trends, hashtags, and audience behavior to help you craft posts that generate buzz and drive traffic to your book sales page"
+                iconBg={BRAND.bg}
+                iconColor={BRAND.primary}
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+      <div className="h-1 w-full" style={{ background: `linear-gradient(90deg, ${BRAND.deep}, ${BRAND.primary}, ${BRAND.accent})` }} />
+
       {/* ─── Pricing ─────────────────────────────────────────────── */}
       <section className="py-16 px-4" style={{ background: BRAND.bg }}>
         <div className="container mx-auto max-w-5xl">
@@ -299,6 +436,43 @@ function FeatureCard({ icon, title, description }: { icon: React.ReactNode; titl
         {title}
       </h3>
       <p className="text-xs leading-relaxed" style={{ color: BRAND.gray }}>
+        {description}
+      </p>
+    </div>
+  )
+}
+
+function SectionFeatureCard({
+  icon,
+  title,
+  description,
+  iconBg,
+  iconColor,
+}: {
+  icon: React.ReactNode
+  title: string
+  description: string
+  iconBg: string
+  iconColor: string
+}) {
+  return (
+    <div
+      className="flex flex-col items-center text-center max-w-xs mx-auto"
+      style={{ fontFamily: "var(--font-dm-sans, system-ui, sans-serif)" }}
+    >
+      <div
+        className="w-16 h-16 rounded-2xl flex items-center justify-center mb-5 flex-shrink-0"
+        style={{ background: iconBg, color: iconColor }}
+      >
+        {icon}
+      </div>
+      <h3
+        className="text-base font-bold mb-2"
+        style={{ color: BRAND.deep }}
+      >
+        {title}
+      </h3>
+      <p className="text-sm leading-relaxed" style={{ color: BRAND.gray }}>
         {description}
       </p>
     </div>

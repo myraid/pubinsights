@@ -29,7 +29,7 @@ export default function Home() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-50/80 via-white to-white">
+    <div className="min-h-screen" style={{ background: "linear-gradient(180deg, #F5EEFF 0%, #FFFFFF 40%, #FFFFFF 100%)" }}>
       <Header />
       <main className="container mx-auto p-3 md:p-5 max-w-7xl">
         <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 mb-4">

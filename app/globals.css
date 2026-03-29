@@ -5,11 +5,11 @@
 @layer base {
   :root {
     /* ── PubInsights Brand Palette ─────────────────────────────────────────── */
-    --brand-deep:    #8400B8; /* deep purple    — dark text, hover states       */
-    --brand-primary: #9900CC; /* primary purple  — buttons, active elements     */
+    --brand-deep:    #7000A0; /* deeper purple   — hover/dark states, headings  */
+    --brand-primary: #9900CC; /* exact logo purple — primary actions, buttons   */
     --brand-bg:      #F5EEFF; /* soft lavender   — page/section backgrounds     */
     --brand-gray:    #6E6E6E; /* neutral gray    — body text, muted labels      */
-    --brand-accent:  #AA00DD; /* vivid accent    — badges, highlights, callouts */
+    --brand-accent:  #BB00EE; /* bright accent   — badges, highlights, callouts */
 
     /* ── Shadcn token mapping ──────────────────────────────────────────────── */
     --background: 0 0% 100%;
@@ -24,7 +24,7 @@
     --secondary-foreground: 285 100% 36%;
     --muted: 285 30% 96%;
     --muted-foreground: 0 0% 43%;   /* #6E6E6E */
-    --accent: 286 100% 43%;         /* #AA00DD */
+    --accent: 288 100% 47%;         /* #BB00EE */
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
