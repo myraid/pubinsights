@@ -36,10 +36,6 @@ FIREBASE_PRIVATE_KEY=your_firebase_private_key
 # API Keys
 SCRAPPER_AUTHORIZATION_KEY=your_scraper_api_key
 
-# Webhook URLs
-SOCIAL_MEDIA_WEBHOOK_URL=https://hook.us2.make.com/your_webhook_id
-INSIGHTS_WEBHOOK_URL=https://hook.us2.make.com/your_webhook_id
-
 # Bannerbear (Optional - for social media ad generation)
 BANNERBEAR_API_KEY=your_bannerbear_api_key
 ```
