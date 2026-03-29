@@ -41,9 +41,16 @@ export async function checkAndIncrementUsage(
 
   const data = (userDoc.exists ? userDoc.data() : {}) as Record<string, unknown>
   const tier = (data.subscriptionTier ?? 'free') as SubscriptionTier
+  const tierConfig = TIER_LIMITS[tier]
+
+  // Beta users have unlimited access — skip limit check
+  if (tierConfig.unlimited) {
+    return { allowed: true, tier, current: 0, limit: 9999 }
+  }
+
   const monthUsage = ((data.usage ?? {}) as Record<string, Record<string, number>>)[monthKey] ?? {}
   const current = (monthUsage[type] ?? 0)
-  const limit = TIER_LIMITS[tier][type]
+  const limit = tierConfig[type]
 
   if (current >= limit) {
     return { allowed: false, tier, current, limit }

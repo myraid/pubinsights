@@ -11,7 +11,7 @@ import { useAuth } from "@/app/context/AuthContext"
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 interface UsageData {
-  tier: "free" | "creator"
+  tier: "free" | "creator" | "beta"
   subscriptionStatus: string | null
   insights: { current: number; limit: number }
   outlines: { current: number; limit: number }
