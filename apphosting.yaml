@@ -1,0 +1,24 @@
+runConfig:
+  runtime: nodejs22
+
+env:
+  - variable: SCRAPPER_AUTHORIZATION_KEY
+    secret: SCRAPPER_AUTHORIZATION_KEY
+  - variable: OPENAI_API_KEY
+    secret: OPENAI_API_KEY
+  - variable: FIREBASE_PROJECT_ID
+    secret: FIREBASE_PROJECT_ID
+  - variable: FIREBASE_CLIENT_EMAIL
+    secret: FIREBASE_CLIENT_EMAIL
+  - variable: FIREBASE_PRIVATE_KEY
+    secret: FIREBASE_PRIVATE_KEY
+  - variable: STRIPE_SECRET_KEY
+    secret: STRIPE_SECRET_KEY
+  - variable: STRIPE_PRICE_CREATOR
+    secret: STRIPE_PRICE_CREATOR
+  - variable: STRIPE_WEBHOOK_SECRET
+    secret: STRIPE_WEBHOOK_SECRET
+  - variable: STRIPE_SUCCESS_URL
+    secret: STRIPE_SUCCESS_URL
+  - variable: STRIPE_CANCEL_URL
+    secret: STRIPE_CANCEL_URL
