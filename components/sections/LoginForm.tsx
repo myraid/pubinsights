@@ -5,7 +5,6 @@ import { useState } from "react"
 import { useAuth } from "@/app/context/AuthContext"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { updateProfile } from "firebase/auth"
 import { doc, setDoc } from "firebase/firestore"
@@ -99,11 +98,10 @@ export default function LoginForm({ initialMode = "login" }: { initialMode?: "lo
 
         {/* Logo — white card so the purple stamp reads cleanly against the gradient */}
         <div className="bg-white rounded-2xl p-3 inline-block shadow-lg relative z-10">
-          <Image
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
             src="/images/Logo-1.png"
             alt="PubInsights"
-            width={240}
-            height={240}
             className="w-auto h-24 block"
           />
         </div>
@@ -152,11 +150,10 @@ export default function LoginForm({ initialMode = "login" }: { initialMode?: "lo
         {/* Mobile logo */}
         <div className="lg:hidden mb-8">
           <div className="rounded-xl overflow-hidden shadow-md inline-block">
-            <Image
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
               src="/images/Logo-1.png"
               alt="PubInsights"
-              width={240}
-              height={240}
               className="w-auto h-16 block"
             />
           </div>

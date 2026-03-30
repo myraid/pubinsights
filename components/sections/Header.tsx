@@ -1,6 +1,5 @@
 "use client"
 
-import Image from "next/image"
 import { useAuth } from "@/app/context/AuthContext"
 import { Button } from "@/components/ui/button"
 import { LogOut } from "lucide-react"
@@ -36,13 +35,11 @@ export default function Header() {
           {/* Logo — left anchor */}
           <div className="flex items-center flex-shrink-0">
             <div className="rounded-xl overflow-hidden shadow-md flex-shrink-0">
-              <Image
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src="/images/Logo-1.png"
                 alt="Publisher Insights"
-                width={240}
-                height={240}
                 className="w-auto h-10 md:h-12 block"
-                priority
               />
             </div>
           </div>

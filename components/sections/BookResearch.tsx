@@ -646,7 +646,10 @@ export default function BookResearch() {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="flex items-center gap-1.5 hover:opacity-80" style={{ borderColor: `${BRAND.primary}50`, color: BRAND.primary }}
+                  className="flex items-center gap-1.5 transition-colors"
+                  style={{ borderColor: `${BRAND.primary}50`, color: BRAND.primary, background: "transparent" }}
+                  onMouseEnter={e => { e.currentTarget.style.background = BRAND.primary; e.currentTarget.style.color = "#fff"; e.currentTarget.style.borderColor = BRAND.primary }}
+                  onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = BRAND.primary; e.currentTarget.style.borderColor = `${BRAND.primary}50` }}
                 >
                   <FolderPlus className="h-4 w-4" />
                   Save to Project
