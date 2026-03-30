@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button"
 import { BookOpen, TrendingUp, Share2, BarChart2, ArrowRight, Sparkles, Search, Tag, List, FileText, Video, Zap } from "lucide-react"
 import LoginForm from "./LoginForm"
 import type React from "react"
-import Image from "next/image"
 
 const BRAND = {
   deep: "#7000A0",
@@ -32,11 +31,10 @@ export default function LandingPage() {
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b" style={{ borderColor: "#EEE0F8" }}>
         <div className="container mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <div className="rounded-xl overflow-hidden shadow-md flex-shrink-0">
-            <Image
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
               src="/images/Logo-1.png"
               alt="Publisher Insights"
-              width={240}
-              height={240}
               className="w-auto h-10 md:h-12 block"
             />
           </div>

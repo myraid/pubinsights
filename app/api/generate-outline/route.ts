@@ -58,7 +58,7 @@ function parseOutlineContent(title: string, content: string): OutlineData {
 
 export async function POST(request: Request) {
   try {
-    const { title, userId } = await request.json()
+    const { title, ageGroup, userId } = await request.json()
 
     if (!title) {
       return NextResponse.json({ error: 'Title is required' }, { status: 400 })
@@ -85,7 +85,7 @@ export async function POST(request: Request) {
       console.error('Usage check failed (non-blocking):', usageError)
     }
 
-    const content = await generateOutline(title)
+    const content = await generateOutline(title, ageGroup)
     const parsedOutline = parseOutlineContent(title, content)
 
     if (userId) {

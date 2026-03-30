@@ -86,6 +86,7 @@ const renderOutlineValue = (value: unknown) => {
 export default function BookOutline({ title: initialTitle }: { title?: string }) {
   const { user } = useAuth()
   const [title, setTitle] = useState(initialTitle ?? "")
+  const [ageGroup, setAgeGroup] = useState<"" | "Kids" | "Teens" | "Adults">("")
   const [outline, setOutline] = useState<OutlineResponse | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -140,7 +141,7 @@ export default function BookOutline({ title: initialTitle }: { title?: string })
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ title, userId: user?.uid })
+        body: JSON.stringify({ title, ageGroup: ageGroup || undefined, userId: user?.uid })
       })
 
       const data = await response.json()
@@ -290,6 +291,28 @@ export default function BookOutline({ title: initialTitle }: { title?: string })
                 </span>
               ) : "Generate Outline"}
             </Button>
+          </div>
+
+          {/* Age group filter */}
+          <div className="mt-3.5 flex flex-wrap items-center gap-2">
+            <span className="text-xs text-slate-400">Age group:</span>
+            {(["Kids", "Teens", "Adults"] as const).map(ag => (
+              <button
+                key={ag}
+                onClick={() => setAgeGroup(ageGroup === ag ? "" : ag)}
+                disabled={loading}
+                className="rounded-full px-3 py-1 text-xs font-medium transition-colors disabled:opacity-50"
+                style={{
+                  background: ageGroup === ag ? BRAND.primary : BRAND.bg,
+                  color: ageGroup === ag ? "#fff" : BRAND.primary,
+                  border: `1px solid ${BRAND.primary}40`,
+                }}
+                onMouseEnter={e => { if (ageGroup !== ag) { e.currentTarget.style.background = BRAND.primary; e.currentTarget.style.color = "#fff" } }}
+                onMouseLeave={e => { if (ageGroup !== ag) { e.currentTarget.style.background = BRAND.bg; e.currentTarget.style.color = BRAND.primary } }}
+              >
+                {ag}
+              </button>
+            ))}
           </div>
         </div>
       </div>

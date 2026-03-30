@@ -39,8 +39,9 @@ function writeLog(title: string, payload: object): void {
 
 // ─── Main export ──────────────────────────────────────────────────────────────
 
-export async function generateOutline(title: string): Promise<string> {
-  const userMessage = `Create a detailed book outline for: "${title}"`;
+export async function generateOutline(title: string, ageGroup?: string): Promise<string> {
+  const audienceClause = ageGroup ? ` The target audience is ${ageGroup}.` : ""
+  const userMessage = `Create a detailed book outline for: "${title}".${audienceClause}`;
   const estimatedInputTokens = Math.round((SYSTEM_PROMPT.length + userMessage.length) / 4);
 
   // Log request
