@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { BookOpen, TrendingUp, Share2, BarChart2, ArrowRight, Sparkles, Search, Tag, List, FileText, Video, Zap } from "lucide-react"
+import { BookOpen, TrendingUp, Share2, BarChart2, ArrowRight, Sparkles, Search, Tag, List, FileText, Video, Zap, Check } from "lucide-react"
 import LoginForm from "./LoginForm"
 import type React from "react"
 
@@ -321,7 +321,7 @@ export default function LandingPage() {
 
       {/* ─── Pricing ─────────────────────────────────────────────── */}
       <section className="py-16 px-4" style={{ background: BRAND.bg }}>
-        <div className="container mx-auto max-w-5xl">
+        <div className="container mx-auto max-w-3xl">
           <div className="text-center mb-12">
             <h2
               className="text-2xl sm:text-3xl font-bold mb-3 [font-family:var(--font-playfair,Georgia,serif)]"
@@ -330,45 +330,38 @@ export default function LandingPage() {
               Choose a plan that fits you
             </h2>
             <p className="text-sm" style={{ color: BRAND.gray }}>
-              Flexible options for nonfiction creators at every stage.
+              Start free and upgrade when you&apos;re ready to go deeper.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <PlanCard
-              title="Freemium"
-              price="Free"
-              description="Try the platform with a small monthly allowance."
+              title="Free"
+              price="$0"
+              priceDetail="per month"
+              description="Get started with the essentials."
               features={[
-                "5 book requests / month",
-                "3 outline generations / month",
-                "No social media ads",
+                "3 market insights per month",
+                "2 book outlines per month",
+                "Amazon & trend data",
+                "No credit card required",
               ]}
               cta="Start Free"
               onCta={() => { setLoginMode("signup"); setShowLoginForm(true) }}
             />
             <PlanCard
               title="Creator"
-              price="25 requests"
-              description="Validate topics and build your nonfiction pipeline."
+              price="$9"
+              priceDetail="per month"
+              description="For authors serious about niche research."
               features={[
-                "25 book requests / month",
-                "25 outline generations / month",
-                "Email support",
+                "25 market insights per month",
+                "15 book outlines per month",
+                "Amazon & trend data",
+                "Save research to projects",
+                "Priority support",
               ]}
-              cta="Choose Creator"
+              cta="Get Started"
               highlight
-              onCta={() => { setLoginMode("signup"); setShowLoginForm(true) }}
-            />
-            <PlanCard
-              title="Pro"
-              price="100 requests"
-              description="Scale your nonfiction catalog with pro tools."
-              features={[
-                "100 book requests / month",
-                "100 outline generations / month",
-                "Social media ad generation",
-              ]}
-              cta="Go Pro"
               onCta={() => { setLoginMode("signup"); setShowLoginForm(true) }}
             />
           </div>
@@ -480,6 +473,7 @@ function SectionFeatureCard({
 function PlanCard({
   title,
   price,
+  priceDetail,
   description,
   features,
   cta,
@@ -488,6 +482,7 @@ function PlanCard({
 }: {
   title: string
   price: string
+  priceDetail: string
   description: string
   features: string[]
   cta: string
@@ -496,66 +491,86 @@ function PlanCard({
 }) {
   return (
     <div
-      className="rounded-2xl p-6 flex flex-col transition-all hover:shadow-lg"
+      className="rounded-2xl p-6 flex flex-col transition-all hover:shadow-lg relative overflow-hidden"
       style={{
-        background: highlight ? BRAND.primary : "#FFFFFF",
-        border: highlight ? "none" : `1px solid #EEE0F8`,
-        boxShadow: highlight ? "0 8px 32px rgba(153,0,204,0.25)" : undefined,
+        background: "#FFFFFF",
+        border: highlight
+          ? `2px solid ${BRAND.primary}`
+          : `1px solid #EEE0F8`,
+        boxShadow: highlight ? "0 4px 24px 0 rgba(153,0,204,0.10)" : undefined,
       }}
     >
-      <div className="flex items-center justify-between mb-1">
-        <h3
-          className="text-base font-bold"
-          style={{ color: highlight ? "#FFFFFF" : BRAND.deep }}
+      {/* "Most Popular" badge — highlight plan only */}
+      {highlight && (
+        <div
+          className="absolute top-0 right-0 flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-bl-xl text-white"
+          style={{
+            background: BRAND.primary,
+            fontFamily: "var(--font-dm-sans, system-ui, sans-serif)",
+          }}
         >
-          {title}
-        </h3>
-        {highlight && (
-          <span
-            className="text-xs font-semibold px-2 py-0.5 rounded-full"
-            style={{ background: "rgba(255,255,255,0.2)", color: "#FFFFFF" }}
-          >
-            Most Popular
-          </span>
-        )}
-      </div>
+          <Sparkles className="w-3 h-3 flex-shrink-0" />
+          Most Popular
+        </div>
+      )}
+
+      {/* Plan name */}
       <p
-        className="text-xs mb-6"
-        style={{ color: highlight ? "rgba(255,255,255,0.7)" : BRAND.gray }}
+        className="text-xs font-semibold uppercase tracking-widest mb-2"
+        style={{
+          color: highlight ? BRAND.primary : BRAND.gray,
+          fontFamily: "var(--font-dm-sans, system-ui, sans-serif)",
+        }}
+      >
+        {title}
+      </p>
+
+      {/* Price row */}
+      <div className="flex items-baseline gap-1.5 mb-1">
+        <span
+          className="text-4xl font-bold [font-family:var(--font-playfair,Georgia,serif)]"
+          style={{ color: BRAND.deep }}
+        >
+          {price}
+        </span>
+        <span
+          className="text-sm"
+          style={{ color: BRAND.gray, fontFamily: "var(--font-dm-sans, system-ui, sans-serif)" }}
+        >
+          {priceDetail}
+        </span>
+      </div>
+
+      {/* Description */}
+      <p
+        className="text-sm mb-6"
+        style={{ color: BRAND.gray, fontFamily: "var(--font-dm-sans, system-ui, sans-serif)" }}
       >
         {description}
       </p>
-      <p
-        className="text-2xl font-bold mb-1 [font-family:var(--font-playfair,Georgia,serif)]"
-        style={{ color: highlight ? "#FFFFFF" : BRAND.deep }}
-      >
-        {price}
-      </p>
-      <p
-        className="text-xs mb-6"
-        style={{ color: highlight ? "rgba(255,255,255,0.6)" : BRAND.gray }}
-      >
-        Billed monthly
-      </p>
-      <ul className="flex-1 space-y-2 mb-6">
+
+      {/* Feature list */}
+      <ul className="flex-1 space-y-2.5 mb-6">
         {features.map((feature) => (
-          <li key={feature} className="flex items-start gap-2 text-xs">
-            <span
-              className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0"
-              style={{ background: highlight ? "rgba(255,255,255,0.8)" : BRAND.primary }}
+          <li key={feature} className="flex items-start gap-2.5 text-sm">
+            <Check
+              className="w-4 h-4 flex-shrink-0 mt-0.5"
+              style={{ color: highlight ? BRAND.primary : "#059669" }}
             />
-            <span style={{ color: highlight ? "rgba(255,255,255,0.85)" : BRAND.gray }}>
+            <span style={{ color: BRAND.gray, fontFamily: "var(--font-dm-sans, system-ui, sans-serif)" }}>
               {feature}
             </span>
           </li>
         ))}
       </ul>
+
       <Button
         onClick={onCta}
         className="w-full h-10 text-sm font-semibold rounded-xl transition-all"
         style={{
-          background: highlight ? "#FFFFFF" : BRAND.primary,
-          color: highlight ? BRAND.primary : "#FFFFFF",
+          background: highlight ? BRAND.primary : "#FFFFFF",
+          color: highlight ? "#FFFFFF" : BRAND.primary,
+          border: highlight ? "none" : `1.5px solid ${BRAND.primary}`,
           fontFamily: "var(--font-dm-sans, system-ui, sans-serif)",
         }}
       >

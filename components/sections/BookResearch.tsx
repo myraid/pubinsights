@@ -471,7 +471,6 @@ export default function BookResearch() {
   const [projects, setProjects] = useState<Project[]>([])
   const [showIndieOnly, setShowIndieOnly] = useState(false)
   const [inputError, setInputError] = useState(false)
-  const [ageGroup, setAgeGroup] = useState<"" | "Kids" | "Teens" | "Adults">("")
 
   const abortRef = useRef<AbortController | null>(null)
   const resultsRef = useRef<HTMLDivElement | null>(null)
@@ -516,9 +515,8 @@ export default function BookResearch() {
 
     try {
       // 1. Amazon books + Google Trends in parallel
-      const searchKeyword = ageGroup ? `${trimmed} for ${ageGroup.toLowerCase()}` : trimmed
       const [booksResult, trendsResult] = await Promise.allSettled([
-        fetch(`/api/amazon-books/search?keywords=${encodeURIComponent(searchKeyword)}&page=1`, { signal })
+        fetch(`/api/amazon-books/search?keywords=${encodeURIComponent(trimmed)}&page=1`, { signal })
           .then(r => { if (!r.ok) throw new Error("Amazon search failed"); return r.json() as Promise<AmazonBook[]> }),
         fetch(`/api/trends?keyword=${encodeURIComponent(searchKeyword)}`, { signal })
           .then(r => r.ok ? r.json() : null)
@@ -708,27 +706,6 @@ export default function BookResearch() {
                   </span>
                 ) : "Analyze Market"}
               </Button>
-            </div>
-
-            {/* Age group filter */}
-            <div className="mt-3.5 flex flex-wrap items-center gap-2">
-              <span className="text-xs text-slate-400">Age group:</span>
-              {(["Kids", "Teens", "Adults"] as const).map(ag => (
-                <button
-                  key={ag}
-                  onClick={() => setAgeGroup(ageGroup === ag ? "" : ag)}
-                  className="rounded-full px-3 py-1 text-xs font-medium transition-colors"
-                  style={{
-                    background: ageGroup === ag ? BRAND.primary : BRAND.bg,
-                    color: ageGroup === ag ? "#fff" : BRAND.primary,
-                    border: `1px solid ${BRAND.primary}40`,
-                  }}
-                  onMouseEnter={e => { if (ageGroup !== ag) { e.currentTarget.style.background = BRAND.primary; e.currentTarget.style.color = "#fff" } }}
-                  onMouseLeave={e => { if (ageGroup !== ag) { e.currentTarget.style.background = BRAND.bg; e.currentTarget.style.color = BRAND.primary } }}
-                >
-                  {ag}
-                </button>
-              ))}
             </div>
 
             {/* Example pills — only before first search */}
