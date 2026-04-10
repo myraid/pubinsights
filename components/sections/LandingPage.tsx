@@ -35,6 +35,9 @@ export default function LandingPage() {
             <img
               src="/images/Logo-1.png"
               alt="Publisher Insights"
+              width={48}
+              height={48}
+              loading="eager"
               className="w-auto h-10 md:h-12 block"
             />
           </div>

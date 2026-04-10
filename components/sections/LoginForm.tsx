@@ -102,6 +102,9 @@ export default function LoginForm({ initialMode = "login" }: { initialMode?: "lo
           <img
             src="/images/Logo-1.png"
             alt="PubInsights"
+            width={96}
+            height={96}
+            loading="eager"
             className="w-auto h-24 block"
           />
         </div>
@@ -154,6 +157,9 @@ export default function LoginForm({ initialMode = "login" }: { initialMode?: "lo
             <img
               src="/images/Logo-1.png"
               alt="PubInsights"
+              width={64}
+              height={64}
+              loading="eager"
               className="w-auto h-16 block"
             />
           </div>
