@@ -66,9 +66,10 @@ interface ProjectWithContent extends Project {
     marketIntelligence?: {
       rating: number;
       insights: string[];
-      pros: string[];
-      cons: string[];
+      content_gaps: string[];
       title_suggestion: string;
+      cover_quality_score?: number;
+      cover_quality_summary?: string;
     } | null;
   }[];
   socialContent?: ProjectSocialContent[];
@@ -641,35 +642,19 @@ const MyProjects: React.FC = () => {
                             </ul>
                           </div>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                          {/* Pros */}
-                          <div className="rounded-xl p-6" style={{ background: "#F0FDF4", border: "1px solid #BBF7D0" }}>
-                            <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "#166534" }}>
-                              Opportunities
-                            </p>
-                            <ul className="space-y-2">
-                              {(insights?.pros || []).map((pro: string, idx: number) => (
-                                <li key={idx} className="flex items-start gap-2 text-sm" style={{ color: "#166534" }}>
-                                  <span className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0 bg-green-500" />
-                                  {pro}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                          {/* Cons */}
-                          <div className="rounded-xl p-6" style={{ background: "#FFF1F2", border: "1px solid #FECDD3" }}>
-                            <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "#9F1239" }}>
-                              Risks
-                            </p>
-                            <ul className="space-y-2">
-                              {(insights?.cons || []).map((con: string, idx: number) => (
-                                <li key={idx} className="flex items-start gap-2 text-sm" style={{ color: "#9F1239" }}>
-                                  <span className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0 bg-red-400" />
-                                  {con}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
+                        {/* Content Gaps */}
+                        <div className="rounded-xl p-6" style={{ background: "#F0FDF4", border: "1px solid #BBF7D0" }}>
+                          <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "#166534" }}>
+                            Content Gaps
+                          </p>
+                          <ul className="space-y-2">
+                            {(insights?.content_gaps || []).map((gap: string, idx: number) => (
+                              <li key={idx} className="flex items-start gap-2 text-sm" style={{ color: "#166534" }}>
+                                <span className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0 bg-green-500" />
+                                {gap}
+                              </li>
+                            ))}
+                          </ul>
                         </div>
                         {/* Suggested Title */}
                         <div
