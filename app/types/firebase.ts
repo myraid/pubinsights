@@ -52,9 +52,10 @@ export interface Project {
     marketIntelligence?: {
       rating: number;
       insights: string[];
-      pros: string[];
-      cons: string[];
+      content_gaps: string[];
       title_suggestion: string;
+      cover_quality_score?: number;
+      cover_quality_summary?: string;
     } | null;
   }[];
   socialContent?: ProjectSocialContent[];
@@ -105,9 +106,10 @@ export interface SearchHistoryItem {
   marketIntelligence?: {
     rating: number;
     insights: string[];
-    pros: string[];
-    cons: string[];
+    content_gaps: string[];
     title_suggestion: string;
+    cover_quality_score?: number;
+    cover_quality_summary?: string;
   } | null;
 }
 

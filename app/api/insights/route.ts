@@ -77,6 +77,7 @@ export async function POST(request: Request) {
             review_ai_summary: book.review_ai_summary || null,
             rating_stars_distribution: book.rating_stars_distribution || [],
             top_reviews: reviews,
+            image_url: book.image_url || null,
           };
         })
       : [];

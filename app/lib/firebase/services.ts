@@ -205,25 +205,27 @@ interface SearchHistoryItem {
   marketIntelligence: {
     rating: number;
     insights: string[];
-    pros: string[];
-    cons: string[];
+    content_gaps: string[];
     title_suggestion: string;
+    cover_quality_score?: number;
+    cover_quality_summary?: string;
   } | null;
   createdAt: Timestamp;
   updatedAt: Timestamp;
 }
 
 export const saveUserSearch = async (
-  userId: string, 
-  keyword: string, 
-  books: AmazonBook[], 
-  trendData: TrendData, 
+  userId: string,
+  keyword: string,
+  books: AmazonBook[],
+  trendData: TrendData,
   marketIntelligence?: {
     rating: number;
     insights: string[];
-    pros: string[];
-    cons: string[];
+    content_gaps: string[];
     title_suggestion: string;
+    cover_quality_score?: number;
+    cover_quality_summary?: string;
   } | null
 ) => {
   try {
@@ -496,9 +498,10 @@ export const addMarketResearchToProject = async (projectId: string, researchData
   marketIntelligence?: {
     rating: number;
     insights: string[];
-    pros: string[];
-    cons: string[];
+    content_gaps: string[];
     title_suggestion: string;
+    cover_quality_score?: number;
+    cover_quality_summary?: string;
   } | null;
 }) => {
   try {

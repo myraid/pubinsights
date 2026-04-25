@@ -13,8 +13,12 @@ import Header from "@/components/sections/Header"
 import { SearchIcon as BookSearch, PenTool, Share2, FolderKanban, Crown, type LucideIcon } from "lucide-react"
 
 export default function Home() {
-  const { user } = useAuth()
+  const { user, loading } = useAuth()
   const [activeSection, setActiveSection] = useState<string>("My Projects")
+
+  if (loading) {
+    return null
+  }
 
   if (!user) {
     return <LandingPage />

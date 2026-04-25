@@ -99,8 +99,6 @@ FIREBASE_CLIENT_EMAIL
 FIREBASE_PRIVATE_KEY          # Stored with literal \n, replaced at runtime
 OPENAI_API_KEY
 SCRAPPER_AUTHORIZATION_KEY    # Decodo API key
-SOCIAL_MEDIA_WEBHOOK_URL      # Make.com webhook (optional)
-INSIGHTS_WEBHOOK_URL          # Make.com webhook (optional)
 BANNERBEAR_API_KEY            # Optional, ad image generation
 ```
 
