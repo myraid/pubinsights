@@ -265,3 +265,72 @@ export async function searchAmazonBooks(keyword: string): Promise<BookItem[]> {
 export async function getProductDetails(asin: string): Promise<RawProductResults> {
   return fetchProductDetails(asin);
 }
+
+export interface BookLookup {
+  asin: string;
+  title: string;
+  author: string | null;
+  description: string | null;
+  price: number | null;
+  rating: number | null;
+  imageUrl: string | null;
+  publisher: string | null;
+  categories: string[];
+  bsr: number | null;
+  url: string;
+}
+
+export async function lookupBookByAsin(asin: string): Promise<BookLookup | null> {
+  const product = await fetchProductDetails(asin);
+  if (!product || !Object.keys(product).length) return null;
+
+  const details = product.product_details ?? {};
+  const categories = product.category ?? [];
+  const ladder = Array.isArray(categories) && categories[0]?.ladder
+    ? categories[0].ladder
+        .map((c: { name?: string }) => c?.name ?? '')
+        .filter((n: string) => n && n !== 'Books')
+    : [];
+
+  // Search by ASIN to get title, image, and price (not in product details)
+  let title = '';
+  let imageUrl: string | null = null;
+  let price: number | null = null;
+
+  try {
+    const searchData = await decodoRequest({
+      target: 'amazon_search',
+      query: asin,
+      domain: 'com',
+      category: '1000',
+      parse: true,
+    }) as DecodoResponse;
+
+    const organic = searchData?.results?.[0]?.content?.results?.results?.organic ?? [];
+    const match = organic.find(item => item.asin === asin) ?? organic[0];
+    if (match) {
+      title = match.title ?? '';
+      imageUrl = match.url_image ?? null;
+      price = match.price ?? null;
+    }
+  } catch {
+    // Search failed — use what we have from product details
+  }
+
+  return {
+    asin,
+    title: title || asin,
+    author: product.manufacturer ?? null,
+    description: product.description ?? null,
+    price,
+    rating: product.rating ?? null,
+    imageUrl,
+    publisher: (details as Record<string, unknown>).publisher as string ?? null,
+    categories: ladder,
+    bsr: Array.isArray(product.sales_rank) && product.sales_rank[0]?.rank
+      ? product.sales_rank[0].rank
+      : null,
+    url: `https://www.amazon.com/dp/${asin}?tag=${AFFILIATE_TAG}`,
+  };
+}
+

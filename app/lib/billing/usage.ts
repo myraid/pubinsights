@@ -17,7 +17,7 @@ export interface UsageCheckResult {
  */
 export async function checkAndIncrementUsage(
   userId: string,
-  type: 'insights' | 'outlines'
+  type: 'insights' | 'outlines' | 'social_images'
 ): Promise<UsageCheckResult> {
   const monthKey = getMonthKey()
   const userRef = adminDb.collection('users').doc(userId)
