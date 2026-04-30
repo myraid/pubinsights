@@ -502,7 +502,6 @@ Seven routes covering the full section lifecycle. All stateless, all use the Con
 | `/api/approve-section` | POST | section-summarizer | No |
 | `/api/extract-style` | POST | style-extractor | No |
 | `/api/complete-chapter` | POST | chapter-summarizer | No |
-| `/api/write-chapter` | POST | writer-agent (legacy) | Yes (backward compat) |
 
 ### 4.2 `POST /api/plan-sections`
 
@@ -989,7 +988,8 @@ When the last chapter is completed:
 
 1. Set manuscript status -> `complete`
 2. Calculate final totals: total word count, total chapters completed
-3. No auto-generated front matter (dedication, foreword) in this scope
+3. Save assembled manuscript to the project (see 6.4)
+4. No auto-generated front matter (dedication, foreword) in this scope
 
 ### 6.3 Edge Case: Re-opening a Completed Chapter
 
@@ -998,6 +998,48 @@ When the last chapter is completed:
 3. Section -> `review`. Chapter -> `writing`. Manuscript -> `in_progress`.
 4. All chapters after this one remain as they are (content not invalidated) but generating new content in later chapters is blocked until this chapter is re-completed.
 5. Author re-approves section -> chapter re-completes -> later chapters unblocked.
+
+### 6.4 Save Manuscript to Project
+
+When a manuscript reaches `complete` status (or any time the author clicks "Save to Project"), the full assembled manuscript is saved to the project document — making it visible in the My Projects view alongside research and outlines.
+
+**Data written to project doc**:
+```typescript
+// projects/{projectId} — update
+{
+  manuscript: {
+    manuscriptId: string
+    title: string
+    totalChapters: number
+    totalWordCount: number
+    status: 'in_progress' | 'complete'
+    chapters: {
+      chapterNumber: number
+      title: string
+      wordCount: number
+      status: string
+    }[]
+    savedAt: Timestamp
+  }
+}
+```
+
+This is a **summary snapshot** — not the full chapter content. The full content stays in the subcollections. The project-level snapshot gives the My Projects view enough data to display manuscript status, word count, and progress without querying subcollections.
+
+**When saved**:
+- Automatically on manuscript completion (all chapters done)
+- Manually via "Save to Project" button in the BookWriter top bar (available at any point, saves current progress)
+- On each chapter completion (updates the snapshot with latest progress)
+
+**Firebase service**: `saveManuscriptToProject(projectId, manuscriptSummary)` — uses `updateDoc` to set the `manuscript` field on the project doc. Overwrites previous snapshot (one manuscript per project for now).
+
+**Edge cases**:
+
+| Edge Case | Handling |
+|-----------|----------|
+| Project already has a manuscript snapshot | Overwrite with latest data. The snapshot is always the most recent state. |
+| Multiple manuscripts per project | Only the active manuscript is saved to the project snapshot. Author can switch which manuscript is "active" in the future, but for now one manuscript per project. |
+| Author re-opens completed manuscript and edits | Next save (manual or chapter completion) updates the snapshot with `status: 'in_progress'` and reduced completion counts. |
 
 ---
 
@@ -1034,24 +1076,180 @@ Usage is checked before generation (to reject if over limit) but incremented onl
 
 ---
 
-## 8. Migration from Current System
+## 8. DOCX Export
 
-### 8.1 Backward Compatibility
+### 8.1 Dependency
 
-The existing `/api/write-chapter` route and monolithic chapter generation remain functional. Existing manuscripts (created under the current system) continue to work — they simply don't have sections.
+Use `docx` npm package (`npm install docx`). It generates `.docx` files programmatically from JavaScript objects — no Word installation needed, runs server-side on Vercel.
 
-### 8.2 New Manuscripts Only
+### 8.2 API Route: `POST /api/export-manuscript`
 
-The section-level workflow applies only to newly created manuscripts. No migration of existing manuscripts is needed. The UI detects whether a manuscript has section-based chapters (check for `sectionPlan` on chapter doc) and renders accordingly:
-- If `sectionPlan` exists -> new section-based workflow
-- If `sectionPlan` is empty/missing -> legacy chapter-based workflow
+**Request**:
+```typescript
+{
+  userId: string
+  projectId: string
+  manuscriptId: string
+}
+```
 
-### 8.3 Deprecation Path
+**Response**: Binary `.docx` file download.
+```
+Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document
+Content-Disposition: attachment; filename="Book-Title.docx"
+```
 
-After the section-based system is stable:
-1. New manuscripts always use section-based flow
-2. Legacy manuscripts remain readable/editable but "Start Writing" creates section-based manuscripts
-3. `/api/write-chapter` remains as a fallback but is not exposed in new UI
+**Flow**:
+1. Validate IDs, verify user owns project
+2. Read manuscript doc (title, outlineSnapshot)
+3. Read all chapters ordered by `chapterNumber` (need `content` and `title` fields)
+4. Verify manuscript status is `complete` — all chapters must be complete. If not, return 403: "All chapters must be completed before exporting."
+5. Build DOCX document (see 8.3)
+6. Generate buffer via `Packer.toBuffer(doc)`
+7. Return as binary response with appropriate headers
+
+**`maxDuration`**: 30 seconds (DOCX generation is fast, but reading all chapters from Firestore takes time for large books).
+
+### 8.3 Document Structure
+
+The `docx` package uses a builder pattern. The export produces a publish-ready manuscript:
+
+```typescript
+const doc = new Document({
+  styles: { ... },                   // See 8.4
+  sections: [
+    // Title page
+    {
+      properties: { page: { ... } },
+      children: [
+        new Paragraph({ text: bookTitle, heading: HeadingLevel.TITLE }),
+        new Paragraph({ text: authorName, style: "Author" }),
+      ]
+    },
+    // Table of contents
+    {
+      children: [
+        new TableOfContents("Table of Contents", { ... }),
+      ]
+    },
+    // One section per chapter
+    ...chapters.map(chapter => ({
+      properties: {
+        page: { size: { width: 12240, height: 15840 } },  // US Letter
+      },
+      children: [
+        // Chapter title (page break before)
+        new Paragraph({
+          text: `Chapter ${chapter.chapterNumber}: ${chapter.title}`,
+          heading: HeadingLevel.HEADING_1,
+          pageBreakBefore: true,
+        }),
+        // Chapter content — parsed from HTML
+        ...htmlToDocxParagraphs(chapter.content),
+      ]
+    }))
+  ]
+})
+```
+
+### 8.4 HTML to DOCX Conversion
+
+The chapter `content` field is HTML from Tiptap. It needs to be converted to `docx` Paragraph/TextRun objects.
+
+**Conversion module**: `app/lib/export/html-to-docx.ts`
+
+```typescript
+function htmlToDocxParagraphs(html: string): Paragraph[]
+```
+
+**HTML tag mapping**:
+
+| HTML Tag | DOCX Element |
+|----------|-------------|
+| `<h2>` | `Paragraph` with `HeadingLevel.HEADING_2` |
+| `<h3>` | `Paragraph` with `HeadingLevel.HEADING_3` |
+| `<p>` | `Paragraph` with body style |
+| `<strong>`, `<b>` | `TextRun` with `bold: true` |
+| `<em>`, `<i>` | `TextRun` with `italics: true` |
+| `<ul>` / `<li>` | `Paragraph` with bullet numbering |
+| `<ol>` / `<li>` | `Paragraph` with decimal numbering |
+| `<br>` | Line break within paragraph |
+
+**Parser approach**: Use a lightweight HTML parser (the `htmlparser2` package, already commonly available, or parse with regex for the limited tag set Tiptap produces). Tiptap outputs clean, predictable HTML — no arbitrary nesting or exotic tags.
+
+### 8.5 Document Styling
+
+```typescript
+const styles = {
+  default: {
+    document: {
+      run: {
+        font: "Georgia",             // Standard book font
+        size: 24,                     // 12pt
+      },
+      paragraph: {
+        spacing: { after: 200, line: 360 },  // 1.5 line spacing
+      },
+    },
+    heading1: {
+      run: {
+        font: "Georgia",
+        size: 48,                     // 24pt
+        bold: true,
+      },
+      paragraph: {
+        spacing: { before: 480, after: 240 },
+      },
+    },
+    heading2: {
+      run: {
+        font: "Georgia",
+        size: 36,                     // 18pt
+        bold: true,
+      },
+      paragraph: {
+        spacing: { before: 360, after: 200 },
+      },
+    },
+    heading3: {
+      run: {
+        font: "Georgia",
+        size: 28,                     // 14pt
+        bold: true,
+        italics: true,
+      },
+      paragraph: {
+        spacing: { before: 240, after: 120 },
+      },
+    },
+  },
+}
+```
+
+**Page setup**: US Letter (8.5" x 11"), 1" margins all sides. Page numbers in footer (centered, starting from chapter 1 — not title page).
+
+### 8.6 UI: Export Button
+
+In the `BookWriter.tsx` top bar, when manuscript status is `complete`:
+
+- **"Export DOCX"** button appears next to the manuscript title
+- Click -> loading spinner ("Generating manuscript...")
+- On response: browser downloads the `.docx` file
+- If manuscript is not complete: button is disabled with tooltip "Complete all chapters to export"
+
+For incomplete manuscripts, offer a partial export option:
+- **"Export Draft"** — exports only completed chapters with a note on the title page: "DRAFT — Chapters X-Y incomplete"
+
+### 8.7 Edge Cases
+
+| Edge Case | Handling |
+|-----------|----------|
+| Manuscript not complete | Return 403 unless `draft: true` flag is passed, which exports completed chapters only |
+| Empty chapter content | Skip chapter in export. Should not happen if chapter is `complete`, but defensive. |
+| Very large manuscript (100K+ words) | `docx` package handles this fine. Buffer generation is in-memory. Vercel function has 250MB memory limit — a 100K word doc is ~1MB. No issue. |
+| Special characters in HTML | The HTML parser handles entities (`&amp;`, `&lt;`, etc.). `docx` package accepts UTF-8 strings. |
+| No author name available | Use "Author" as placeholder on title page. Author name pulled from user's Firebase profile `displayName` field. |
+| Images in content | Not supported in this version. Tiptap StarterKit doesn't include images. If images are added later, they'd need to be fetched and embedded as `ImageRun` objects. |
 
 ---
 
@@ -1077,6 +1275,8 @@ After the section-based system is stable:
 | `components/book-writer/SectionEditor.tsx` | Section-level editor with 4 states |
 | `components/book-writer/ContextPanel.tsx` | Right panel: outline, notes, style, history |
 | `components/book-writer/CommentPopover.tsx` | Popover for adding comments on selected text |
+| `app/api/export-manuscript/route.ts` | DOCX export endpoint |
+| `app/lib/export/html-to-docx.ts` | HTML to DOCX paragraph conversion |
 
 ### Files to Modify
 
