@@ -3,6 +3,7 @@ export type SubscriptionTier = 'free' | 'creator' | 'beta'
 export interface TierLimits {
   insights: number
   outlines: number
+  sections: number
   unlimited: boolean
 }
 
@@ -10,16 +11,19 @@ export const TIER_LIMITS: Record<SubscriptionTier, TierLimits> = {
   free: {
     insights: 3,
     outlines: 2,
+    sections: 15,
     unlimited: false,
   },
   creator: {
     insights: 25,
     outlines: 15,
+    sections: 200,
     unlimited: false,
   },
   beta: {
     insights: 9999,
     outlines: 9999,
+    sections: 9999,
     unlimited: true,
   },
 }

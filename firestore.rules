@@ -27,6 +27,30 @@ service cloud.firestore {
         && request.auth.uid == resource.data.userId;
       allow create: if request.auth != null
         && request.auth.uid == request.resource.data.userId;
+
+      // Manuscripts — owner only (verified via parent project)
+      match /manuscripts/{manuscriptId} {
+        allow read, write: if request.auth != null
+          && request.auth.uid == get(/databases/$(database)/documents/projects/$(projectId)).data.userId;
+        allow create: if request.auth != null
+          && request.auth.uid == request.resource.data.userId;
+
+        // Chapters — owner only (verified via parent project)
+        match /chapters/{chapterId} {
+          allow read, write: if request.auth != null
+            && request.auth.uid == get(/databases/$(database)/documents/projects/$(projectId)).data.userId;
+          allow create: if request.auth != null
+            && request.auth.uid == get(/databases/$(database)/documents/projects/$(projectId)).data.userId;
+
+          // Sections — owner only (verified via parent project)
+          match /sections/{sectionId} {
+            allow read, write: if request.auth != null
+              && request.auth.uid == get(/databases/$(database)/documents/projects/$(projectId)).data.userId;
+            allow create: if request.auth != null
+              && request.auth.uid == get(/databases/$(database)/documents/projects/$(projectId)).data.userId;
+          }
+        }
+      }
     }
 
     // Search history — owner only

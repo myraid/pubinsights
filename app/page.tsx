@@ -7,10 +7,11 @@ import BookResearch from "@/components/sections/BookResearch"
 import BookOutline from "@/components/sections/BookOutline"
 import SocialMedia from "@/components/sections/SocialMedia"
 import MyProjects from "@/components/sections/MyProjects"
+import BookWriter from "@/components/sections/BookWriter"
 import Pricing from "@/components/sections/Pricing"
 import LandingPage from "@/components/sections/LandingPage"
 import Header from "@/components/sections/Header"
-import { SearchIcon as BookSearch, PenTool, Share2, FolderKanban, Crown, type LucideIcon } from "lucide-react"
+import { SearchIcon as BookSearch, PenTool, Share2, FolderKanban, Crown, BookText, type LucideIcon } from "lucide-react"
 
 export default function Home() {
   const { user, loading } = useAuth()
@@ -29,6 +30,7 @@ export default function Home() {
     { name: "Book Research", icon: BookSearch, component: BookResearch },
     { name: "Book Outline", icon: PenTool, component: BookOutline },
     { name: "Social Media", icon: Share2, component: SocialMedia },
+    { name: "Book Writer", icon: BookText, component: BookWriter },
     { name: "Upgrade", icon: Crown, component: Pricing },
   ]
 
@@ -36,7 +38,7 @@ export default function Home() {
     <div className="min-h-screen" style={{ background: "linear-gradient(180deg, #F5EEFF 0%, #FFFFFF 40%, #FFFFFF 100%)" }}>
       <Header />
       <main className="container mx-auto p-3 md:p-5 max-w-7xl">
-        <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 mb-4">
+        <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 mb-4">
           {sections.map((section) => (
             <Card
               key={section.name}

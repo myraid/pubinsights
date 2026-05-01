@@ -616,4 +616,208 @@ export const migrateToMainCollections = async (userId: string) => {
     console.error('Error migrating to main collections:', error);
     throw error;
   }
-}; 
+};
+
+// ─── Manuscript / Book Writer Services ────────────────────────────────────────
+
+export const createManuscript = async (
+  projectId: string,
+  userId: string,
+  title: string,
+  outlineSnapshot: {
+    Title: string;
+    Chapters: { Chapter: number; Title: string; Summary?: string; KeyTopics?: string[] }[];
+  }
+) => {
+  const manuscriptsRef = collection(db, 'projects', projectId, 'manuscripts');
+  const manuscriptDoc = await addDoc(manuscriptsRef, {
+    projectId,
+    userId,
+    title,
+    status: 'in_progress',
+    totalChapters: outlineSnapshot.Chapters.length,
+    completedChapters: 0,
+    totalWordCount: 0,
+    outlineSnapshot,
+    createdAt: Timestamp.now(),
+    updatedAt: Timestamp.now(),
+  });
+
+  // Create empty chapter docs
+  const chaptersRef = collection(db, 'projects', projectId, 'manuscripts', manuscriptDoc.id, 'chapters');
+  for (const ch of outlineSnapshot.Chapters) {
+    await addDoc(chaptersRef, {
+      chapterNumber: ch.Chapter,
+      title: ch.Title,
+      status: 'not_started',
+      content: '',
+      wordCount: 0,
+      outlineContext: {
+        summary: ch.Summary || '',
+        keyTopics: ch.KeyTopics || [],
+      },
+      aiGenerated: false,
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now(),
+    });
+  }
+
+  return manuscriptDoc.id;
+};
+
+export const getProjectManuscripts = async (projectId: string) => {
+  const q = query(
+    collection(db, 'projects', projectId, 'manuscripts'),
+    orderBy('createdAt', 'desc')
+  );
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+};
+
+export const getManuscript = async (projectId: string, manuscriptId: string) => {
+  const docRef = doc(db, 'projects', projectId, 'manuscripts', manuscriptId);
+  const snap = await getDoc(docRef);
+  if (!snap.exists()) return null;
+  return { id: snap.id, ...snap.data() };
+};
+
+export const getAllChapters = async (projectId: string, manuscriptId: string) => {
+  const q = query(
+    collection(db, 'projects', projectId, 'manuscripts', manuscriptId, 'chapters'),
+    orderBy('chapterNumber', 'asc')
+  );
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+};
+
+export const getChapter = async (projectId: string, manuscriptId: string, chapterId: string) => {
+  const docRef = doc(db, 'projects', projectId, 'manuscripts', manuscriptId, 'chapters', chapterId);
+  const snap = await getDoc(docRef);
+  if (!snap.exists()) return null;
+  return { id: snap.id, ...snap.data() };
+};
+
+export const saveChapter = async (
+  projectId: string,
+  manuscriptId: string,
+  chapterId: string,
+  data: { content?: string; wordCount?: number; status?: string; aiGenerated?: boolean }
+) => {
+  const docRef = doc(db, 'projects', projectId, 'manuscripts', manuscriptId, 'chapters', chapterId);
+  await updateDoc(docRef, {
+    ...data,
+    updatedAt: Timestamp.now(),
+  });
+};
+
+export const updateManuscriptProgress = async (
+  projectId: string,
+  manuscriptId: string,
+  completedChapters: number,
+  totalWordCount: number
+) => {
+  const docRef = doc(db, 'projects', projectId, 'manuscripts', manuscriptId);
+  await updateDoc(docRef, {
+    completedChapters,
+    totalWordCount,
+    status: completedChapters > 0 ? 'in_progress' : 'in_progress',
+    updatedAt: Timestamp.now(),
+  });
+};
+
+// ── Section CRUD ──
+
+export const createSections = async (
+  projectId: string,
+  manuscriptId: string,
+  chapterId: string,
+  sections: { sectionNumber: number; title: string; outlineContext: string; estimatedWords: number }[]
+) => {
+  const chapRef = doc(db, 'projects', projectId, 'manuscripts', manuscriptId, 'chapters', chapterId)
+  const sectionsCol = collection(chapRef, 'sections')
+  for (const sec of sections) {
+    await addDoc(sectionsCol, {
+      sectionNumber: sec.sectionNumber,
+      title: sec.title,
+      status: 'not_started',
+      content: '',
+      wordCount: 0,
+      outlineContext: sec.outlineContext,
+      estimatedWords: sec.estimatedWords,
+      comments: [],
+      revisionCount: 0,
+      revisionHistory: [],
+      authorNotes: '',
+      aiGenerated: false,
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now(),
+    })
+  }
+}
+
+export const getAllSections = async (
+  projectId: string,
+  manuscriptId: string,
+  chapterId: string
+) => {
+  const sectionsCol = collection(db, 'projects', projectId, 'manuscripts', manuscriptId, 'chapters', chapterId, 'sections')
+  const q = query(sectionsCol, orderBy('sectionNumber', 'asc'))
+  const snap = await getDocs(q)
+  return snap.docs.map(d => ({ id: d.id, ...d.data() }))
+}
+
+export const getSection = async (
+  projectId: string,
+  manuscriptId: string,
+  chapterId: string,
+  sectionId: string
+) => {
+  const docRef = doc(db, 'projects', projectId, 'manuscripts', manuscriptId, 'chapters', chapterId, 'sections', sectionId)
+  const snap = await getDoc(docRef)
+  if (!snap.exists()) return null
+  return { id: snap.id, ...snap.data() }
+}
+
+export const saveSection = async (
+  projectId: string,
+  manuscriptId: string,
+  chapterId: string,
+  sectionId: string,
+  data: Record<string, unknown>
+) => {
+  const docRef = doc(db, 'projects', projectId, 'manuscripts', manuscriptId, 'chapters', chapterId, 'sections', sectionId)
+  await updateDoc(docRef, { ...data, updatedAt: Timestamp.now() })
+}
+
+export const deleteSections = async (
+  projectId: string,
+  manuscriptId: string,
+  chapterId: string
+) => {
+  const sectionsCol = collection(db, 'projects', projectId, 'manuscripts', manuscriptId, 'chapters', chapterId, 'sections')
+  const snap = await getDocs(sectionsCol)
+  for (const d of snap.docs) {
+    await deleteDoc(d.ref)
+  }
+}
+
+// ── Style Profile ──
+
+export const saveStyleProfile = async (
+  projectId: string,
+  manuscriptId: string,
+  styleProfile: Record<string, unknown>
+) => {
+  const msRef = doc(db, 'projects', projectId, 'manuscripts', manuscriptId)
+  await updateDoc(msRef, { styleProfile, updatedAt: Timestamp.now() })
+}
+
+// ── Save Manuscript to Project ──
+
+export const saveManuscriptToProject = async (
+  projectId: string,
+  manuscript: Record<string, unknown>
+) => {
+  const projRef = doc(db, 'projects', projectId)
+  await updateDoc(projRef, { manuscript, updatedAt: Timestamp.now() })
+} 
