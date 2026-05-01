@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback, useRef } from "react"
+import { useState, useEffect } from "react"
 import {
   BookOpen, ChevronDown, Loader2, Plus,
   ArrowLeft, BookText
@@ -16,18 +16,20 @@ import {
   createManuscript,
   getProjectManuscripts,
   getAllChapters,
-  saveChapter,
-  updateManuscriptProgress,
+  getAllSections,
+  saveSection,
 } from "@/app/lib/firebase/services"
-import type { Project, ProjectOutline, Manuscript, ChapterDocument } from "@/app/types/firebase"
+import type { Project, ProjectOutline, Manuscript, ChapterDocument, Section, StyleProfile } from "@/app/types/firebase"
 import { toast } from "sonner"
 import ChapterSidebar from "@/components/book-writer/ChapterSidebar"
 import dynamic from "next/dynamic"
 
-const ChapterEditor = dynamic(() => import("@/components/book-writer/ChapterEditor"), { ssr: false })
+const SectionEditor = dynamic(() => import("@/components/book-writer/SectionEditor"), { ssr: false })
+const ContextPanel = dynamic(() => import("@/components/book-writer/ContextPanel"), { ssr: false })
 
 type ChapterWithId = ChapterDocument & { id: string }
 type ManuscriptWithId = Manuscript & { id: string }
+type SectionWithId = Section & { id: string }
 
 export default function BookWriter() {
   const { user } = useAuth()
@@ -45,12 +47,19 @@ export default function BookWriter() {
   const [activeChapterId, setActiveChapterId] = useState<string | null>(null)
   const [creatingManuscript, setCreatingManuscript] = useState(false)
 
+  // Section state
+  const [sections, setSections] = useState<SectionWithId[]>([])
+  const [activeSectionId, setActiveSectionId] = useState<string | null>(null)
+  const [planningChapterId, setPlanningChapterId] = useState<string | null>(null)
+  const [styleProfile, setStyleProfile] = useState<StyleProfile | null>(null)
+
   // Editor state
   const [generating, setGenerating] = useState(false)
+  const [revising, setRevising] = useState(false)
   const [saving, setSaving] = useState(false)
-  const abortRef = useRef<AbortController | null>(null)
 
   const activeChapter = chapters.find(c => c.id === activeChapterId) || null
+  const activeSection = sections.find(s => s.id === activeSectionId) || null
 
   // Load projects
   useEffect(() => {
@@ -72,14 +81,15 @@ export default function BookWriter() {
 
   // Load chapters when manuscript selected
   useEffect(() => {
-    if (!selectedProject || !activeManuscript) { setChapters([]); setActiveChapterId(null); return }
+    if (!selectedProject || !activeManuscript) { setChapters([]); setActiveChapterId(null); setSections([]); setActiveSectionId(null); return }
     getAllChapters(selectedProject.id, activeManuscript.id)
       .then(chs => {
         const typed = chs as ChapterWithId[]
         setChapters(typed)
-        if (typed.length > 0) setActiveChapterId(typed[0].id)
+        if (typed.length > 0) handleSelectChapter(typed[0].id)
       })
       .catch(() => toast.error("Failed to load chapters"))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedProject, activeManuscript])
 
   // Filter projects that have outlines
@@ -103,8 +113,6 @@ export default function BookWriter() {
       const outlineSnapshot = {
         Title: selectedOutline.outline.Title,
         Chapters: selectedOutline.outline.Chapters.map(ch => {
-          // Outline agent emits `Summary` (string) and `KeyTopics` (string[]).
-          // Tolerate legacy/alternate keys ("Key Points", "Topics") as fallbacks.
           const rawSummary = ch["Summary"]
           const summary = Array.isArray(rawSummary)
             ? (rawSummary as string[]).join(". ")
@@ -132,7 +140,6 @@ export default function BookWriter() {
       const msId = await createManuscript(selectedProject.id, user.uid, selectedOutline.title, outlineSnapshot)
       toast.success("Manuscript created! Start writing your chapters.")
 
-      // Reload manuscripts
       const ms = await getProjectManuscripts(selectedProject.id)
       setManuscripts(ms as ManuscriptWithId[])
       const newMs = (ms as ManuscriptWithId[]).find(m => m.id === msId)
@@ -145,95 +152,361 @@ export default function BookWriter() {
     }
   }
 
-  const handleContentChange = useCallback(async (html: string, wordCount: number) => {
-    if (!selectedProject || !activeManuscript || !activeChapterId) return
-    setSaving(true)
+  // ── Section-level handlers ──
+
+  const handleSelectChapter = async (chapterId: string) => {
+    if (!selectedProject || !activeManuscript) return
+    setActiveChapterId(chapterId)
     try {
-      const status = wordCount > 0 ? "writing" : "not_started"
-      await saveChapter(selectedProject.id, activeManuscript.id, activeChapterId, {
-        content: html, wordCount, status,
+      const secs = await getAllSections(selectedProject.id, activeManuscript.id, chapterId) as SectionWithId[]
+
+      // Check for stale generating sections (older than 3 minutes)
+      const now = Math.floor(Date.now() / 1000)
+      const staleThreshold = 3 * 60
+      let hasStale = false
+      const cleanedSecs = secs.map(s => {
+        if (s.status === 'generating' && s.updatedAt && (now - s.updatedAt.seconds) > staleThreshold) {
+          hasStale = true
+          return { ...s, status: 'not_started' as const }
+        }
+        return s
       })
+      if (hasStale) {
+        toast.warning('Some sections had stale generation status and were reset.')
+      }
 
-      // Update local state
-      setChapters(prev => prev.map(c =>
-        c.id === activeChapterId ? { ...c, content: html, wordCount, status: status as ChapterDocument["status"] } : c
-      ))
+      setSections(cleanedSecs)
+      // Select first non-approved section, or first section
+      const firstNonApproved = cleanedSecs.find(s => s.status !== 'approved')
+      setActiveSectionId(firstNonApproved ? firstNonApproved.id : (cleanedSecs.length > 0 ? cleanedSecs[0].id : null))
 
-      // Update manuscript progress
-      const allChs = await getAllChapters(selectedProject.id, activeManuscript.id) as ChapterWithId[]
-      const totalWords = allChs.reduce((sum, c) => sum + (c.wordCount || 0), 0)
-      const completed = allChs.filter(c => c.status === "complete").length
-      await updateManuscriptProgress(selectedProject.id, activeManuscript.id, completed, totalWords)
-      setActiveManuscript(prev => prev ? { ...prev, totalWordCount: totalWords, completedChapters: completed } : prev)
+      // Load style profile from manuscript doc if available
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const msAny = activeManuscript as any
+      if (msAny.styleProfile) {
+        setStyleProfile(msAny.styleProfile as StyleProfile)
+      }
     } catch {
-      toast.error("Failed to save")
-    } finally {
-      setSaving(false)
+      toast.error("Failed to load sections")
+      setSections([])
+      setActiveSectionId(null)
     }
-  }, [selectedProject, activeManuscript, activeChapterId])
+  }
 
-  const handleAIDraft = useCallback(async () => {
-    if (!selectedProject || !activeManuscript || !activeChapter) return
-
-    if (abortRef.current) abortRef.current.abort()
-    const controller = new AbortController()
-    abortRef.current = controller
-
-    setGenerating(true)
+  const handlePlanSections = async (chapterId: string) => {
+    if (!user || !selectedProject || !activeManuscript) return
+    setPlanningChapterId(chapterId)
     try {
-      // Get previous chapter summary for continuity
-      const prevChapter = chapters.find(c => c.chapterNumber === activeChapter.chapterNumber - 1)
-
-      const res = await fetch("/api/write-chapter", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        signal: controller.signal,
+      const res = await fetch('/api/plan-sections', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          bookTitle: activeManuscript.outlineSnapshot.Title,
-          chapterNumber: activeChapter.chapterNumber,
-          chapterTitle: activeChapter.title,
-          summary: activeChapter.outlineContext.summary,
-          keyTopics: activeChapter.outlineContext.keyTopics,
-          previousChapterSummary: prevChapter?.content
-            ? prevChapter.content.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim().slice(0, 500)
-            : undefined,
-          totalChapters: activeManuscript.totalChapters,
+          userId: user.uid,
           projectId: selectedProject.id,
           manuscriptId: activeManuscript.id,
-          chapterId: activeChapter.id,
-          userId: user!.uid,
+          chapterId,
         }),
       })
-
       if (!res.ok) {
-        const errBody = await res.json().catch(() => ({}))
-        throw new Error(errBody.details || errBody.error || `Request failed (${res.status})`)
+        const e = await res.json()
+        throw new Error(e.error)
+      }
+      // Reload chapters and sections
+      const chs = await getAllChapters(selectedProject.id, activeManuscript.id)
+      setChapters(chs as ChapterWithId[])
+      const secs = await getAllSections(selectedProject.id, activeManuscript.id, chapterId)
+      setSections(secs as SectionWithId[])
+      if (secs.length > 0) setActiveSectionId((secs[0] as SectionWithId).id)
+      toast.success('Section plan created!')
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'Failed to plan sections')
+    } finally {
+      setPlanningChapterId(null)
+    }
+  }
+
+  const handleGenerateDraft = async (authorNotes?: string) => {
+    if (!activeSection || !user || !selectedProject || !activeManuscript || !activeChapterId) return
+    setGenerating(true)
+    try {
+      const res = await fetch('/api/write-section', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: user.uid,
+          projectId: selectedProject.id,
+          manuscriptId: activeManuscript.id,
+          chapterId: activeChapterId,
+          sectionId: activeSectionId,
+          authorNotes,
+        }),
+      })
+      if (!res.ok) {
+        const e = await res.json()
+        throw new Error(e.error)
       }
       const data = await res.json()
-
-      // Update local state with the generated content
-      setChapters(prev => prev.map(c =>
-        c.id === activeChapter.id
-          ? { ...c, content: data.content, wordCount: data.wordCount, status: "writing" as const, aiGenerated: true }
-          : c
+      setSections(prev => prev.map(s =>
+        s.id === activeSectionId
+          ? { ...s, content: data.content, wordCount: data.wordCount, status: 'review' as const, aiGenerated: true }
+          : s
       ))
-
-      // Refresh manuscript progress
-      const allChs = await getAllChapters(selectedProject.id, activeManuscript.id) as ChapterWithId[]
-      const totalWords = allChs.reduce((sum, c) => sum + (c.wordCount || 0), 0)
-      const completed = allChs.filter(c => c.status === "complete").length
-      setActiveManuscript(prev => prev ? { ...prev, totalWordCount: totalWords, completedChapters: completed } : prev)
-
-      toast.success(`Chapter ${activeChapter.chapterNumber} draft generated!`)
-    } catch (e: unknown) {
-      if (e instanceof Error && e.name === "AbortError") return
-      const msg = e instanceof Error ? e.message : "Failed to generate chapter draft"
-      toast.error(msg)
-      console.error(e)
+      if (data.warning) toast.warning(data.warning)
+      else toast.success('Draft generated!')
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'Failed to generate draft')
+      setSections(prev => prev.map(s =>
+        s.id === activeSectionId ? { ...s, status: 'not_started' as const } : s
+      ))
     } finally {
       setGenerating(false)
     }
-  }, [selectedProject, activeManuscript, activeChapter, chapters, user])
+  }
+
+  const handleApproveSection = async () => {
+    if (!activeSection || !user || !selectedProject || !activeManuscript || !activeChapterId || !activeSectionId) return
+    try {
+      const res = await fetch('/api/approve-section', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: user.uid,
+          projectId: selectedProject.id,
+          manuscriptId: activeManuscript.id,
+          chapterId: activeChapterId,
+          sectionId: activeSectionId,
+        }),
+      })
+      if (!res.ok) {
+        const e = await res.json()
+        throw new Error(e.error)
+      }
+      const data = await res.json()
+
+      // Update section status locally
+      setSections(prev => prev.map(s =>
+        s.id === activeSectionId ? { ...s, status: 'approved' as const, approvedSummary: data.summary } : s
+      ))
+
+      // Auto-advance to next section
+      const currentIdx = sections.findIndex(s => s.id === activeSectionId)
+      if (currentIdx < sections.length - 1) {
+        setActiveSectionId(sections[currentIdx + 1].id)
+      }
+
+      // If chapter complete, reload chapters
+      if (data.chapterComplete) {
+        const chs = await getAllChapters(selectedProject.id, activeManuscript.id)
+        setChapters(chs as ChapterWithId[])
+        toast.success('Chapter complete!')
+      } else {
+        toast.success('Section approved!')
+      }
+
+      // Trigger style extraction if needed
+      if (data.shouldExtractStyle) {
+        handleStyleExtraction()
+      }
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'Failed to approve section')
+    }
+  }
+
+  const handleApplyRevisions = async () => {
+    if (!activeSection || !user || !selectedProject || !activeManuscript || !activeChapterId || !activeSectionId) return
+    const pendingComments = (activeSection.comments || []).filter(c => c.status === 'pending')
+    if (pendingComments.length === 0) return
+
+    setRevising(true)
+    try {
+      const res = await fetch('/api/revise-section', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: user.uid,
+          projectId: selectedProject.id,
+          manuscriptId: activeManuscript.id,
+          chapterId: activeChapterId,
+          sectionId: activeSectionId,
+          comments: pendingComments,
+        }),
+      })
+      if (!res.ok) {
+        const e = await res.json()
+        throw new Error(e.error)
+      }
+      const data = await res.json()
+
+      setSections(prev => prev.map(s => {
+        if (s.id !== activeSectionId) return s
+        return {
+          ...s,
+          content: data.content,
+          wordCount: data.wordCount,
+          revisionCount: (s.revisionCount || 0) + 1,
+          comments: s.comments.map(c =>
+            pendingComments.some(pc => pc.id === c.id) ? { ...c, status: 'resolved' as const } : c
+          ),
+        }
+      }))
+
+      toast.success(`${data.changesApplied.length} revision(s) applied`)
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'Failed to apply revisions')
+    } finally {
+      setRevising(false)
+    }
+  }
+
+  const handleRegenerate = async () => {
+    if (!activeSection || !user || !selectedProject || !activeManuscript || !activeChapterId) return
+    setGenerating(true)
+    try {
+      const res = await fetch('/api/write-section', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: user.uid,
+          projectId: selectedProject.id,
+          manuscriptId: activeManuscript.id,
+          chapterId: activeChapterId,
+          sectionId: activeSectionId,
+          regenerate: true,
+        }),
+      })
+      if (!res.ok) {
+        const e = await res.json()
+        throw new Error(e.error)
+      }
+      const data = await res.json()
+      setSections(prev => prev.map(s =>
+        s.id === activeSectionId
+          ? { ...s, content: data.content, wordCount: data.wordCount, status: 'review' as const, aiGenerated: true }
+          : s
+      ))
+      if (data.warning) toast.warning(data.warning)
+      else toast.success('Draft regenerated!')
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'Failed to regenerate draft')
+    } finally {
+      setGenerating(false)
+    }
+  }
+
+  const handleMakeChanges = async () => {
+    if (!activeSection || !selectedProject || !activeManuscript || !activeChapterId || !activeSectionId) return
+    await saveSection(selectedProject.id, activeManuscript.id, activeChapterId, activeSectionId, { status: 'review' })
+    setSections(prev => prev.map(s =>
+      s.id === activeSectionId ? { ...s, status: 'review' as const } : s
+    ))
+  }
+
+  const handleAddComment = async (comment: { selectedText: string; startOffset: number; endOffset: number; authorFeedback: string }) => {
+    if (!activeSection || !selectedProject || !activeManuscript || !activeChapterId || !activeSectionId) return
+    const newComment = {
+      id: crypto.randomUUID(),
+      ...comment,
+      status: 'pending' as const,
+      createdAt: { seconds: Math.floor(Date.now() / 1000), nanoseconds: 0 },
+    }
+    const updatedComments = [...(activeSection.comments || []), newComment]
+    await saveSection(selectedProject.id, activeManuscript.id, activeChapterId, activeSectionId, { comments: updatedComments })
+    setSections(prev => prev.map(s =>
+      s.id === activeSectionId ? { ...s, comments: updatedComments } : s
+    ))
+  }
+
+  const handleDeleteComment = async (commentId: string) => {
+    if (!activeSection || !selectedProject || !activeManuscript || !activeChapterId || !activeSectionId) return
+    const updatedComments = (activeSection.comments || []).filter(c => c.id !== commentId)
+    await saveSection(selectedProject.id, activeManuscript.id, activeChapterId, activeSectionId, { comments: updatedComments })
+    setSections(prev => prev.map(s =>
+      s.id === activeSectionId ? { ...s, comments: updatedComments } : s
+    ))
+  }
+
+  const handleSaveSectionContent = async (html: string, wordCount: number) => {
+    if (!selectedProject || !activeManuscript || !activeChapterId || !activeSectionId) return
+    setSaving(true)
+    try {
+      await saveSection(selectedProject.id, activeManuscript.id, activeChapterId, activeSectionId, { content: html, wordCount })
+      setSections(prev => prev.map(s =>
+        s.id === activeSectionId ? { ...s, content: html, wordCount } : s
+      ))
+    } catch {
+      toast.error('Failed to save')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const handleAuthorNotesChange = async (notes: string) => {
+    if (!activeSectionId || !selectedProject || !activeManuscript || !activeChapterId) return
+    await saveSection(selectedProject.id, activeManuscript.id, activeChapterId, activeSectionId, { authorNotes: notes })
+    setSections(prev => prev.map(s =>
+      s.id === activeSectionId ? { ...s, authorNotes: notes } : s
+    ))
+  }
+
+  const handleStyleExtraction = async () => {
+    if (!user || !selectedProject || !activeManuscript) return
+    try {
+      const approvedIds = sections.filter(s => s.status === 'approved').map(s => s.id)
+      if (approvedIds.length < 2) return
+      const res = await fetch('/api/extract-style', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: user.uid,
+          projectId: selectedProject.id,
+          manuscriptId: activeManuscript.id,
+          sectionIds: approvedIds.slice(-5),
+        }),
+      })
+      if (!res.ok) return
+      const data = await res.json()
+      setStyleProfile(data.styleProfile)
+      toast.success('Style profile updated')
+    } catch {
+      /* non-fatal */
+    }
+  }
+
+  const handleRestoreVersion = async (content: string) => {
+    if (!activeSectionId || !selectedProject || !activeManuscript || !activeChapterId) return
+    await saveSection(selectedProject.id, activeManuscript.id, activeChapterId, activeSectionId, { content, status: 'review' })
+    setSections(prev => prev.map(s =>
+      s.id === activeSectionId ? { ...s, content, status: 'review' as const } : s
+    ))
+    toast.success('Version restored')
+  }
+
+  const handleExportDocx = async () => {
+    if (!user || !selectedProject || !activeManuscript) return
+    try {
+      const res = await fetch('/api/export-manuscript', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: user.uid,
+          projectId: selectedProject.id,
+          manuscriptId: activeManuscript.id,
+          draft: activeManuscript.status !== 'complete',
+        }),
+      })
+      if (!res.ok) throw new Error('Export failed')
+      const blob = await res.blob()
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `${activeManuscript.title}.docx`
+      a.click()
+      URL.revokeObjectURL(url)
+      toast.success('Manuscript exported!')
+    } catch {
+      toast.error('Failed to export manuscript')
+    }
+  }
 
   // ── No project/outline selected: show setup screen ──
   if (!activeManuscript) {
@@ -390,7 +663,7 @@ export default function BookWriter() {
     )
   }
 
-  // ── Active manuscript: two-panel layout ──
+  // ── Active manuscript: three-panel layout ──
   return (
     <div className="flex flex-col h-[calc(100vh-200px)] min-h-[600px]">
       {/* Top bar */}
@@ -414,56 +687,82 @@ export default function BookWriter() {
             {activeManuscript.completedChapters}/{activeManuscript.totalChapters} chapters
           </p>
         </div>
+        <Button variant="outline" size="sm" onClick={handleExportDocx} className="text-xs">
+          Export DOCX
+        </Button>
       </div>
 
-      {/* Two-panel layout */}
+      {/* Mobile chapter selector */}
+      <div className="md:hidden border-b border-purple-100 px-4 py-2 bg-white flex-shrink-0">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="sm" className="w-full justify-between text-xs">
+              {activeChapter ? `Ch. ${activeChapter.chapterNumber}: ${activeChapter.title}` : "Select chapter"}
+              <ChevronDown className="h-3 w-3 ml-1" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-[--radix-dropdown-menu-trigger-width]">
+            {chapters.map(ch => (
+              <DropdownMenuItem key={ch.id} onClick={() => handleSelectChapter(ch.id)}>
+                Ch. {ch.chapterNumber}: {ch.title}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+
+      {/* Three-panel layout */}
       <div className="flex flex-1 overflow-hidden">
-        {/* Sidebar */}
+        {/* Left: Chapter Sidebar */}
         <div className="w-64 flex-shrink-0 hidden md:block">
           <ChapterSidebar
             chapters={chapters}
             activeChapterId={activeChapterId}
-            onSelectChapter={setActiveChapterId}
+            sections={sections}
+            activeSectionId={activeSectionId}
+            onSelectChapter={handleSelectChapter}
+            onSelectSection={setActiveSectionId}
+            onPlanSections={handlePlanSections}
             totalWordCount={activeManuscript.totalWordCount || 0}
             completedCount={activeManuscript.completedChapters || 0}
+            planningChapterId={planningChapterId}
           />
         </div>
 
-        {/* Mobile chapter selector */}
-        <div className="md:hidden border-b border-purple-100 px-4 py-2 bg-white flex-shrink-0">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="w-full justify-between text-xs">
-                {activeChapter ? `Ch. ${activeChapter.chapterNumber}: ${activeChapter.title}` : "Select chapter"}
-                <ChevronDown className="h-3 w-3 ml-1" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-[--radix-dropdown-menu-trigger-width]">
-              {chapters.map(ch => (
-                <DropdownMenuItem key={ch.id} onClick={() => setActiveChapterId(ch.id)}>
-                  Ch. {ch.chapterNumber}: {ch.title}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+        {/* Center: Section Editor */}
+        <div className="flex-1 overflow-hidden">
+          <SectionEditor
+            section={activeSection}
+            chapterTitle={activeChapter?.title || ''}
+            chapterNumber={activeChapter?.chapterNumber || 0}
+            totalSections={sections.length}
+            sections={sections}
+            onGenerateDraft={handleGenerateDraft}
+            onSaveContent={handleSaveSectionContent}
+            onApprove={handleApproveSection}
+            onApplyRevisions={handleApplyRevisions}
+            onRegenerate={handleRegenerate}
+            onMakeChanges={handleMakeChanges}
+            onAddComment={handleAddComment}
+            onSelectSection={setActiveSectionId}
+            generating={generating}
+            revising={revising}
+            saving={saving}
+          />
         </div>
 
-        {/* Editor */}
-        <div className="flex-1 overflow-hidden">
-          {activeChapter ? (
-            <ChapterEditor
-              content={activeChapter.content}
-              onContentChange={handleContentChange}
-              onAIDraft={handleAIDraft}
-              generating={generating}
-              saving={saving}
-              chapterStatus={activeChapter.status}
-            />
-          ) : (
-            <div className="flex items-center justify-center h-full text-gray-400 text-sm">
-              Select a chapter to start writing
-            </div>
-          )}
+        {/* Right: Context Panel */}
+        <div className="hidden lg:block">
+          <ContextPanel
+            section={activeSection}
+            styleProfile={styleProfile}
+            onAuthorNotesChange={handleAuthorNotesChange}
+            onDeleteComment={handleDeleteComment}
+            onScrollToComment={() => {}}
+            onStyleReextract={handleStyleExtraction}
+            onRestoreVersion={handleRestoreVersion}
+            saving={saving}
+          />
         </div>
       </div>
     </div>
