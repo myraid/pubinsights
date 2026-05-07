@@ -14,7 +14,7 @@ import {
   deleteDoc
 } from 'firebase/firestore';
 import { db } from './config';
-import type { BookOutline, ContentHistory } from '../../types/firebase';
+import { DEFAULT_TARGET_WORDS_PER_CHAPTER, type BookOutline, type ContentHistory } from '../../types/firebase';
 import type { AmazonBook, TrendData } from '@/types';
 
 // Project Services
@@ -627,9 +627,19 @@ export const createManuscript = async (
   outlineSnapshot: {
     Title: string;
     Chapters: { Chapter: number; Title: string; Summary?: string; KeyTopics?: string[] }[];
+  },
+  options?: {
+    aiContext?: string;
+    targetWordsPerChapter?: number;
   }
 ) => {
   const manuscriptsRef = collection(db, 'projects', projectId, 'manuscripts');
+  const aiContext = options?.aiContext?.trim() || '';
+  const targetWordsPerChapter =
+    options?.targetWordsPerChapter && options.targetWordsPerChapter > 0
+      ? options.targetWordsPerChapter
+      : DEFAULT_TARGET_WORDS_PER_CHAPTER;
+
   const manuscriptDoc = await addDoc(manuscriptsRef, {
     projectId,
     userId,
@@ -639,6 +649,8 @@ export const createManuscript = async (
     completedChapters: 0,
     totalWordCount: 0,
     outlineSnapshot,
+    targetWordsPerChapter,
+    aiContext,
     createdAt: Timestamp.now(),
     updatedAt: Timestamp.now(),
   });
@@ -650,12 +662,15 @@ export const createManuscript = async (
       chapterNumber: ch.Chapter,
       title: ch.Title,
       status: 'not_started',
+      totalSections: 0,
+      completedSections: 0,
       content: '',
       wordCount: 0,
       outlineContext: {
         summary: ch.Summary || '',
         keyTopics: ch.KeyTopics || [],
       },
+      sectionPlan: [],
       aiGenerated: false,
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),

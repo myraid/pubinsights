@@ -46,6 +46,7 @@ export default function BookWriter() {
   const [chapters, setChapters] = useState<ChapterWithId[]>([])
   const [activeChapterId, setActiveChapterId] = useState<string | null>(null)
   const [creatingManuscript, setCreatingManuscript] = useState(false)
+  const [manuscriptAIContext, setManuscriptAIContext] = useState("")
 
   // Section state
   const [sections, setSections] = useState<SectionWithId[]>([])
@@ -137,13 +138,20 @@ export default function BookWriter() {
         }),
       }
 
-      const msId = await createManuscript(selectedProject.id, user.uid, selectedOutline.title, outlineSnapshot)
+      const msId = await createManuscript(
+        selectedProject.id,
+        user.uid,
+        selectedOutline.title,
+        outlineSnapshot,
+        { aiContext: manuscriptAIContext }
+      )
       toast.success("Manuscript created! Start writing your chapters.")
 
       const ms = await getProjectManuscripts(selectedProject.id)
       setManuscripts(ms as ManuscriptWithId[])
       const newMs = (ms as ManuscriptWithId[]).find(m => m.id === msId)
       if (newMs) setActiveManuscript(newMs)
+      setManuscriptAIContext("")
     } catch (e) {
       toast.error("Failed to create manuscript")
       console.error(e)
@@ -157,8 +165,21 @@ export default function BookWriter() {
   const handleSelectChapter = async (chapterId: string) => {
     if (!selectedProject || !activeManuscript) return
     setActiveChapterId(chapterId)
+
+    const loadSections = async (retries = 1): Promise<SectionWithId[]> => {
+      try {
+        return await getAllSections(selectedProject.id, activeManuscript.id, chapterId) as SectionWithId[]
+      } catch (err) {
+        if (retries > 0) {
+          await new Promise(r => setTimeout(r, 500))
+          return loadSections(retries - 1)
+        }
+        throw err
+      }
+    }
+
     try {
-      const secs = await getAllSections(selectedProject.id, activeManuscript.id, chapterId) as SectionWithId[]
+      const secs = await loadSections()
 
       // Check for stale generating sections (older than 3 minutes)
       const now = Math.floor(Date.now() / 1000)
@@ -186,7 +207,8 @@ export default function BookWriter() {
       if (msAny.styleProfile) {
         setStyleProfile(msAny.styleProfile as StyleProfile)
       }
-    } catch {
+    } catch (err) {
+      console.error("Failed to load sections:", err)
       toast.error("Failed to load sections")
       setSections([])
       setActiveSectionId(null)
@@ -211,12 +233,17 @@ export default function BookWriter() {
         const e = await res.json()
         throw new Error(e.error)
       }
-      // Reload chapters and sections
+      const data = await res.json()
+
+      // Use API response directly (avoids Firestore eventual consistency issues)
+      const apiSections = (data.sections || []) as SectionWithId[]
+      setSections(apiSections)
+      if (apiSections.length > 0) setActiveSectionId(apiSections[0].id)
+
+      // Reload chapters to get updated sectionPlan/status
       const chs = await getAllChapters(selectedProject.id, activeManuscript.id)
       setChapters(chs as ChapterWithId[])
-      const secs = await getAllSections(selectedProject.id, activeManuscript.id, chapterId)
-      setSections(secs as SectionWithId[])
-      if (secs.length > 0) setActiveSectionId((secs[0] as SectionWithId).id)
+
       toast.success('Section plan created!')
     } catch (e) {
       toast.error(e instanceof Error ? e.message : 'Failed to plan sections')
@@ -643,6 +670,26 @@ export default function BookWriter() {
                     </div>
                   </div>
                 )}
+
+                <div>
+                  <label
+                    htmlFor="manuscript-ai-context"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    AI context <span className="text-gray-400 font-normal">(optional)</span>
+                  </label>
+                  <textarea
+                    id="manuscript-ai-context"
+                    value={manuscriptAIContext}
+                    onChange={(e) => setManuscriptAIContext(e.target.value)}
+                    placeholder="e.g. Write in second-person, conversational tone. Aim for ~5000 words per chapter. Audience: first-time entrepreneurs."
+                    rows={4}
+                    className="w-full text-sm border border-purple-200 rounded-md p-3 resize-none focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-purple-400 placeholder:text-gray-400"
+                  />
+                  <p className="text-xs text-gray-400 mt-1.5">
+                    Baseline: ~2,500 words per chapter, scaled by the AI to the substance of each chapter (lighter for intros and conclusions, fuller for the meat of the book). Add direction here to shift voice, audience, or overall length.
+                  </p>
+                </div>
 
                 <Button
                   onClick={handleCreateManuscript}

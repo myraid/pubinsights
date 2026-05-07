@@ -1,4 +1,4 @@
-import anthropic, { SONNET_MODEL } from './anthropic-client'
+import anthropic, { SONNET_MODEL, extractJson } from './anthropic-client'
 
 interface StyleExtractionResult {
   tone: string
@@ -52,7 +52,7 @@ export async function extractStyleProfile(
   })
 
   const text = response.content[0].type === 'text' ? response.content[0].text : ''
-  const parsed = JSON.parse(text)
+  const parsed = extractJson<StyleExtractionResult>(text)
   const duration = Date.now() - start
 
   console.log(`[style-extractor] sections=${sections.length} duration=${duration}ms`)

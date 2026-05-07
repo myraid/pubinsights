@@ -228,7 +228,7 @@ export default function SectionEditor({
   if (!section) {
     return (
       <div className="flex-1 flex items-center justify-center text-gray-400">
-        <p>Select a section to begin editing</p>
+        <p>{totalSections === 0 ? "Plan this chapter\u2019s sections to get started" : "Select a section to begin editing"}</p>
       </div>
     )
   }

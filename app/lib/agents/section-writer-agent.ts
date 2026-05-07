@@ -24,7 +24,11 @@ function buildSystemPrompt(ctx: WritingContext): string {
     prompt += '\n\nStyle: Professional, accessible non-fiction. Balance data and narrative. Avoid jargon.'
   }
 
-  prompt += '\n\nRules:\n- Be substantive and data-rich. No filler, no jargon padding.\n- If author notes conflict with the outline, follow the author notes.\n- Output only HTML. No markdown, no code fences.'
+  if (ctx.authorContext) {
+    prompt += `\n\nAUTHOR CONTEXT (manuscript-level instructions — these override defaults for tone, audience, length, voice, or any other direction):\n${ctx.authorContext}`
+  }
+
+  prompt += '\n\nRules:\n- Be substantive and data-rich. No filler, no jargon padding.\n- Aim for the target word count. Modest overshoot (up to ~20%) is fine when the material genuinely needs it; do not pad to hit the number.\n- If author notes conflict with the outline, follow the author notes.\n- Output only HTML. No markdown, no code fences.'
 
   return prompt
 }

@@ -5,6 +5,8 @@ export interface WritingContext {
   bookTitle: string
   fullOutline: { chapterNumber: number; title: string; summary: string }[]
   styleProfile: StyleProfile | null
+  /** Manuscript-level author guidance (free-form). Highest-priority override after style profile. */
+  authorContext?: string
 
   currentChapter: {
     number: number
@@ -67,6 +69,10 @@ export class ContextBuilder {
       summary: (ch.Summary as string) || '',
     }))
     const styleProfile: StyleProfile | null = ms.styleProfile || null
+    const authorContext: string | undefined =
+      typeof ms.aiContext === 'string' && ms.aiContext.trim().length > 0
+        ? ms.aiContext.trim()
+        : undefined
 
     // Read 2: Current chapter
     const chapDoc = await adminDb.doc(`${basePath}/chapters/${chapterId}`).get()
@@ -146,6 +152,7 @@ export class ContextBuilder {
       bookTitle,
       fullOutline,
       styleProfile,
+      authorContext,
       currentChapter,
       currentSection,
       previousSectionsInChapter,

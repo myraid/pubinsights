@@ -1,4 +1,4 @@
-import anthropic, { SONNET_MODEL } from './anthropic-client'
+import anthropic, { SONNET_MODEL, extractJson } from './anthropic-client'
 import type { WritingContext } from '@/app/lib/context/context-builder'
 
 interface RevisionResult {
@@ -41,6 +41,10 @@ export async function reviseSection(ctx: WritingContext): Promise<RevisionResult
     userMessage += `\nMaintain this style: ${ctx.styleProfile.tone}, ${ctx.styleProfile.vocabulary}`
   }
 
+  if (ctx.authorContext) {
+    userMessage += `\n\nAUTHOR CONTEXT (manuscript-level direction — keep revisions consistent with this):\n${ctx.authorContext}`
+  }
+
   const response = await anthropic.messages.create({
     model: SONNET_MODEL,
     max_tokens: 8000,
@@ -50,7 +54,7 @@ export async function reviseSection(ctx: WritingContext): Promise<RevisionResult
   })
 
   const text = response.content[0].type === 'text' ? response.content[0].text : ''
-  const parsed = JSON.parse(text)
+  const parsed = extractJson<{ content: string; changesApplied: string[] }>(text)
   const duration = Date.now() - start
 
   console.log(`[revision-agent] sec="${sec.title}" changes=${parsed.changesApplied.length} duration=${duration}ms`)

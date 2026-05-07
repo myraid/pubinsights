@@ -1,4 +1,4 @@
-import anthropic, { HAIKU_MODEL } from './anthropic-client'
+import anthropic, { HAIKU_MODEL, extractJson } from './anthropic-client'
 
 interface ChapterSummaryResult {
   chapterSummary: string
@@ -17,10 +17,10 @@ export async function summarizeChapter(
     model: HAIKU_MODEL,
     max_tokens: 500,
     temperature: 0.2,
-    system: 'Summarize the given book chapter from its section summaries. Return valid JSON with "chapterSummary" (3-5 sentences) and "keyPointsCovered" (array of main topics addressed).',
+    system: 'Summarize the given book chapter from its section summaries. Return ONLY a valid JSON object (no markdown fences, no prose) with "chapterSummary" (3-5 sentences) and "keyPointsCovered" (array of main topics addressed).',
     messages: [{ role: 'user', content: `Chapter: "${chapterTitle}"\n\nSections:\n${sectionsText}` }],
   })
 
   const text = response.content[0].type === 'text' ? response.content[0].text : ''
-  return JSON.parse(text)
+  return extractJson<ChapterSummaryResult>(text)
 }

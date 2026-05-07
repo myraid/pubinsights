@@ -82,8 +82,7 @@ export default function ChapterSidebar({
               : 0
           const showPlanSections =
             isActive &&
-            ch.status !== "not_started" &&
-            (ch.sectionPlan.length === 0 || ch.totalSections === 0)
+            ((ch.sectionPlan?.length ?? 0) === 0 || ch.totalSections === 0)
           const isPlanning = planningChapterId === ch.id
 
           return (

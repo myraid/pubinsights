@@ -150,6 +150,8 @@ export interface OutlineResponse {
 }
 
 // Book Writer types
+export const DEFAULT_TARGET_WORDS_PER_CHAPTER = 2500;
+
 export interface Manuscript {
   id: string;
   projectId: string;
@@ -164,6 +166,10 @@ export interface Manuscript {
     Chapters: { Chapter: number; Title: string; Summary?: string; KeyTopics?: string[] }[];
   };
   styleProfile?: StyleProfile;
+  /** Default per-chapter word budget the planner targets when breaking chapters into sections. */
+  targetWordsPerChapter?: number;
+  /** Free-form author guidance applied to every chapter plan and section draft. */
+  aiContext?: string;
   createdAt: { seconds: number; nanoseconds: number };
   updatedAt: { seconds: number; nanoseconds: number };
 }

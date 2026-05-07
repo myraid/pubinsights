@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { adminDb } from '@/app/lib/firebase/admin'
 import { FieldValue } from 'firebase-admin/firestore'
 import { planSections } from '@/app/lib/agents/section-planner-agent'
+import { DEFAULT_TARGET_WORDS_PER_CHAPTER } from '@/app/types/firebase'
 
 export const maxDuration = 60
 
@@ -80,6 +81,18 @@ export async function POST(request: NextRequest) {
       (c: { Chapter: number }) => c.Chapter === chap.chapterNumber
     )
 
+    // Per-chapter word target — manuscript-level setting, defaulting to 2500.
+    const targetChapterWords =
+      typeof ms.targetWordsPerChapter === 'number' && ms.targetWordsPerChapter > 0
+        ? ms.targetWordsPerChapter
+        : DEFAULT_TARGET_WORDS_PER_CHAPTER
+
+    // Optional author guidance applied to every chapter plan in this manuscript.
+    const authorContext: string | undefined =
+      typeof ms.aiContext === 'string' && ms.aiContext.trim().length > 0
+        ? ms.aiContext.trim()
+        : undefined
+
     // Call planner agent
     const sections = await planSections({
       bookTitle,
@@ -89,25 +102,38 @@ export async function POST(request: NextRequest) {
       keyTopics: chap.outlineContext?.keyTopics || currentOutlineChapter?.KeyTopics || [],
       totalChapters: ms.totalChapters,
       previousChapterTitles,
+      targetChapterWords,
+      authorContext,
     })
 
-    // Write section plan to chapter doc
-    const now = FieldValue.serverTimestamp()
-    await adminDb.doc(`${basePath}/chapters/${chapterId}`).update({
-      sectionPlan: sections,
-      totalSections: sections.length,
-      completedSections: 0,
-      status: 'writing',
-      updatedAt: now,
-    })
-
-    // Create empty section subdocs
+    // Create empty section subdocs first (batch commit before chapter update for atomicity)
+    const nowMs = { seconds: Math.floor(Date.now() / 1000), nanoseconds: 0 }
     const batch = adminDb.batch()
+    const createdSections: { id: string; sectionNumber: number; title: string; status: string; content: string; wordCount: number; outlineContext: string; estimatedWords: number; comments: never[]; revisionCount: number; revisionHistory: never[]; authorNotes: string; aiGenerated: boolean; createdAt: typeof nowMs; updatedAt: typeof nowMs }[] = []
+
     for (const sec of sections) {
       const secRef = adminDb
         .collection(`${basePath}/chapters/${chapterId}/sections`)
         .doc()
-      batch.set(secRef, {
+      const secData = {
+        sectionNumber: sec.sectionNumber,
+        title: sec.title,
+        status: 'not_started' as const,
+        content: '',
+        wordCount: 0,
+        outlineContext: sec.outlineContext,
+        estimatedWords: sec.estimatedWords,
+        comments: [] as never[],
+        revisionCount: 0,
+        revisionHistory: [] as never[],
+        authorNotes: '',
+        aiGenerated: false,
+        createdAt: FieldValue.serverTimestamp(),
+        updatedAt: FieldValue.serverTimestamp(),
+      }
+      batch.set(secRef, secData)
+      createdSections.push({
+        id: secRef.id,
         sectionNumber: sec.sectionNumber,
         title: sec.title,
         status: 'not_started',
@@ -120,15 +146,24 @@ export async function POST(request: NextRequest) {
         revisionHistory: [],
         authorNotes: '',
         aiGenerated: false,
-        createdAt: now,
-        updatedAt: now,
+        createdAt: nowMs,
+        updatedAt: nowMs,
       })
     }
     await batch.commit()
 
+    // Update chapter doc after batch succeeds
+    await adminDb.doc(`${basePath}/chapters/${chapterId}`).update({
+      sectionPlan: sections,
+      totalSections: sections.length,
+      completedSections: 0,
+      status: 'writing',
+      updatedAt: FieldValue.serverTimestamp(),
+    })
+
     console.log(`[plan-sections] chapter=${chap.chapterNumber} sections=${sections.length}`)
 
-    return NextResponse.json({ sections })
+    return NextResponse.json({ sections: createdSections })
   } catch (error) {
     console.error('[plan-sections] Error:', error)
     return NextResponse.json(
