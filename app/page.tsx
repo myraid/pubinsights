@@ -37,7 +37,7 @@ export default function Home() {
   return (
     <div className="min-h-screen" style={{ background: "linear-gradient(180deg, #F5EEFF 0%, #FFFFFF 40%, #FFFFFF 100%)" }}>
       <Header />
-      <main className="container mx-auto p-3 md:p-5 max-w-7xl">
+      <main className="px-4 md:px-8 lg:px-12 py-3 md:py-5">
         <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 mb-4">
           {sections.map((section) => (
             <Card
@@ -68,4 +68,3 @@ export default function Home() {
     </div>
   )
 }
-
