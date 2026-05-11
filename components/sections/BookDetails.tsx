@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
 import { Link, Star, DollarSign, BookOpen } from "lucide-react"
 import Image from "next/image"
+import { useAuth } from "@/app/context/AuthContext"
 
 interface BookDetailsProps {
   onBookDetailsFetched: (details: {
@@ -29,6 +30,7 @@ interface BookDetails {
 }
 
 export default function BookDetails({ onBookDetailsFetched }: BookDetailsProps) {
+  const { user } = useAuth()
   const [bookUrl, setBookUrl] = useState("")
   const [loading, setLoading] = useState(false)
   const [bookData, setBookData] = useState<{
@@ -53,7 +55,7 @@ export default function BookDetails({ onBookDetailsFetched }: BookDetailsProps) 
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ bookUrl }),
+        body: JSON.stringify({ bookUrl, userId: user?.uid }),
       })
 
       if (!response.ok) {

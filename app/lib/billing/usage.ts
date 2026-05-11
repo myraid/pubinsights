@@ -17,7 +17,7 @@ export interface UsageCheckResult {
  */
 export async function checkAndIncrementUsage(
   userId: string,
-  type: 'insights' | 'outlines' | 'sections'
+  type: 'insights' | 'outlines' | 'sections' | 'social'
 ): Promise<UsageCheckResult> {
   const monthKey = getMonthKey()
   const userRef = adminDb.collection('users').doc(userId)
@@ -88,6 +88,14 @@ export async function getUserUsage(userId: string) {
     outlines: {
       current: (monthUsage.outlines as number) ?? 0,
       limit: TIER_LIMITS[tier].outlines,
+    },
+    sections: {
+      current: (monthUsage.sections as number) ?? 0,
+      limit: TIER_LIMITS[tier].sections,
+    },
+    social: {
+      current: (monthUsage.social as number) ?? 0,
+      limit: TIER_LIMITS[tier].social,
     },
   }
 }

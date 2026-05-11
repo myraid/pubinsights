@@ -29,7 +29,9 @@ interface SectionBlockProps {
   onSaveContent: (sectionId: string, html: string, wordCount: number) => void
   onApprove: (sectionId: string) => void
   onApplyRevisions: (sectionId: string) => void
-  onRegenerate: (sectionId: string) => void
+  onValidate: (sectionId: string) => void
+  validating: boolean
+  validationResult: { valid: boolean; issues: Array<{ location: string; message: string }>; suggestions: string[] } | null
   onMakeChanges: (sectionId: string) => void
   onAddComment: (sectionId: string, comment: { selectedText: string; startOffset: number; endOffset: number; authorFeedback: string }) => void
   onDeleteComment: (sectionId: string, commentId: string) => void
@@ -50,7 +52,9 @@ export default function SectionBlock({
   onSaveContent,
   onApprove,
   onApplyRevisions,
-  onRegenerate,
+  onValidate,
+  validating,
+  validationResult,
   onMakeChanges,
   onAddComment,
   onDeleteComment,
@@ -533,6 +537,32 @@ export default function SectionBlock({
         )}
       </div>
 
+      {/* Validation result display */}
+      {validationResult && isFocused && (
+        <div className={`mx-4 mb-0 mt-2 rounded-lg p-3 text-xs ${validationResult.valid ? 'bg-emerald-50 border border-emerald-200' : 'bg-amber-50 border border-amber-200'}`}>
+          <div className="flex items-center gap-1.5 font-semibold mb-1">
+            {validationResult.valid ? (
+              <><Check className="h-3.5 w-3.5 text-emerald-600" /> Flow looks good</>
+            ) : (
+              <><MessageSquare className="h-3.5 w-3.5 text-amber-600" /> {validationResult.issues.length} issue{validationResult.issues.length !== 1 ? 's' : ''} found</>
+            )}
+          </div>
+          {validationResult.issues.map((issue, i) => (
+            <div key={i} className="mt-1.5 pl-5">
+              <p className="text-gray-500 italic">&ldquo;{issue.location}&rdquo;</p>
+              <p className="text-gray-700 mt-0.5">{issue.message}</p>
+            </div>
+          ))}
+          {validationResult.suggestions.length > 0 && (
+            <div className="mt-2 pl-5 text-gray-600">
+              {validationResult.suggestions.map((s, i) => (
+                <p key={i} className="mt-0.5">{s}</p>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Action bar */}
       {isFocused && isEditable && !generating && !revising && (
         <div className="flex items-center gap-2 px-4 py-2.5 border-t border-purple-100 bg-purple-50/30 rounded-b-xl">
@@ -543,7 +573,7 @@ export default function SectionBlock({
             size="sm"
             className="border-purple-200 hover:bg-purple-100 text-purple-700 text-xs"
           >
-            Apply AI Revisions
+            Revise with AI
             {pendingComments.length > 0 && (
               <span className="ml-1.5 inline-flex items-center justify-center w-4 h-4 rounded-full bg-purple-600 text-white text-[9px] font-bold">
                 {pendingComments.length}
@@ -559,12 +589,17 @@ export default function SectionBlock({
             Approve
           </Button>
           <Button
-            onClick={() => onRegenerate(section.id)}
+            onClick={() => onValidate(section.id)}
+            disabled={validating}
             variant="outline"
             size="sm"
             className="border-purple-200 hover:bg-purple-50 text-purple-600 text-xs"
           >
-            Regenerate
+            {validating ? (
+              <><Loader2 className="h-3 w-3 mr-1 animate-spin" /> Validating...</>
+            ) : (
+              <><Check className="h-3 w-3 mr-1" /> Validate</>
+            )}
           </Button>
           <div className="flex-1" />
           <span className="text-xs text-gray-400">

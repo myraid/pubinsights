@@ -14,9 +14,14 @@ import {
 import { doc, getDoc, setDoc } from "firebase/firestore"
 import { auth, db } from "../lib/firebase/config"
 
+export interface FeatureFlags {
+  coauthoring?: boolean
+}
+
 interface AuthContextType {
   user: User | null
   loading: boolean
+  featureFlags: FeatureFlags
   signIn: (email: string, password: string) => Promise<UserCredential>
   signUp: (email: string, password: string) => Promise<UserCredential>
   signInWithGoogle: () => Promise<UserCredential>
@@ -30,15 +35,16 @@ export const useAuth = () => useContext(AuthContext)
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
+  const [featureFlags, setFeatureFlags] = useState<FeatureFlags>({})
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setUser(user)
-        
+
         // Check if user document exists
         const userDoc = await getDoc(doc(db, 'users', user.uid))
-        
+
         if (!userDoc.exists()) {
           // Create new user document if it doesn't exist
           await setDoc(doc(db, 'users', user.uid), {
@@ -50,9 +56,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             createdAt: new Date(),
             updatedAt: new Date()
           })
+          setFeatureFlags({})
+        } else {
+          const data = userDoc.data()
+          setFeatureFlags(data?.featureFlags ?? {})
         }
       } else {
         setUser(null)
+        setFeatureFlags({})
       }
       setLoading(false)
     })
@@ -78,9 +89,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, signIn, signUp, signInWithGoogle, logout }}>
+    <AuthContext.Provider value={{ user, loading, featureFlags, signIn, signUp, signInWithGoogle, logout }}>
       {children}
     </AuthContext.Provider>
   )
 }
-

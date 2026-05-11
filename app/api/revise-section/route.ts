@@ -3,6 +3,7 @@ import { adminDb } from '@/app/lib/firebase/admin'
 import { FieldValue } from 'firebase-admin/firestore'
 import { ContextBuilder } from '@/app/lib/context/context-builder'
 import { reviseSection } from '@/app/lib/agents/revision-agent'
+import { checkAndIncrementUsage } from '@/app/lib/billing/usage'
 
 export const maxDuration = 120
 
@@ -29,6 +30,15 @@ export async function POST(request: NextRequest) {
     const projectDoc = await adminDb.doc(`projects/${projectId}`).get()
     if (!projectDoc.exists || projectDoc.data()!.userId !== userId) {
       return NextResponse.json({ error: 'Project not found or access denied' }, { status: 403 })
+    }
+
+    // Check usage limits
+    const usageCheck = await checkAndIncrementUsage(userId, 'sections')
+    if (!usageCheck.allowed) {
+      return NextResponse.json(
+        { error: 'usage_limit_exceeded', tier: usageCheck.tier, current: usageCheck.current, limit: usageCheck.limit },
+        { status: 429 }
+      )
     }
 
     const basePath = `projects/${projectId}/manuscripts/${manuscriptId}`
@@ -74,7 +84,7 @@ export async function POST(request: NextRequest) {
       version: (sec.revisionCount || 0) + 1,
       content: sec.content,
       resolvedComments: comments.map((c: { id?: string }) => c.id).filter(Boolean),
-      createdAt: FieldValue.serverTimestamp(),
+      createdAt: new Date(),
     }
 
     let revisionHistory = sec.revisionHistory || []

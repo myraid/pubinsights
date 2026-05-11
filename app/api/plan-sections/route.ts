@@ -3,6 +3,7 @@ import { adminDb } from '@/app/lib/firebase/admin'
 import { FieldValue } from 'firebase-admin/firestore'
 import { planSections } from '@/app/lib/agents/section-planner-agent'
 import { DEFAULT_TARGET_WORDS_PER_CHAPTER } from '@/app/types/firebase'
+import { checkAndIncrementUsage } from '@/app/lib/billing/usage'
 
 export const maxDuration = 60
 
@@ -21,6 +22,15 @@ export async function POST(request: NextRequest) {
     const projectDoc = await adminDb.doc(`projects/${projectId}`).get()
     if (!projectDoc.exists || projectDoc.data()!.userId !== userId) {
       return NextResponse.json({ error: 'Project not found or access denied' }, { status: 403 })
+    }
+
+    // Check usage limits
+    const usageCheck = await checkAndIncrementUsage(userId, 'sections')
+    if (!usageCheck.allowed) {
+      return NextResponse.json(
+        { error: 'usage_limit_exceeded', tier: usageCheck.tier, current: usageCheck.current, limit: usageCheck.limit },
+        { status: 429 }
+      )
     }
 
     const basePath = `projects/${projectId}/manuscripts/${manuscriptId}`

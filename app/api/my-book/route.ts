@@ -3,7 +3,11 @@ import { getProductDetails } from '@/app/lib/services/amazon-scraper';
 
 export async function POST(request: Request) {
   try {
-    const { bookUrl } = await request.json();
+    const { bookUrl, userId } = await request.json();
+
+    if (!userId) {
+      return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
+    }
 
     if (!bookUrl) {
       return NextResponse.json(

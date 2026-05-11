@@ -8,34 +8,36 @@ interface TimelinePoint {
 
 function smoothData(timelineData: TimelinePoint[], windowSize: number = 7) {
   const result: TimelinePoint[] = [];
-  
+
   for (let i = 0; i < timelineData.length; i++) {
-    // Calculate the window boundaries
     const windowStart = Math.max(0, i - Math.floor(windowSize / 2));
     const windowEnd = Math.min(timelineData.length - 1, i + Math.floor(windowSize / 2));
-    
-    // Calculate moving average for this window
+
     let sum = 0;
     let count = 0;
-    
+
     for (let j = windowStart; j <= windowEnd; j++) {
       sum += timelineData[j].value[0];
       count++;
     }
-    
-    // Create smoothed data point
+
     result.push({
       time: timelineData[i].time,
       value: [sum / count]
     });
   }
-  
+
   return result;
 }
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const searchKeyword = searchParams.get('keyword')
+  const userId = searchParams.get('userId')
+
+  if (!userId) {
+    return NextResponse.json({ error: 'Authentication required' }, { status: 401 })
+  }
 
   if (!searchKeyword) {
     return NextResponse.json({ error: 'Keyword is required' }, { status: 400 })
@@ -58,10 +60,8 @@ export async function GET(request: Request) {
     // Get web search trends
     const webSearchData = await googleTrends.interestOverTime(options)
       .then(res => {
-        //console.log('web search res : ', res);
         try {
           const parsed = JSON.parse(res);
-          // Apply smoothing to the timeline data
           const smoothedData = {
             ...parsed.default,
             timelineData: smoothData(parsed.default.timelineData)
@@ -73,20 +73,19 @@ export async function GET(request: Request) {
         }
       })
 
-    // Wait for 1 seconds before making YouTube API call
+    // Wait before making YouTube API call
     await new Promise(resolve => setTimeout(resolve, 2000));
 
     // Get YouTube trends
     const youtubeOptions = {
       ...options,
-      property: 'youtube' // This tells the API to get YouTube search data
+      property: 'youtube'
     }
 
     const youtubeData = await googleTrends.interestOverTime(youtubeOptions)
       .then(res => {
         try {
           const parsed = JSON.parse(res);
-          // Apply smoothing to the timeline data
           const smoothedData = {
             ...parsed.default,
             timelineData: smoothData(parsed.default.timelineData)
@@ -113,4 +112,3 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: errorMessage }, { status: 500 })
   }
 }
-

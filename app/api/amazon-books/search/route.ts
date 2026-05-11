@@ -4,6 +4,11 @@ import { searchAmazonBooks } from '@/app/lib/services/amazon-scraper';
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const keywords = searchParams.get('keywords');
+  const userId = searchParams.get('userId');
+
+  if (!userId) {
+    return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
+  }
 
   if (!keywords) {
     return NextResponse.json({ error: 'Keywords are required' }, { status: 400 });

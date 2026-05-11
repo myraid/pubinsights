@@ -16,7 +16,9 @@ interface UnifiedChapterViewProps {
   onSaveContent: (sectionId: string, html: string, wordCount: number) => void
   onApprove: (sectionId: string) => void
   onApplyRevisions: (sectionId: string) => void
-  onRegenerate: (sectionId: string) => void
+  onValidate: (sectionId: string) => void
+  validatingSectionId: string | null
+  validationResults: Record<string, { valid: boolean; issues: Array<{ location: string; message: string }>; suggestions: string[] }>
   onMakeChanges: (sectionId: string) => void
   onAddComment: (sectionId: string, comment: { selectedText: string; startOffset: number; endOffset: number; authorFeedback: string }) => void
   onDeleteComment: (sectionId: string, commentId: string) => void
@@ -37,7 +39,9 @@ export default function UnifiedChapterView({
   onSaveContent,
   onApprove,
   onApplyRevisions,
-  onRegenerate,
+  onValidate,
+  validatingSectionId,
+  validationResults,
   onMakeChanges,
   onAddComment,
   onDeleteComment,
@@ -126,7 +130,9 @@ export default function UnifiedChapterView({
                 onSaveContent={onSaveContent}
                 onApprove={onApprove}
                 onApplyRevisions={onApplyRevisions}
-                onRegenerate={onRegenerate}
+                onValidate={onValidate}
+                validating={validatingSectionId === sec.id}
+                validationResult={validationResults[sec.id] || null}
                 onMakeChanges={onMakeChanges}
                 onAddComment={onAddComment}
                 onDeleteComment={onDeleteComment}

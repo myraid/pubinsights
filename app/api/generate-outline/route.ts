@@ -58,7 +58,7 @@ function parseOutlineContent(title: string, content: string): OutlineData {
 
 export async function POST(request: Request) {
   try {
-    const { title, ageGroup, userId } = await request.json()
+    const { title, ageGroup, userId, context, regeneratePrompt } = await request.json()
 
     if (!title) {
       return NextResponse.json({ error: 'Title is required' }, { status: 400 })
@@ -68,24 +68,20 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'userId is required' }, { status: 400 })
     }
 
-    try {
-      const usageCheck = await checkAndIncrementUsage(userId, 'outlines')
-      if (!usageCheck.allowed) {
-        return NextResponse.json(
-          {
-            error: 'usage_limit_exceeded',
-            tier: usageCheck.tier,
-            current: usageCheck.current,
-            limit: usageCheck.limit,
-          },
-          { status: 429 }
-        )
-      }
-    } catch (usageError) {
-      console.error('Usage check failed (non-blocking):', usageError)
+    const usageCheck = await checkAndIncrementUsage(userId, 'outlines')
+    if (!usageCheck.allowed) {
+      return NextResponse.json(
+        {
+          error: 'usage_limit_exceeded',
+          tier: usageCheck.tier,
+          current: usageCheck.current,
+          limit: usageCheck.limit,
+        },
+        { status: 429 }
+      )
     }
 
-    const content = await generateOutline(title, ageGroup)
+    const content = await generateOutline(title, ageGroup, context, regeneratePrompt)
     const parsedOutline = parseOutlineContent(title, content)
 
     if (userId) {

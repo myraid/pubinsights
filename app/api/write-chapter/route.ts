@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { generateChapterDraft } from '@/app/lib/agents/writer-agent'
 import { adminDb } from '@/app/lib/firebase/admin'
 import { FieldValue } from 'firebase-admin/firestore'
+import { checkAndIncrementUsage } from '@/app/lib/billing/usage'
 
 // GPT-4o writing 2000–3000 words can take up to 90 seconds
 export const maxDuration = 120
@@ -42,6 +43,21 @@ export async function POST(request: Request) {
             'Missing required fields: bookTitle, chapterNumber, chapterTitle, summary, keyTopics, totalChapters, projectId, manuscriptId, chapterId, userId',
         },
         { status: 400 }
+      )
+    }
+
+    // Verify ownership
+    const projectDoc = await adminDb.doc(`projects/${projectId}`).get()
+    if (!projectDoc.exists || projectDoc.data()!.userId !== userId) {
+      return NextResponse.json({ error: 'Project not found or access denied' }, { status: 403 })
+    }
+
+    // Check usage limits
+    const usageCheck = await checkAndIncrementUsage(userId, 'sections')
+    if (!usageCheck.allowed) {
+      return NextResponse.json(
+        { error: 'usage_limit_exceeded', tier: usageCheck.tier, current: usageCheck.current, limit: usageCheck.limit },
+        { status: 429 }
       )
     }
 

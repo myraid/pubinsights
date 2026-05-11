@@ -14,7 +14,7 @@ import Header from "@/components/sections/Header"
 import { SearchIcon as BookSearch, PenTool, Share2, FolderKanban, Crown, BookText, type LucideIcon } from "lucide-react"
 
 export default function Home() {
-  const { user, loading } = useAuth()
+  const { user, loading, featureFlags } = useAuth()
   const [activeSection, setActiveSection] = useState<string>("My Projects")
 
   if (loading) {
@@ -30,7 +30,7 @@ export default function Home() {
     { name: "Book Research", icon: BookSearch, component: BookResearch },
     { name: "Book Outline", icon: PenTool, component: BookOutline },
     { name: "Social Media", icon: Share2, component: SocialMedia },
-    { name: "Book Writer", icon: BookText, component: BookWriter },
+    ...(featureFlags.coauthoring ? [{ name: "Book Writer", icon: BookText, component: BookWriter }] : []),
     { name: "Upgrade", icon: Crown, component: Pricing },
   ]
 
@@ -38,7 +38,7 @@ export default function Home() {
     <div className="min-h-screen" style={{ background: "linear-gradient(180deg, #F5EEFF 0%, #FFFFFF 40%, #FFFFFF 100%)" }}>
       <Header />
       <main className="px-4 md:px-8 lg:px-12 py-3 md:py-5">
-        <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 mb-4">
+        <div className={`grid grid-cols-3 gap-3 mb-4 ${sections.length <= 5 ? "sm:grid-cols-5" : "sm:grid-cols-6"}`}>
           {sections.map((section) => (
             <Card
               key={section.name}

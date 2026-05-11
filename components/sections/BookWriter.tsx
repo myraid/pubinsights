@@ -57,6 +57,8 @@ export default function BookWriter() {
   const [generatingSectionId, setGeneratingSectionId] = useState<string | null>(null)
   const [revisingSectionId, setRevisingSectionId] = useState<string | null>(null)
   const [savingSectionId, setSavingSectionId] = useState<string | null>(null)
+  const [validatingSectionId, setValidatingSectionId] = useState<string | null>(null)
+  const [validationResults, setValidationResults] = useState<Record<string, { valid: boolean; issues: Array<{ location: string; message: string }>; suggestions: string[] }>>({})
 
   const activeChapter = chapters.find(c => c.id === activeChapterId) || null
 
@@ -378,38 +380,33 @@ export default function BookWriter() {
     }
   }
 
-  const handleRegenerate = async (sectionId: string) => {
-    if (!user || !selectedProject || !activeManuscript || !activeChapterId) return
-    setGeneratingSectionId(sectionId)
+  const handleValidateSection = async (sectionId: string) => {
+    if (!activeManuscript || !activeChapterId || !user) return
+    setValidatingSectionId(sectionId)
+    setValidationResults(prev => {
+      const next = { ...prev }
+      delete next[sectionId]
+      return next
+    })
     try {
-      const res = await fetch('/api/write-section', {
+      const response = await fetch('/api/validate-section', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           userId: user.uid,
-          projectId: selectedProject.id,
+          projectId: selectedProject!.id,
           manuscriptId: activeManuscript.id,
           chapterId: activeChapterId,
           sectionId,
-          regenerate: true,
         }),
       })
-      if (!res.ok) {
-        const e = await res.json()
-        throw new Error(e.error)
-      }
-      const data = await res.json()
-      setSections(prev => prev.map(s =>
-        s.id === sectionId
-          ? { ...s, content: data.content, wordCount: data.wordCount, status: 'review' as const, aiGenerated: true }
-          : s
-      ))
-      if (data.warning) toast.warning(data.warning)
-      else toast.success('Draft regenerated!')
-    } catch (e) {
-      toast.error(e instanceof Error ? e.message : 'Failed to regenerate draft')
+      const data = await response.json()
+      if (!response.ok) throw new Error(data.error || 'Validation failed')
+      setValidationResults(prev => ({ ...prev, [sectionId]: data }))
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Validation failed')
     } finally {
-      setGeneratingSectionId(null)
+      setValidatingSectionId(null)
     }
   }
 
@@ -451,6 +448,11 @@ export default function BookWriter() {
 
   const handleSaveSectionContent = async (sectionId: string, html: string, wordCount: number) => {
     if (!selectedProject || !activeManuscript || !activeChapterId) return
+    setValidationResults(prev => {
+      const next = { ...prev }
+      delete next[sectionId]
+      return next
+    })
     setSavingSectionId(sectionId)
     try {
       await saveSection(selectedProject.id, activeManuscript.id, activeChapterId, sectionId, { content: html, wordCount })
@@ -779,7 +781,9 @@ export default function BookWriter() {
           onSaveContent={handleSaveSectionContent}
           onApprove={handleApproveSection}
           onApplyRevisions={handleApplyRevisions}
-          onRegenerate={handleRegenerate}
+          onValidate={handleValidateSection}
+          validatingSectionId={validatingSectionId}
+          validationResults={validationResults}
           onMakeChanges={handleMakeChanges}
           onAddComment={handleAddComment}
           onDeleteComment={handleDeleteComment}

@@ -513,24 +513,54 @@ export const addMarketResearchToProject = async (projectId: string, researchData
       throw new Error('Project not found');
     }
 
-    const projectData = projectDoc.data();
-    console.log('Current project data:', projectData);
+    // Slim down books to avoid exceeding Firestore 1MB doc limit.
+    // Full data is already saved in searchHistory — project only needs
+    // fields used by MyProjects display.
+    const slimBooks = researchData.books.map(b => ({
+      position: b.position,
+      url: b.url,
+      asin: b.asin,
+      price: b.price,
+      title: b.title,
+      rating: b.rating,
+      image_url: b.image_url,
+      categories: b.categories,
+      bsr: b.bsr,
+      publication_date: b.publication_date,
+      publisher: b.publisher ?? null,
+      manufacturer: b.manufacturer ?? null,
+      reviews_count: b.reviews_count,
+      currency: b.currency,
+      is_prime: b.is_prime,
+    }))
 
-    // Create new research array with updated data
-    const updatedResearch = [{
-      ...researchData,
-      createdAt: Timestamp.now()
-    }];
+    // Clean undefined values from marketIntelligence
+    const mi = researchData.marketIntelligence
+    const cleanedIntelligence = mi ? {
+      rating: mi.rating,
+      insights: mi.insights,
+      content_gaps: mi.content_gaps,
+      title_suggestion: mi.title_suggestion,
+      ...(mi.cover_quality_score != null ? { cover_quality_score: mi.cover_quality_score } : {}),
+      ...(mi.cover_quality_summary != null ? { cover_quality_summary: mi.cover_quality_summary } : {}),
+    } : null
 
-    console.log('Attempting to update project with research:', updatedResearch);
+    const newEntry = {
+      keyword: researchData.keyword,
+      trendData: researchData.trendData,
+      books: slimBooks,
+      marketIntelligence: cleanedIntelligence,
+      createdAt: Timestamp.now(),
+    }
 
-    // Update project with new research array
+    const updatedResearch = [newEntry]
+
     await updateDoc(projectRef, {
       research: updatedResearch,
       updatedAt: Timestamp.now()
     });
 
-    console.log('Successfully updated project research');
+    console.log('[addMarketResearchToProject] saved research for keyword:', researchData.keyword);
     return true;
   } catch (error) {
     console.error('Error adding market research to project:', error);

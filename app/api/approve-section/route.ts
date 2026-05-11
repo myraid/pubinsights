@@ -3,6 +3,7 @@ import { adminDb } from '@/app/lib/firebase/admin'
 import { FieldValue } from 'firebase-admin/firestore'
 import { summarizeSection } from '@/app/lib/agents/section-summarizer-agent'
 import { summarizeChapter } from '@/app/lib/agents/chapter-summarizer-agent'
+import { checkAndIncrementUsage } from '@/app/lib/billing/usage'
 
 export const maxDuration = 60
 
@@ -37,6 +38,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: `Section must be in "review" status to approve. Current status: ${sec.status}` },
         { status: 409 }
+      )
+    }
+
+    // Check usage limits
+    const usageCheck = await checkAndIncrementUsage(userId, 'sections')
+    if (!usageCheck.allowed) {
+      return NextResponse.json(
+        { error: 'usage_limit_exceeded', tier: usageCheck.tier, current: usageCheck.current, limit: usageCheck.limit },
+        { status: 429 }
       )
     }
 
