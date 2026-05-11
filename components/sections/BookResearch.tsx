@@ -716,9 +716,9 @@ export default function BookResearch() {
 
     try {
       const [booksResult, trendsResult] = await Promise.allSettled([
-        fetch(`/api/amazon-books/search?keywords=${encodeURIComponent(trimmed)}&page=1`, { signal })
+        fetch(`/api/amazon-books/search?keywords=${encodeURIComponent(trimmed)}&page=1&userId=${encodeURIComponent(user?.uid || '')}`, { signal })
           .then(r => { if (!r.ok) throw new Error("Amazon search failed"); return r.json() as Promise<AmazonBook[]> }),
-        fetch(`/api/trends?keyword=${encodeURIComponent(trimmed)}`, { signal })
+        fetch(`/api/trends?keyword=${encodeURIComponent(trimmed)}&userId=${encodeURIComponent(user?.uid || '')}`, { signal })
           .then(r => r.ok ? r.json() : null)
           .catch(() => null),
       ])

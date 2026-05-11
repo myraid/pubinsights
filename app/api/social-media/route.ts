@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { generateAdCopy, generateSocialPost } from '@/app/lib/agents/social-agent'
 import { logGeneration } from '@/app/lib/agents/generation-logger'
 import { MODEL } from '@/app/lib/agents/openai-client'
+import { checkAndIncrementUsage } from '@/app/lib/billing/usage'
 
 export async function POST(request: Request) {
   try {
@@ -10,10 +11,23 @@ export async function POST(request: Request) {
     if (contentType && contentType.includes('application/json')) {
       const { title, price, author, description, salePrice, userId } = await request.json()
 
+      if (!userId) {
+        return NextResponse.json({ error: 'Authentication required' }, { status: 401 })
+      }
+
       if (!title) {
         return NextResponse.json(
           { error: 'Title is required' },
           { status: 400 }
+        )
+      }
+
+      // Check usage limits
+      const usageCheck = await checkAndIncrementUsage(userId, 'social')
+      if (!usageCheck.allowed) {
+        return NextResponse.json(
+          { error: 'usage_limit_exceeded', tier: usageCheck.tier, current: usageCheck.current, limit: usageCheck.limit },
+          { status: 429 }
         )
       }
 
@@ -40,10 +54,23 @@ export async function POST(request: Request) {
       const postInfo = formData.get('postInfo') as string | null
       const userId = formData.get('userId') as string | null
 
+      if (!userId) {
+        return NextResponse.json({ error: 'Authentication required' }, { status: 401 })
+      }
+
       if (!title || !bookDescription) {
         return NextResponse.json(
           { error: 'Title and book description are required' },
           { status: 400 }
+        )
+      }
+
+      // Check usage limits
+      const usageCheck2 = await checkAndIncrementUsage(userId, 'social')
+      if (!usageCheck2.allowed) {
+        return NextResponse.json(
+          { error: 'usage_limit_exceeded', tier: usageCheck2.tier, current: usageCheck2.current, limit: usageCheck2.limit },
+          { status: 429 }
         )
       }
 

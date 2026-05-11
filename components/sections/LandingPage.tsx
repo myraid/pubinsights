@@ -344,7 +344,7 @@ export default function LandingPage() {
               description="Get started with the essentials."
               features={[
                 "3 market insights per month",
-                "2 book outlines per month",
+                "1 book outline per month",
                 "Amazon & trend data",
                 "No credit card required",
               ]}
@@ -358,7 +358,7 @@ export default function LandingPage() {
               description="For authors serious about niche research."
               features={[
                 "25 market insights per month",
-                "15 book outlines per month",
+                "10 book outlines per month",
                 "Amazon & trend data",
                 "Save research to projects",
                 "Priority support",

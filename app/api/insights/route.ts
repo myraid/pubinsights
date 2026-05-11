@@ -32,23 +32,17 @@ export async function POST(request: Request) {
       );
     }
 
-    try {
-      const usageCheck = await checkAndIncrementUsage(userId, 'insights');
-      if (!usageCheck.allowed) {
-        return NextResponse.json(
-          {
-            error: 'usage_limit_exceeded',
-            tier: usageCheck.tier,
-            current: usageCheck.current,
-            limit: usageCheck.limit,
-          },
-          { status: 429 }
-        );
-      }
-    } catch (usageError) {
-      // Billing check failure must not block the core feature.
-      // Log and continue — the AI call proceeds regardless.
-      console.error('Usage check failed (non-blocking):', usageError);
+    const usageCheck = await checkAndIncrementUsage(userId, 'insights');
+    if (!usageCheck.allowed) {
+      return NextResponse.json(
+        {
+          error: 'usage_limit_exceeded',
+          tier: usageCheck.tier,
+          current: usageCheck.current,
+          limit: usageCheck.limit,
+        },
+        { status: 429 }
+      );
     }
 
     const enrichedBooks = books?.length
