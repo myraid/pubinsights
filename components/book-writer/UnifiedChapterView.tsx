@@ -98,7 +98,7 @@ export default function UnifiedChapterView({
 
   return (
     <div className="flex-1 overflow-y-auto bg-gray-50/20" ref={scrollRef}>
-      <div className="max-w-5xl mx-auto px-8 lg:px-16 py-10 space-y-6">
+      <div className="px-6 lg:px-12 py-10 space-y-6">
         {/* Chapter heading */}
         <div className="mb-8 pb-6 border-b border-purple-100">
           <p className="text-xs font-semibold text-purple-500 uppercase tracking-widest mb-2">
