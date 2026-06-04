@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { adminDb } from '@/app/lib/firebase/admin'
 import { FieldValue } from 'firebase-admin/firestore'
 import { summarizeChapter } from '@/app/lib/agents/chapter-summarizer-agent'
-import { checkAndIncrementUsage } from '@/app/lib/billing/usage'
+import { checkAndIncrementUsage, checkChapterAccess } from '@/app/lib/billing/usage'
 
 export const maxDuration = 60
 
@@ -31,6 +31,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Chapter not found' }, { status: 404 })
     }
     const chap = chapDoc.data()!
+
+    // Check chapter access (tier gate)
+    const chapterAccess = await checkChapterAccess(userId, chap.chapterNumber)
+    if (!chapterAccess.allowed) {
+      return NextResponse.json({ error: chapterAccess.reason, tier: chapterAccess.tier }, { status: 403 })
+    }
 
     // Read all sections
     const sectionsSnap = await adminDb

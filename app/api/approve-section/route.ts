@@ -3,7 +3,7 @@ import { adminDb } from '@/app/lib/firebase/admin'
 import { FieldValue } from 'firebase-admin/firestore'
 import { summarizeSection } from '@/app/lib/agents/section-summarizer-agent'
 import { summarizeChapter } from '@/app/lib/agents/chapter-summarizer-agent'
-import { checkAndIncrementUsage } from '@/app/lib/billing/usage'
+import { checkAndIncrementUsage, checkChapterAccess } from '@/app/lib/billing/usage'
 
 export const maxDuration = 60
 
@@ -25,6 +25,17 @@ export async function POST(request: NextRequest) {
     }
 
     const basePath = `projects/${projectId}/manuscripts/${manuscriptId}`
+
+    // Check chapter access (tier gate)
+    const chapDocRef = await adminDb.doc(`${basePath}/chapters/${chapterId}`).get()
+    if (!chapDocRef.exists) {
+      return NextResponse.json({ error: 'Chapter not found' }, { status: 404 })
+    }
+    const chapterAccess = await checkChapterAccess(userId, chapDocRef.data()!.chapterNumber)
+    if (!chapterAccess.allowed) {
+      return NextResponse.json({ error: chapterAccess.reason, tier: chapterAccess.tier }, { status: 403 })
+    }
+
     const sectionPath = `${basePath}/chapters/${chapterId}/sections/${sectionId}`
 
     // Read section

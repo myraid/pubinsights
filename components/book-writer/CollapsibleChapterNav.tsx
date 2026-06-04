@@ -19,6 +19,7 @@ interface CollapsibleChapterNavProps {
   totalWordCount: number
   completedCount: number
   planningChapterId: string | null
+  maxAllowedChapter?: number // chapters above this are locked (undefined = unlimited)
 }
 
 const chapterStatusIcon: Record<string, { icon: typeof Circle; color: string }> = {
@@ -47,6 +48,7 @@ export default function CollapsibleChapterNav({
   totalWordCount,
   completedCount,
   planningChapterId,
+  maxAllowedChapter,
 }: CollapsibleChapterNavProps) {
   const [collapsed, setCollapsed] = useState(false)
   const totalChapters = chapters.length
@@ -66,21 +68,27 @@ export default function CollapsibleChapterNav({
 
         {chapters.map((ch) => {
           const isActive = ch.id === activeChapterId
+          const isChapterLocked = maxAllowedChapter !== undefined && ch.chapterNumber > maxAllowedChapter
           const cfg = chapterStatusIcon[ch.status] || chapterStatusIcon.not_started
           const Icon = cfg.icon
 
           return (
             <button
               key={ch.id}
-              onClick={() => onSelectChapter(ch.id)}
-              title={`Ch. ${ch.chapterNumber}: ${ch.title}`}
+              onClick={() => !isChapterLocked && onSelectChapter(ch.id)}
+              disabled={isChapterLocked}
+              title={isChapterLocked ? `Ch. ${ch.chapterNumber}: Locked — upgrade to unlock` : `Ch. ${ch.chapterNumber}: ${ch.title}`}
               className={`w-9 h-9 flex items-center justify-center rounded-lg text-xs font-semibold transition-colors ${
-                isActive
-                  ? "bg-purple-100 text-purple-700 ring-1 ring-purple-300"
-                  : "text-gray-500 hover:bg-gray-100"
+                isChapterLocked
+                  ? "opacity-40 cursor-not-allowed"
+                  : isActive
+                    ? "bg-purple-100 text-purple-700 ring-1 ring-purple-300"
+                    : "text-gray-500 hover:bg-gray-100"
               }`}
             >
-              {ch.status === "complete" ? (
+              {isChapterLocked ? (
+                <Lock className="h-3.5 w-3.5 text-gray-400" />
+              ) : ch.status === "complete" ? (
                 <Icon className={`h-4 w-4 ${cfg.color}`} />
               ) : (
                 ch.chapterNumber
@@ -126,24 +134,32 @@ export default function CollapsibleChapterNav({
       <div className="flex-1 overflow-y-auto">
         {chapters.map((ch) => {
           const isActive = ch.id === activeChapterId
+          const isChapterLocked = maxAllowedChapter !== undefined && ch.chapterNumber > maxAllowedChapter
           const cfg = chapterStatusIcon[ch.status] || chapterStatusIcon.not_started
           const Icon = cfg.icon
-          const showPlanBtn = isActive && ((ch.sectionPlan?.length ?? 0) === 0 || ch.totalSections === 0)
+          const showPlanBtn = isActive && !isChapterLocked && ((ch.sectionPlan?.length ?? 0) === 0 || ch.totalSections === 0)
           const isPlanning = planningChapterId === ch.id
 
           return (
             <div key={ch.id}>
               <button
-                onClick={() => onSelectChapter(ch.id)}
+                onClick={() => !isChapterLocked && onSelectChapter(ch.id)}
+                disabled={isChapterLocked}
                 className={`w-full text-left px-3 py-2.5 transition-colors border-l-2 ${
-                  isActive
-                    ? "bg-purple-50/80 border-l-purple-600"
-                    : "border-l-transparent hover:bg-gray-50"
+                  isChapterLocked
+                    ? "opacity-50 cursor-not-allowed border-l-transparent"
+                    : isActive
+                      ? "bg-purple-50/80 border-l-purple-600"
+                      : "border-l-transparent hover:bg-gray-50"
                 }`}
               >
                 <div className="flex items-center gap-2">
-                  <Icon className={`h-3.5 w-3.5 flex-shrink-0 ${cfg.color}`} />
-                  <span className={`text-xs font-medium truncate ${isActive ? "text-purple-900" : "text-gray-700"}`}>
+                  {isChapterLocked ? (
+                    <Lock className="h-3.5 w-3.5 flex-shrink-0 text-gray-400" />
+                  ) : (
+                    <Icon className={`h-3.5 w-3.5 flex-shrink-0 ${cfg.color}`} />
+                  )}
+                  <span className={`text-xs font-medium truncate ${isChapterLocked ? "text-gray-400" : isActive ? "text-purple-900" : "text-gray-700"}`}>
                     {ch.chapterNumber}. {ch.title}
                   </span>
                 </div>

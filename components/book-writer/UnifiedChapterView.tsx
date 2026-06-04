@@ -16,9 +16,6 @@ interface UnifiedChapterViewProps {
   onSaveContent: (sectionId: string, html: string, wordCount: number) => void
   onApprove: (sectionId: string) => void
   onApplyRevisions: (sectionId: string) => void
-  onValidate: (sectionId: string) => void
-  validatingSectionId: string | null
-  validationResults: Record<string, { valid: boolean; issues: Array<{ location: string; message: string }>; suggestions: string[] }>
   onMakeChanges: (sectionId: string) => void
   onAddComment: (sectionId: string, comment: { selectedText: string; startOffset: number; endOffset: number; authorFeedback: string }) => void
   onDeleteComment: (sectionId: string, commentId: string) => void
@@ -39,9 +36,6 @@ export default function UnifiedChapterView({
   onSaveContent,
   onApprove,
   onApplyRevisions,
-  onValidate,
-  validatingSectionId,
-  validationResults,
   onMakeChanges,
   onAddComment,
   onDeleteComment,
@@ -98,7 +92,7 @@ export default function UnifiedChapterView({
 
   return (
     <div className="flex-1 overflow-y-auto bg-gray-50/20" ref={scrollRef}>
-      <div className="max-w-5xl mx-auto px-8 lg:px-16 py-10 space-y-6">
+      <div className="px-6 lg:px-12 py-10 space-y-6">
         {/* Chapter heading */}
         <div className="mb-8 pb-6 border-b border-purple-100">
           <p className="text-xs font-semibold text-purple-500 uppercase tracking-widest mb-2">
@@ -130,9 +124,6 @@ export default function UnifiedChapterView({
                 onSaveContent={onSaveContent}
                 onApprove={onApprove}
                 onApplyRevisions={onApplyRevisions}
-                onValidate={onValidate}
-                validating={validatingSectionId === sec.id}
-                validationResult={validationResults[sec.id] || null}
                 onMakeChanges={onMakeChanges}
                 onAddComment={onAddComment}
                 onDeleteComment={onDeleteComment}

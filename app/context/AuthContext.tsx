@@ -18,10 +18,13 @@ export interface FeatureFlags {
   coauthoring?: boolean
 }
 
+export type SubscriptionTier = 'free' | 'creator' | 'beta'
+
 interface AuthContextType {
   user: User | null
   loading: boolean
   featureFlags: FeatureFlags
+  subscriptionTier: SubscriptionTier
   signIn: (email: string, password: string) => Promise<UserCredential>
   signUp: (email: string, password: string) => Promise<UserCredential>
   signInWithGoogle: () => Promise<UserCredential>
@@ -36,6 +39,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
   const [featureFlags, setFeatureFlags] = useState<FeatureFlags>({})
+  const [subscriptionTier, setSubscriptionTier] = useState<SubscriptionTier>('free')
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -60,10 +64,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         } else {
           const data = userDoc.data()
           setFeatureFlags(data?.featureFlags ?? {})
+          setSubscriptionTier((data?.subscriptionTier as SubscriptionTier) ?? 'free')
         }
       } else {
         setUser(null)
         setFeatureFlags({})
+        setSubscriptionTier('free')
       }
       setLoading(false)
     })
@@ -89,7 +95,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, featureFlags, signIn, signUp, signInWithGoogle, logout }}>
+    <AuthContext.Provider value={{ user, loading, featureFlags, subscriptionTier, signIn, signUp, signInWithGoogle, logout }}>
       {children}
     </AuthContext.Provider>
   )

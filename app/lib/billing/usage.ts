@@ -23,11 +23,6 @@ export async function checkAndIncrementUsage(
   const userRef = adminDb.collection('users').doc(userId)
   const userDoc = await userRef.get()
 
-  // DEV: skip usage limits on localhost
-  if (process.env.NODE_ENV === 'development') {
-    return { allowed: true, tier: 'free', current: 0, limit: 999 }
-  }
-
   if (!userDoc.exists) {
     // Auto-create user doc with free tier defaults
     await userRef.set({
@@ -62,6 +57,35 @@ export async function checkAndIncrementUsage(
   })
 
   return { allowed: true, tier, current: current + 1, limit }
+}
+
+/**
+ * Checks whether a user can access a given chapter.
+ * Free: no chapter writing. Creator: Chapter 1 only. Beta: all chapters.
+ * Future: $99 per-book purchase unlocks Chapter 2+.
+ */
+export async function checkChapterAccess(
+  userId: string,
+  chapterNumber: number
+): Promise<{ allowed: boolean; tier: SubscriptionTier; reason?: string }> {
+  const userDoc = await adminDb.collection('users').doc(userId).get()
+  const data = (userDoc.exists ? userDoc.data() : {}) as Record<string, unknown>
+  const tier = (data.subscriptionTier ?? 'free') as SubscriptionTier
+
+  if (TIER_LIMITS[tier].unlimited) {
+    return { allowed: true, tier }
+  }
+
+  if (tier === 'free') {
+    return { allowed: false, tier, reason: 'Upgrade to Creator to start writing your book.' }
+  }
+
+  // Creator: Chapter 1 only
+  if (chapterNumber > 1) {
+    return { allowed: false, tier, reason: 'Chapter 1 preview complete. Full book writing coming soon.' }
+  }
+
+  return { allowed: true, tier }
 }
 
 /**

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import {
   BookOpen, ChevronDown, Loader2, Plus,
-  ArrowLeft, BookText
+  ArrowLeft, BookText, Lock
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
@@ -31,7 +31,7 @@ type ManuscriptWithId = Manuscript & { id: string }
 type SectionWithId = Section & { id: string }
 
 export default function BookWriter() {
-  const { user } = useAuth()
+  const { user, subscriptionTier } = useAuth()
 
   // Project & outline selection
   const [projects, setProjects] = useState<Project[]>([])
@@ -57,10 +57,16 @@ export default function BookWriter() {
   const [generatingSectionId, setGeneratingSectionId] = useState<string | null>(null)
   const [revisingSectionId, setRevisingSectionId] = useState<string | null>(null)
   const [savingSectionId, setSavingSectionId] = useState<string | null>(null)
-  const [validatingSectionId, setValidatingSectionId] = useState<string | null>(null)
-  const [validationResults, setValidationResults] = useState<Record<string, { valid: boolean; issues: Array<{ location: string; message: string }>; suggestions: string[] }>>({})
 
   const activeChapter = chapters.find(c => c.id === activeChapterId) || null
+
+  // Chapter gating: beta = unlimited, creator = chapter 1 only, free = shouldn't be here
+  const maxAllowedChapter: number | undefined =
+    subscriptionTier === 'beta'
+      ? undefined
+      : subscriptionTier === 'creator'
+        ? 1
+        : 0 // free users get nothing
 
   // Load projects
   useEffect(() => {
@@ -72,11 +78,17 @@ export default function BookWriter() {
       .finally(() => setLoadingProjects(false))
   }, [user])
 
-  // Load manuscripts when project selected
+  // Load manuscripts when project selected — auto-open if one exists
   useEffect(() => {
     if (!selectedProject) { setManuscripts([]); setActiveManuscript(null); return }
     getProjectManuscripts(selectedProject.id)
-      .then(ms => setManuscripts(ms as ManuscriptWithId[]))
+      .then(ms => {
+        const typed = ms as ManuscriptWithId[]
+        setManuscripts(typed)
+        if (typed.length > 0) {
+          setActiveManuscript(typed[0])
+        }
+      })
       .catch(() => toast.error("Failed to load manuscripts"))
   }, [selectedProject])
 
@@ -380,36 +392,6 @@ export default function BookWriter() {
     }
   }
 
-  const handleValidateSection = async (sectionId: string) => {
-    if (!activeManuscript || !activeChapterId || !user) return
-    setValidatingSectionId(sectionId)
-    setValidationResults(prev => {
-      const next = { ...prev }
-      delete next[sectionId]
-      return next
-    })
-    try {
-      const response = await fetch('/api/validate-section', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId: user.uid,
-          projectId: selectedProject!.id,
-          manuscriptId: activeManuscript.id,
-          chapterId: activeChapterId,
-          sectionId,
-        }),
-      })
-      const data = await response.json()
-      if (!response.ok) throw new Error(data.error || 'Validation failed')
-      setValidationResults(prev => ({ ...prev, [sectionId]: data }))
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Validation failed')
-    } finally {
-      setValidatingSectionId(null)
-    }
-  }
-
   const handleMakeChanges = async (sectionId: string) => {
     if (!selectedProject || !activeManuscript || !activeChapterId) return
     await saveSection(selectedProject.id, activeManuscript.id, activeChapterId, sectionId, { status: 'review' })
@@ -448,11 +430,6 @@ export default function BookWriter() {
 
   const handleSaveSectionContent = async (sectionId: string, html: string, wordCount: number) => {
     if (!selectedProject || !activeManuscript || !activeChapterId) return
-    setValidationResults(prev => {
-      const next = { ...prev }
-      delete next[sectionId]
-      return next
-    })
     setSavingSectionId(sectionId)
     try {
       await saveSection(selectedProject.id, activeManuscript.id, activeChapterId, sectionId, { content: html, wordCount })
@@ -638,64 +615,46 @@ export default function BookWriter() {
                   </p>
                 </div>
 
-                {manuscripts.length > 0 && (
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Existing manuscripts
-                    </label>
-                    <div className="space-y-2">
-                      {manuscripts.map(ms => (
-                        <button
-                          key={ms.id}
-                          onClick={() => setActiveManuscript(ms)}
-                          className="w-full text-left rounded-lg border border-gray-200 hover:border-purple-300 hover:bg-purple-50/50 p-3 transition-colors"
-                        >
-                          <div className="flex items-center justify-between">
-                            <span className="font-medium text-sm text-gray-800">{ms.title}</span>
-                            <span className="text-xs text-gray-400">
-                              {ms.completedChapters}/{ms.totalChapters} chapters
-                            </span>
-                          </div>
-                          <p className="text-xs text-gray-400 mt-1">
-                            {ms.totalWordCount?.toLocaleString() || 0} words
-                          </p>
-                        </button>
-                      ))}
-                    </div>
+                {manuscripts.length > 0 ? (
+                  <div className="rounded-xl border border-purple-200 bg-purple-50/50 p-4 text-center">
+                    <Loader2 className="h-5 w-5 animate-spin text-purple-400 mx-auto mb-2" />
+                    <p className="text-sm text-gray-600">Opening manuscript&hellip;</p>
                   </div>
+                ) : (
+                  <>
+                    <div>
+                      <label
+                        htmlFor="manuscript-ai-context"
+                        className="block text-sm font-medium text-gray-700 mb-2"
+                      >
+                        AI context <span className="text-gray-400 font-normal">(optional)</span>
+                      </label>
+                      <textarea
+                        id="manuscript-ai-context"
+                        value={manuscriptAIContext}
+                        onChange={(e) => setManuscriptAIContext(e.target.value)}
+                        placeholder="e.g. Write in second-person, conversational tone. Aim for ~5000 words per chapter. Audience: first-time entrepreneurs."
+                        rows={4}
+                        className="w-full text-sm border border-purple-200 rounded-md p-3 resize-none focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-purple-400 placeholder:text-gray-400"
+                      />
+                      <p className="text-xs text-gray-400 mt-1.5">
+                        Baseline: ~2,500 words per chapter, scaled by the AI to the substance of each chapter (lighter for intros and conclusions, fuller for the meat of the book). Add direction here to shift voice, audience, or overall length.
+                      </p>
+                    </div>
+
+                    <Button
+                      onClick={handleCreateManuscript}
+                      disabled={creatingManuscript}
+                      className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white shadow-lg shadow-purple-300/30"
+                    >
+                      {creatingManuscript ? (
+                        <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Creating manuscript...</>
+                      ) : (
+                        <><Plus className="h-4 w-4 mr-2" /> Start New Manuscript</>
+                      )}
+                    </Button>
+                  </>
                 )}
-
-                <div>
-                  <label
-                    htmlFor="manuscript-ai-context"
-                    className="block text-sm font-medium text-gray-700 mb-2"
-                  >
-                    AI context <span className="text-gray-400 font-normal">(optional)</span>
-                  </label>
-                  <textarea
-                    id="manuscript-ai-context"
-                    value={manuscriptAIContext}
-                    onChange={(e) => setManuscriptAIContext(e.target.value)}
-                    placeholder="e.g. Write in second-person, conversational tone. Aim for ~5000 words per chapter. Audience: first-time entrepreneurs."
-                    rows={4}
-                    className="w-full text-sm border border-purple-200 rounded-md p-3 resize-none focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-purple-400 placeholder:text-gray-400"
-                  />
-                  <p className="text-xs text-gray-400 mt-1.5">
-                    Baseline: ~2,500 words per chapter, scaled by the AI to the substance of each chapter (lighter for intros and conclusions, fuller for the meat of the book). Add direction here to shift voice, audience, or overall length.
-                  </p>
-                </div>
-
-                <Button
-                  onClick={handleCreateManuscript}
-                  disabled={creatingManuscript}
-                  className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white shadow-lg shadow-purple-300/30"
-                >
-                  {creatingManuscript ? (
-                    <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Creating manuscript...</>
-                  ) : (
-                    <><Plus className="h-4 w-4 mr-2" /> Start New Manuscript</>
-                  )}
-                </Button>
               </div>
             )}
           </div>
@@ -744,11 +703,20 @@ export default function BookWriter() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-[--radix-dropdown-menu-trigger-width]">
-            {chapters.map(ch => (
-              <DropdownMenuItem key={ch.id} onClick={() => handleSelectChapter(ch.id)}>
-                Ch. {ch.chapterNumber}: {ch.title}
-              </DropdownMenuItem>
-            ))}
+            {chapters.map(ch => {
+              const locked = maxAllowedChapter !== undefined && ch.chapterNumber > maxAllowedChapter
+              return (
+                <DropdownMenuItem
+                  key={ch.id}
+                  onClick={() => !locked && handleSelectChapter(ch.id)}
+                  disabled={locked}
+                  className={locked ? "opacity-50" : ""}
+                >
+                  {locked && <Lock className="h-3 w-3 mr-1.5 text-gray-400" />}
+                  Ch. {ch.chapterNumber}: {ch.title}
+                </DropdownMenuItem>
+              )
+            })}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
@@ -768,32 +736,50 @@ export default function BookWriter() {
             totalWordCount={activeManuscript.totalWordCount || 0}
             completedCount={activeManuscript.completedChapters || 0}
             planningChapterId={planningChapterId}
+            maxAllowedChapter={maxAllowedChapter}
           />
         </div>
 
-        {/* Center: Unified chapter view with all sections */}
-        <UnifiedChapterView
-          chapter={activeChapter}
-          sections={sections}
-          focusedSectionId={focusedSectionId}
-          onFocusSection={setFocusedSectionId}
-          onGenerateDraft={handleGenerateDraft}
-          onSaveContent={handleSaveSectionContent}
-          onApprove={handleApproveSection}
-          onApplyRevisions={handleApplyRevisions}
-          onValidate={handleValidateSection}
-          validatingSectionId={validatingSectionId}
-          validationResults={validationResults}
-          onMakeChanges={handleMakeChanges}
-          onAddComment={handleAddComment}
-          onDeleteComment={handleDeleteComment}
-          onAuthorNotesChange={handleAuthorNotesChange}
-          onRestoreVersion={handleRestoreVersion}
-          styleProfile={styleProfile}
-          generatingSectionId={generatingSectionId}
-          revisingSectionId={revisingSectionId}
-          savingSectionId={savingSectionId}
-        />
+        {/* Center: Locked chapter prompt or unified chapter view */}
+        {activeChapter && maxAllowedChapter !== undefined && activeChapter.chapterNumber > maxAllowedChapter ? (
+          <div className="flex-1 flex items-center justify-center">
+            <div className="text-center space-y-4 max-w-md px-6">
+              <div className="w-16 h-16 rounded-2xl bg-purple-50 flex items-center justify-center mx-auto">
+                <Lock className="h-8 w-8 text-purple-300" />
+              </div>
+              <h3
+                className="text-lg font-semibold text-gray-900"
+                style={{ fontFamily: "var(--font-playfair)" }}
+              >
+                Chapter {activeChapter.chapterNumber} is Locked
+              </h3>
+              <p className="text-sm text-gray-500 leading-relaxed">
+                Chapter 1 preview complete. Full book writing is coming soon.
+                You&apos;ll be able to unlock all chapters to complete your manuscript.
+              </p>
+            </div>
+          </div>
+        ) : (
+          <UnifiedChapterView
+            chapter={activeChapter}
+            sections={sections}
+            focusedSectionId={focusedSectionId}
+            onFocusSection={setFocusedSectionId}
+            onGenerateDraft={handleGenerateDraft}
+            onSaveContent={handleSaveSectionContent}
+            onApprove={handleApproveSection}
+            onApplyRevisions={handleApplyRevisions}
+            onMakeChanges={handleMakeChanges}
+            onAddComment={handleAddComment}
+            onDeleteComment={handleDeleteComment}
+            onAuthorNotesChange={handleAuthorNotesChange}
+            onRestoreVersion={handleRestoreVersion}
+            styleProfile={styleProfile}
+            generatingSectionId={generatingSectionId}
+            revisingSectionId={revisingSectionId}
+            savingSectionId={savingSectionId}
+          />
+        )}
       </div>
     </div>
   )
