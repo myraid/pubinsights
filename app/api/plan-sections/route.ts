@@ -3,7 +3,7 @@ import { adminDb } from '@/app/lib/firebase/admin'
 import { FieldValue } from 'firebase-admin/firestore'
 import { planSections } from '@/app/lib/agents/section-planner-agent'
 import { DEFAULT_TARGET_WORDS_PER_CHAPTER } from '@/app/types/firebase'
-import { checkAndIncrementUsage } from '@/app/lib/billing/usage'
+import { checkAndIncrementUsage, checkChapterAccess } from '@/app/lib/billing/usage'
 
 export const maxDuration = 60
 
@@ -48,6 +48,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Chapter not found' }, { status: 404 })
     }
     const chap = chapDoc.data()!
+
+    // Check chapter access (tier gate)
+    const chapterAccess = await checkChapterAccess(userId, chap.chapterNumber)
+    if (!chapterAccess.allowed) {
+      return NextResponse.json({ error: chapterAccess.reason, tier: chapterAccess.tier }, { status: 403 })
+    }
 
     // Check if sections already exist
     if (chap.sectionPlan && chap.sectionPlan.length > 0) {

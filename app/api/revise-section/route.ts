@@ -3,7 +3,7 @@ import { adminDb } from '@/app/lib/firebase/admin'
 import { FieldValue } from 'firebase-admin/firestore'
 import { ContextBuilder } from '@/app/lib/context/context-builder'
 import { reviseSection } from '@/app/lib/agents/revision-agent'
-import { checkAndIncrementUsage } from '@/app/lib/billing/usage'
+import { checkAndIncrementUsage, checkChapterAccess } from '@/app/lib/billing/usage'
 
 export const maxDuration = 120
 
@@ -42,6 +42,17 @@ export async function POST(request: NextRequest) {
     }
 
     const basePath = `projects/${projectId}/manuscripts/${manuscriptId}`
+
+    // Check chapter access (tier gate)
+    const chapDoc = await adminDb.doc(`${basePath}/chapters/${chapterId}`).get()
+    if (!chapDoc.exists) {
+      return NextResponse.json({ error: 'Chapter not found' }, { status: 404 })
+    }
+    const chapterAccess = await checkChapterAccess(userId, chapDoc.data()!.chapterNumber)
+    if (!chapterAccess.allowed) {
+      return NextResponse.json({ error: chapterAccess.reason, tier: chapterAccess.tier }, { status: 403 })
+    }
+
     const sectionPath = `${basePath}/chapters/${chapterId}/sections/${sectionId}`
 
     // Read section

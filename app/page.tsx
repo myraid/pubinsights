@@ -14,7 +14,7 @@ import Header from "@/components/sections/Header"
 import { SearchIcon as BookSearch, PenTool, Share2, FolderKanban, Crown, BookText, type LucideIcon } from "lucide-react"
 
 export default function Home() {
-  const { user, loading, featureFlags } = useAuth()
+  const { user, loading, subscriptionTier } = useAuth()
   const [activeSection, setActiveSection] = useState<string>("My Projects")
 
   if (loading) {
@@ -25,12 +25,14 @@ export default function Home() {
     return <LandingPage />
   }
 
+  const showBookWriter = subscriptionTier === 'creator' || subscriptionTier === 'beta'
+
   const sections: Array<{ name: string; icon: LucideIcon; component: ComponentType }> = [
     { name: "My Projects", icon: FolderKanban, component: MyProjects },
     { name: "Book Research", icon: BookSearch, component: BookResearch },
     { name: "Book Outline", icon: PenTool, component: BookOutline },
     { name: "Social Media", icon: Share2, component: SocialMedia },
-    ...(featureFlags.coauthoring ? [{ name: "Book Writer", icon: BookText, component: BookWriter }] : []),
+    ...(showBookWriter ? [{ name: "Book Writer", icon: BookText, component: BookWriter }] : []),
     { name: "Upgrade", icon: Crown, component: Pricing },
   ]
 
