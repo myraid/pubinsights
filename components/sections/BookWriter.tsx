@@ -777,7 +777,7 @@ export default function BookWriter() {
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="w-1 h-1 rounded-full bg-purple-400 flex-shrink-0" />
-                    Export to DOCX
+                    Export your manuscript
                   </li>
                 </ul>
               </div>

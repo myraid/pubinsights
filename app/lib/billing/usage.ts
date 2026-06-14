@@ -94,9 +94,27 @@ export async function checkChapterAccess(
  */
 export async function getUserUsage(userId: string) {
   const monthKey = getMonthKey()
-  const userDoc = await adminDb.collection('users').doc(userId).get()
+  const userRef = adminDb.collection('users').doc(userId)
+  const userDoc = await userRef.get()
 
-  if (!userDoc.exists) return null
+  if (!userDoc.exists) {
+    // Auto-create with free tier defaults so usage tracking works immediately
+    await userRef.set({
+      subscriptionTier: 'free',
+      subscriptionStatus: null,
+      usage: {},
+      createdAt: FieldValue.serverTimestamp(),
+      updatedAt: FieldValue.serverTimestamp(),
+    })
+    return {
+      tier: 'free' as SubscriptionTier,
+      subscriptionStatus: null,
+      insights: { current: 0, limit: TIER_LIMITS.free.insights },
+      outlines: { current: 0, limit: TIER_LIMITS.free.outlines },
+      sections: { current: 0, limit: TIER_LIMITS.free.sections },
+      social: { current: 0, limit: TIER_LIMITS.free.social },
+    }
+  }
 
   const data = userDoc.data()!
   const tier = (data.subscriptionTier ?? 'free') as SubscriptionTier
