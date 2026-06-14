@@ -5,13 +5,12 @@ import { useAuth } from "./context/AuthContext"
 import { Card } from "@/components/ui/card"
 import BookResearch from "@/components/sections/BookResearch"
 import BookOutline from "@/components/sections/BookOutline"
-import SocialMedia from "@/components/sections/SocialMedia"
 import MyProjects from "@/components/sections/MyProjects"
 import BookWriter from "@/components/sections/BookWriter"
 import Pricing from "@/components/sections/Pricing"
 import LandingPage from "@/components/sections/LandingPage"
 import Header from "@/components/sections/Header"
-import { SearchIcon as BookSearch, PenTool, Share2, FolderKanban, Crown, BookText, Lock, ArrowRight, Check, PenLine, type LucideIcon } from "lucide-react"
+import { SearchIcon as BookSearch, PenTool, FolderKanban, Crown, BookText, Lock, ArrowRight, Check, PenLine, type LucideIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 const BRAND = {
@@ -93,7 +92,6 @@ export default function Home() {
     { name: "My Projects", icon: FolderKanban, component: MyProjects },
     { name: "Book Research", icon: BookSearch, component: BookResearch },
     { name: "Book Outline", icon: PenTool, component: BookOutline },
-    { name: "Social Media", icon: Share2, component: SocialMedia },
     { name: "Book Writer", icon: BookText, component: canAccessBookWriter ? BookWriter : () => <BookWriterGate onUpgrade={() => setActiveSection("Upgrade")} />, locked: !canAccessBookWriter },
     { name: "Upgrade", icon: Crown, component: Pricing },
   ]

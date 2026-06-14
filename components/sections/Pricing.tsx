@@ -84,7 +84,7 @@ const BOOK_PLAN = {
     { label: "All chapters unlocked" },
     { label: "AI drafts + comment-driven revision" },
     { label: "Style-matched writing across chapters" },
-    { label: "Export to DOCX" },
+    { label: "Export your manuscript" },
     { label: "Requires Creator subscription" },
   ],
 }
@@ -184,6 +184,8 @@ export default function Pricing() {
         if (res.ok) {
           const data: UsageData = await res.json()
           setUsage(data)
+        } else {
+          console.error("Usage API returned", res.status, await res.text().catch(() => ""))
         }
       } catch (err) {
         if ((err as Error).name !== "AbortError") {

@@ -331,8 +331,8 @@ export default function LandingPage() {
               />
               <SectionFeatureCard
                 icon={<FileText className="w-7 h-7" />}
-                title="Export-Ready Manuscripts"
-                description="Download your finished book in a clean format, ready for editors, beta readers, or self-publishing."
+                title="Export Your Manuscript"
+                description="Download your finished book, ready for editors, beta readers, or self-publishing."
                 iconBg={BRAND.bg}
                 iconColor={BRAND.primary}
               />
