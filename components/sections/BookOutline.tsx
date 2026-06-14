@@ -5,7 +5,7 @@ import {
   FileText, ChevronDown, BookOpen, Loader2, Plus,
   Trash2, RotateCcw, Check, X, Wand2,
   ShieldCheck, AlertTriangle, CheckCircle2, XCircle,
-  MessageSquarePlus,
+  MessageSquarePlus, ArrowRight, PenLine,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
@@ -63,7 +63,7 @@ function getTopics(ch: Chapter): string[] {
 // ─── Main Component ─────────────────────────────────────────────────────────
 
 export default function BookOutline({ title: initialTitle }: { title?: string }) {
-  const { user } = useAuth()
+  const { user, subscriptionTier } = useAuth()
 
   const [title, setTitle] = useState(initialTitle ?? "")
   const [context, setContext] = useState("")
@@ -134,7 +134,12 @@ export default function BookOutline({ title: initialTitle }: { title?: string })
       })
 
       const data = await response.json()
-      if (!response.ok || data.error) throw new Error(data.error || 'Failed to generate outline')
+      if (!response.ok || data.error) {
+        if (data.error === 'usage_limit_exceeded') {
+          throw new Error(`You\u2019ve reached your monthly outline limit (${data.current}/${data.limit}). Upgrade to Creator for more.`)
+        }
+        throw new Error(data.error || 'Failed to generate outline')
+      }
 
       setOutline(data)
       setComments({})
@@ -676,6 +681,46 @@ export default function BookOutline({ title: initialTitle }: { title?: string })
               <><ShieldCheck className="h-4 w-4 mr-2" /> Validate with AI</>
             )}
           </Button>
+        </div>
+      )}
+
+      {/* ── Book Writer upgrade CTA (free users only) ─────────────────── */}
+      {hasOutline && subscriptionTier === 'free' && (
+        <div
+          className="mt-4 rounded-2xl border overflow-hidden"
+          style={{ borderColor: '#DDD0EC', background: `linear-gradient(135deg, ${BRAND.bg} 0%, #FFFFFF 100%)` }}
+        >
+          <div className="px-6 py-5 flex flex-col sm:flex-row items-center gap-4">
+            <div
+              className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl"
+              style={{ background: BRAND.primary }}
+            >
+              <PenLine className="h-6 w-6 text-white" />
+            </div>
+            <div className="flex-1 text-center sm:text-left">
+              <p className="text-sm font-bold" style={{ color: BRAND.deep }}>
+                See what your first chapter looks like.
+              </p>
+              <p className="text-xs mt-0.5" style={{ color: BRAND.gray }}>
+                Creator plan includes a free chapter preview — try the AI Book Copilot on this outline.
+              </p>
+            </div>
+            <Button
+              onClick={() => {
+                const tabs = document.querySelectorAll('[class*="cursor-pointer"]')
+                tabs.forEach((tab) => {
+                  if (tab.textContent?.includes("Upgrade")) (tab as HTMLElement).click()
+                })
+              }}
+              className="text-sm font-semibold text-white px-6 rounded-full whitespace-nowrap"
+              style={{ background: BRAND.primary }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = BRAND.deep)}
+              onMouseLeave={(e) => (e.currentTarget.style.background = BRAND.primary)}
+            >
+              Upgrade to Creator
+              <ArrowRight className="h-4 w-4 ml-1.5" />
+            </Button>
+          </div>
         </div>
       )}
 

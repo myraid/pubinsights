@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { BookOpen, TrendingUp, Share2, BarChart2, ArrowRight, Sparkles, Search, Tag, List, FileText, Video, Zap, Check } from "lucide-react"
+import { BookOpen, TrendingUp, BarChart2, ArrowRight, Sparkles, Search, Tag, List, FileText, PenLine, RefreshCw, Check } from "lucide-react"
 import LoginForm from "./LoginForm"
 import type React from "react"
 
@@ -30,15 +30,15 @@ export default function LandingPage() {
       {/* ─── Nav ─────────────────────────────────────────────────── */}
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b" style={{ borderColor: "#EEE0F8" }}>
         <div className="container mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          <div className="rounded-xl overflow-hidden shadow-md flex-shrink-0">
+          <div className="flex-shrink-0">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/images/Logo-1.png"
-              alt="Publisher Insights"
-              width={48}
-              height={48}
+              alt="PubInsights"
+              width={40}
+              height={40}
               loading="eager"
-              className="w-auto h-10 md:h-12 block"
+              className="w-auto h-10 block"
             />
           </div>
           <div className="flex items-center gap-3">
@@ -92,12 +92,12 @@ export default function LandingPage() {
           className="text-4xl sm:text-5xl md:text-6xl font-black leading-tight max-w-3xl mb-6 [font-family:var(--font-playfair,Georgia,serif)]"
           style={{ color: BRAND.deep }}
         >
-          Discover your next{" "}
+          Know your market{" "}
           <span
             className="relative inline-block"
             style={{ color: BRAND.accent }}
           >
-            bestselling niche
+            before you write a word.
             <svg
               className="absolute -bottom-1 left-0 w-full"
               viewBox="0 0 300 12"
@@ -121,11 +121,11 @@ export default function LandingPage() {
           className="text-lg sm:text-xl max-w-xl mb-10 leading-relaxed"
           style={{ color: BRAND.gray }}
         >
-          PubInsights gives indie authors Amazon market data, AI-driven insights, and book outlines — everything you need to publish with confidence.
+          Validate your niche. Build your outline. Co-author your book with AI.
         </p>
 
         {/* CTAs */}
-        <div className="flex flex-col sm:flex-row items-center gap-3">
+        <div className="flex flex-col sm:flex-row items-center gap-3 mb-4">
           <Button
             size="lg"
             onClick={() => { setLoginMode("signup"); setShowLoginForm(true) }}
@@ -135,17 +135,37 @@ export default function LandingPage() {
               fontFamily: "var(--font-dm-sans, system-ui, sans-serif)",
             }}
           >
-            Start for free
+            Start Your First Book
             <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
-          <button
-            className="text-sm font-medium underline underline-offset-4 transition-colors"
-            style={{ color: BRAND.gray }}
-            onClick={() => { setLoginMode("login"); setShowLoginForm(true) }}
+          <Button
+            size="lg"
+            onClick={() => { setLoginMode("signup"); setShowLoginForm(true) }}
+            className="h-12 px-8 rounded-full text-base font-semibold transition-all hover:-translate-y-0.5"
+            style={{
+              background: "transparent",
+              color: BRAND.primary,
+              border: `1.5px solid ${BRAND.primary}`,
+              fontFamily: "var(--font-dm-sans, system-ui, sans-serif)",
+            }}
           >
-            Already have an account?
-          </button>
+            Explore a Niche
+          </Button>
         </div>
+
+        {/* Trust statement */}
+        <p className="text-xs mb-5" style={{ color: BRAND.gray }}>
+          No publishing experience required. No guesswork. Just data-backed decisions.
+        </p>
+
+        {/* Sign in link */}
+        <button
+          className="text-sm font-medium underline underline-offset-4 transition-colors"
+          style={{ color: BRAND.gray }}
+          onClick={() => { setLoginMode("login"); setShowLoginForm(true) }}
+        >
+          Already have an account?
+        </button>
       </section>
 
       {/* ─── Feature strip ───────────────────────────────────────── */}
@@ -159,29 +179,29 @@ export default function LandingPage() {
               Everything an indie author needs
             </h2>
             <p className="text-sm" style={{ color: BRAND.gray }}>
-              Research smarter. Write faster. Publish with an edge.
+              Research smarter. Write faster. Launch with confidence.
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             <FeatureCard
               icon={<Search className="w-5 h-5" />}
-              title="Amazon Market Data"
-              description="See real BSR, review counts, and pricing for competing books in any niche."
+              title="Bestseller Analysis"
+              description="See real sales rank, review counts, and pricing for competing books in your niche."
             />
             <FeatureCard
               icon={<BarChart2 className="w-5 h-5" />}
-              title="Trend Intelligence"
-              description="Google & YouTube trend signals so you publish into rising demand."
+              title="Market Demand Signals"
+              description="Real-time trend data so you enter rising markets, not yesterday's hype."
             />
             <FeatureCard
               icon={<BookOpen className="w-5 h-5" />}
               title="Book Outline Generator"
-              description="AI-drafted chapter outlines ready in seconds, tailored to your topic."
+              description="Generate a professional chapter-by-chapter outline tailored to your audience."
             />
             <FeatureCard
-              icon={<Share2 className="w-5 h-5" />}
-              title="Social Ad Copy"
-              description="Platform-ready ad copy and organic posts crafted for each channel."
+              icon={<PenLine className="w-5 h-5" />}
+              title="AI Book Copilot"
+              description="Move from outline to manuscript with AI-assisted drafting and revision."
             />
           </div>
         </div>
@@ -195,10 +215,10 @@ export default function LandingPage() {
           <h2
             className="text-2xl sm:text-3xl font-bold text-white mb-3 [font-family:var(--font-playfair,Georgia,serif)]"
           >
-            Everything you need to research your next book topic.
+            Find opportunities other authors miss.
           </h2>
           <p className="text-sm text-white/80 max-w-xl mx-auto" style={{ fontFamily: "var(--font-dm-sans, system-ui, sans-serif)" }}>
-            Unlock unmatched insights into trends to discover your perfect niche
+            Before you spend months writing, understand what readers are already buying.
           </p>
         </div>
         {/* Cards */}
@@ -207,22 +227,22 @@ export default function LandingPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <SectionFeatureCard
                 icon={<Search className="w-7 h-7" />}
-                title="Find Your Unique Niche"
-                description="Research your book topic by analyzing keyword trends across multiple platforms"
+                title="Bestseller Analysis"
+                description="See real sales rank, review counts, and pricing for competing books in your niche."
                 iconBg={BRAND.bg}
                 iconColor={BRAND.primary}
               />
               <SectionFeatureCard
                 icon={<TrendingUp className="w-7 h-7" />}
-                title="Market Analysis"
-                description="Access real-time BSR (Best Seller Rank), daily and monthly sales figures for books related to your niche"
+                title="Market Demand Signals"
+                description="Real-time trend data so you enter rising markets, not yesterday's hype."
                 iconBg={BRAND.bg}
                 iconColor={BRAND.primary}
               />
               <SectionFeatureCard
                 icon={<Tag className="w-7 h-7" />}
-                title="Keyword Suggestions"
-                description="Discover related keywords based on competitor analysis to improve your book's discoverability"
+                title="AI Opportunity Analysis"
+                description="Uncover content gaps, competition scores, and positioning recommendations."
                 iconBg={BRAND.bg}
                 iconColor={BRAND.primary}
               />
@@ -240,10 +260,10 @@ export default function LandingPage() {
             className="text-2xl sm:text-3xl font-bold mb-3 [font-family:var(--font-playfair,Georgia,serif)]"
             style={{ color: BRAND.deep }}
           >
-            AI-Powered Writing Assistant: Create with Confidence
+            Know if your idea has potential.
           </h2>
           <p className="text-sm max-w-2xl mx-auto" style={{ color: BRAND.gray, fontFamily: "var(--font-dm-sans, system-ui, sans-serif)" }}>
-            Crafting your book has never been easier. PubInsights leverages AI to assist you at every stage of the writing process
+            Not every book idea deserves six months of your life. PubInsights evaluates demand, competition, and market positioning.
           </p>
         </div>
         {/* Cards */}
@@ -252,22 +272,22 @@ export default function LandingPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <SectionFeatureCard
                 icon={<BookOpen className="w-7 h-7" />}
-                title="Book Title Generator"
-                description="Let AI analyze your niche, discover high-demand keywords, and suggest a winning book title"
+                title="Niche Validation"
+                description="Evaluate demand and competition before you commit to an idea."
                 iconBg={BRAND.primary}
                 iconColor="#FFFFFF"
               />
               <SectionFeatureCard
                 icon={<List className="w-7 h-7" />}
-                title="Book Outline"
-                description="Our AI-generated outlines help you organize your ideas, present insights effectively, and engage readers from cover to cover"
+                title="Book Outline Generator"
+                description="Generate a professional chapter-by-chapter outline tailored to your audience."
                 iconBg={BRAND.primary}
                 iconColor="#FFFFFF"
               />
               <SectionFeatureCard
                 icon={<FileText className="w-7 h-7" />}
-                title="Book Description"
-                description="Create a book description packed with the right keywords for SEO optimization"
+                title="AI Book Copilot"
+                description="Move from outline to manuscript with AI-assisted drafting and revision."
                 iconBg={BRAND.primary}
                 iconColor="#FFFFFF"
               />
@@ -276,7 +296,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ─── Social Media Promotion section ──────────────────────── */}
+      {/* ─── AI Book Copilot section ──────────────────────────────── */}
       <div className="h-1 w-full" style={{ background: `linear-gradient(90deg, ${BRAND.deep}, ${BRAND.primary}, ${BRAND.accent})` }} />
       <section>
         {/* Header band */}
@@ -285,10 +305,10 @@ export default function LandingPage() {
             className="text-2xl sm:text-3xl font-bold mb-3 [font-family:var(--font-playfair,Georgia,serif)]"
             style={{ color: BRAND.deep }}
           >
-            Effortless Book Promotion Across Social Media using AI
+            Your AI copilot, from outline to manuscript.
           </h2>
           <p className="text-sm max-w-2xl mx-auto" style={{ color: BRAND.gray, fontFamily: "var(--font-dm-sans, system-ui, sans-serif)" }}>
-            Generate ready-to-publish social media posts to engage readers and grow your audience across Facebook, Instagram, and TikTok
+            PubInsights writes alongside you — drafting chapters, refining prose, and keeping you moving. You stay in control. Your copilot handles the blank page.
           </p>
         </div>
         {/* Cards */}
@@ -296,27 +316,34 @@ export default function LandingPage() {
           <div className="container mx-auto max-w-5xl">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <SectionFeatureCard
-                icon={<Share2 className="w-7 h-7" />}
-                title="Generate Social Media Posts"
-                description="With one click, create posts for Facebook, Instagram, and TikTok that highlight your book's key selling points, quotes, or exciting snippets"
+                icon={<PenLine className="w-7 h-7" />}
+                title="Chapter Drafting"
+                description="Co-author each chapter with AI that follows your outline, voice, and structure from start to finish."
                 iconBg={BRAND.bg}
                 iconColor={BRAND.primary}
               />
               <SectionFeatureCard
-                icon={<Video className="w-7 h-7" />}
-                title="Video Script Generator"
-                description="Use AI to create captivating video scripts for Reels, TikTok videos, and other short-form content"
+                icon={<RefreshCw className="w-7 h-7" />}
+                title="Revision & Refinement"
+                description="Tighten prose, fix inconsistencies, and polish your manuscript without losing your voice."
                 iconBg={BRAND.bg}
                 iconColor={BRAND.primary}
               />
               <SectionFeatureCard
-                icon={<Zap className="w-7 h-7" />}
-                title="Maximize Reach & Engagement"
-                description="Our app analyzes current trends, hashtags, and audience behavior to help you craft posts that generate buzz and drive traffic to your book sales page"
+                icon={<FileText className="w-7 h-7" />}
+                title="Export-Ready Manuscripts"
+                description="Download your finished book in a clean format, ready for editors, beta readers, or self-publishing."
                 iconBg={BRAND.bg}
                 iconColor={BRAND.primary}
               />
             </div>
+            {/* Teaser line */}
+            <p className="text-center mt-10 text-sm italic" style={{ color: BRAND.gray }}>
+              Research your niche. Build your outline. Then let your copilot write the book.
+              <span className="block text-xs mt-1 not-italic" style={{ color: BRAND.primary }}>
+                Available on the Creator plan.
+              </span>
+            </p>
           </div>
         </div>
       </section>
@@ -345,7 +372,7 @@ export default function LandingPage() {
               features={[
                 "3 market insights per month",
                 "1 book outline per month",
-                "Amazon & trend data",
+                "Live market & trend data",
                 "No credit card required",
               ]}
               cta="Start Free"
@@ -359,9 +386,9 @@ export default function LandingPage() {
               features={[
                 "25 market insights per month",
                 "10 book outlines per month",
-                "Amazon & trend data",
+                "AI Book Copilot — 1 chapter preview",
+                "Live market & trend data",
                 "Save research to projects",
-                "Priority support",
               ]}
               cta="Get Started"
               highlight
@@ -380,10 +407,10 @@ export default function LandingPage() {
           <h2
             className="text-3xl sm:text-4xl font-bold text-white mb-4 [font-family:var(--font-playfair,Georgia,serif)]"
           >
-            Ready to elevate your publishing career?
+            Ready to write your next bestseller?
           </h2>
           <p className="text-white/70 mb-8 text-base">
-            Join PubInsights and unlock the power of AI-driven market research for your books.
+            Join PubInsights. Research smarter. Write faster. Launch with confidence.
           </p>
           <Button
             size="lg"
@@ -395,8 +422,8 @@ export default function LandingPage() {
               fontFamily: "var(--font-dm-sans, system-ui, sans-serif)",
             }}
           >
-            Sign up — it&apos;s free
-            <TrendingUp className="w-4 h-4 ml-2" />
+            Start Your First Book
+            <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
         </div>
       </section>

@@ -8,7 +8,7 @@ import {
   ChevronDown, Brain, Sparkles, Zap, Target, Shield, Lightbulb,
   BookOpen, ShoppingCart, Search, Star, TrendingUp, ExternalLink,
   Loader2, FolderPlus, BarChart3, DollarSign, Users, Award,
-  BookMarked
+  BookMarked, Crown, Check, ArrowRight
 } from "lucide-react"
 import { toast } from "sonner"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
@@ -65,7 +65,7 @@ function detectIndie(book: AmazonBook): boolean {
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type SearchPhase = "idle" | "searching" | "analyzing" | "done"
+type SearchPhase = "idle" | "searching" | "analyzing" | "done" | "limit_reached"
 
 interface InsightsData {
   rating?: number
@@ -676,11 +676,12 @@ export default function BookResearch() {
   const [projects, setProjects] = useState<Project[]>([])
   const [showIndieOnly, setShowIndieOnly] = useState(false)
   const [inputError, setInputError] = useState(false)
+  const [usageLimit, setUsageLimit] = useState<{ current: number; limit: number; tier: string } | null>(null)
 
   const abortRef = useRef<AbortController | null>(null)
   const resultsRef = useRef<HTMLDivElement | null>(null)
 
-  const isLoading = phase !== "idle" && phase !== "done"
+  const isLoading = phase !== "idle" && phase !== "done" && phase !== "limit_reached"
 
   useEffect(() => {
     if (!user?.uid) return
@@ -715,6 +716,19 @@ export default function BookResearch() {
     setInsightsLoading(false)
 
     try {
+      // Pre-flight usage check — don't burn external API calls if limit is reached
+      if (user?.uid) {
+        const usageRes = await fetch(`/api/usage?userId=${encodeURIComponent(user.uid)}`, { signal })
+        if (usageRes.ok) {
+          const usage = await usageRes.json()
+          if (usage.insights && usage.insights.current >= usage.insights.limit) {
+            setUsageLimit({ current: usage.insights.current, limit: usage.insights.limit, tier: usage.tier })
+            setPhase("limit_reached")
+            return
+          }
+        }
+      }
+
       const [booksResult, trendsResult] = await Promise.allSettled([
         fetch(`/api/amazon-books/search?keywords=${encodeURIComponent(trimmed)}&page=1&userId=${encodeURIComponent(user?.uid || '')}`, { signal })
           .then(r => { if (!r.ok) throw new Error("Amazon search failed"); return r.json() as Promise<AmazonBook[]> }),
@@ -764,10 +778,9 @@ export default function BookResearch() {
       } else {
         const errBody = await insightsRes.json().catch(() => ({}))
         if (insightsRes.status === 429 && errBody?.error === 'usage_limit_exceeded') {
-          toast.error(
-            `You've used all ${errBody.limit} insights for this month on the ${errBody.tier} plan. Upgrade to get more.`,
-            { duration: 8000 }
-          )
+          setUsageLimit({ current: errBody.current ?? errBody.limit, limit: errBody.limit, tier: errBody.tier })
+          setPhase("limit_reached")
+          return
         } else {
           const isQuota = insightsRes.status === 500 &&
             (JSON.stringify(errBody).includes("quota") || JSON.stringify(errBody).includes("429"))
@@ -960,6 +973,78 @@ export default function BookResearch() {
 
       {/* ── Results anchor ───────────────────────────────────────────────── */}
       <div ref={resultsRef} />
+
+      {/* ── Usage limit reached — upgrade prompt ─────────────────────── */}
+      {phase === "limit_reached" && usageLimit && (
+        <div className="mb-8 flex justify-center">
+          <div
+            className="relative w-full max-w-md rounded-2xl bg-white overflow-hidden"
+            style={{
+              border: "2px solid #9900CC",
+              boxShadow: "0 4px 24px rgba(153,0,204,0.10)",
+            }}
+          >
+            <div
+              className="absolute top-0 left-0 right-0 h-1"
+              style={{ background: "linear-gradient(90deg, #9900CC, #CC44FF, #9900CC)" }}
+            />
+            <div className="p-6 text-center">
+              <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full" style={{ background: "#F5EEFF" }}>
+                <Crown className="h-6 w-6" style={{ color: "#9900CC" }} />
+              </div>
+              <p
+                className="text-sm font-medium mb-1"
+                style={{ color: "#666", fontFamily: "var(--font-dm-sans, system-ui, sans-serif)" }}
+              >
+                You&apos;ve used {usageLimit.current}/{usageLimit.limit} insights this month
+              </p>
+              <h3
+                className="text-xl font-bold mb-1"
+                style={{ color: "#1a1a2e", fontFamily: "var(--font-playfair, serif)" }}
+              >
+                Upgrade to Creator
+              </h3>
+              <p
+                className="text-2xl font-bold mb-4"
+                style={{ color: "#9900CC", fontFamily: "var(--font-dm-sans, system-ui, sans-serif)" }}
+              >
+                $9<span className="text-sm font-normal text-gray-500">/month</span>
+              </p>
+              <ul className="text-left space-y-2 mb-5 mx-auto max-w-xs">
+                {[
+                  "25 market insights per month",
+                  "10 book outlines per month",
+                  "AI Book Copilot — 1 chapter preview",
+                ].map((f) => (
+                  <li key={f} className="flex items-center gap-2 text-sm" style={{ color: "#444" }}>
+                    <Check className="h-4 w-4 flex-shrink-0" style={{ color: "#9900CC" }} />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <button
+                onClick={() => {
+                  // Navigate to Upgrade tab via DOM — avoids prop drilling
+                  const tabs = document.querySelectorAll('[class*="cursor-pointer"]')
+                  tabs.forEach((tab) => {
+                    if (tab.textContent?.trim() === "Upgrade") {
+                      ;(tab as HTMLElement).click()
+                    }
+                  })
+                }}
+                className="inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold text-white transition-all hover:scale-[1.02]"
+                style={{
+                  background: "linear-gradient(135deg, #9900CC, #7700AA)",
+                  boxShadow: "0 2px 12px rgba(153,0,204,0.3)",
+                  fontFamily: "var(--font-dm-sans, system-ui, sans-serif)",
+                }}
+              >
+                Upgrade Now <ArrowRight className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ── Stats bar ────────────────────────────────────────────────────── */}
       {hasResults && <MarketStatsBar books={books} />}
