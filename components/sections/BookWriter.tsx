@@ -743,20 +743,51 @@ export default function BookWriter() {
         {/* Center: Locked chapter prompt or unified chapter view */}
         {activeChapter && maxAllowedChapter !== undefined && activeChapter.chapterNumber > maxAllowedChapter ? (
           <div className="flex-1 flex items-center justify-center">
-            <div className="text-center space-y-4 max-w-md px-6">
+            <div className="text-center space-y-5 max-w-md px-6">
               <div className="w-16 h-16 rounded-2xl bg-purple-50 flex items-center justify-center mx-auto">
                 <Lock className="h-8 w-8 text-purple-300" />
               </div>
-              <h3
-                className="text-lg font-semibold text-gray-900"
-                style={{ fontFamily: "var(--font-playfair)" }}
+              <div>
+                <h3
+                  className="text-lg font-semibold text-gray-900"
+                  style={{ fontFamily: "var(--font-playfair)" }}
+                >
+                  Unlock your full manuscript
+                </h3>
+                <p className="text-sm text-gray-500 leading-relaxed mt-2">
+                  Your Chapter 1 preview is complete. Purchase a book credit to co-author the remaining chapters with AI.
+                </p>
+              </div>
+              <div className="rounded-xl border border-dashed p-4 text-left" style={{ borderColor: "rgba(153,0,204,0.3)", background: "#FAFAFE" }}>
+                <p className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#9900CC" }}>
+                  Book Credit — $99 per book
+                </p>
+                <ul className="space-y-1.5 text-sm text-gray-600">
+                  <li className="flex items-center gap-2">
+                    <span className="w-1 h-1 rounded-full bg-purple-400 flex-shrink-0" />
+                    All chapters unlocked
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="w-1 h-1 rounded-full bg-purple-400 flex-shrink-0" />
+                    AI drafts + comment-driven revision
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="w-1 h-1 rounded-full bg-purple-400 flex-shrink-0" />
+                    Style-matched writing across chapters
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="w-1 h-1 rounded-full bg-purple-400 flex-shrink-0" />
+                    Export to DOCX
+                  </li>
+                </ul>
+              </div>
+              <Button
+                disabled
+                className="text-sm font-semibold text-white px-8 h-10 rounded-full opacity-80"
+                style={{ background: "#9900CC" }}
               >
-                Chapter {activeChapter.chapterNumber} is Locked
-              </h3>
-              <p className="text-sm text-gray-500 leading-relaxed">
-                Chapter 1 preview complete. Full book writing is coming soon.
-                You&apos;ll be able to unlock all chapters to complete your manuscript.
-              </p>
+                Coming Soon
+              </Button>
             </div>
           </div>
         ) : (

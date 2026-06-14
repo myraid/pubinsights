@@ -22,8 +22,8 @@ const dmSans = DM_Sans({
 })
 
 export const metadata: Metadata = {
-  title: "PubInsights - Book Research and Publishing Insights",
-  description: "Research book trends, generate outlines, and get publishing insights",
+  title: "PubInsights — AI-Powered Book Market Research",
+  description: "Validate your niche, build your outline, and co-author your book with AI.",
 }
 
 export default function RootLayout({

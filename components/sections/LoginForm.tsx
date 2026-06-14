@@ -96,16 +96,16 @@ export default function LoginForm({ initialMode = "login" }: { initialMode?: "lo
           style={{ background: "#FFFFFF" }}
         />
 
-        {/* Logo — white card so the purple stamp reads cleanly against the gradient */}
-        <div className="bg-white rounded-2xl p-3 inline-block shadow-lg relative z-10">
+        {/* Logo mark */}
+        <div className="relative z-10">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/images/Logo-1.png"
             alt="PubInsights"
-            width={96}
-            height={96}
+            width={56}
+            height={56}
             loading="eager"
-            className="w-auto h-24 block"
+            className="w-auto h-14 block"
           />
         </div>
 
@@ -114,18 +114,18 @@ export default function LoginForm({ initialMode = "login" }: { initialMode?: "lo
           <h2
             className="text-4xl font-black text-white mb-4 leading-tight [font-family:var(--font-playfair,Georgia,serif)]"
           >
-            Research smarter.<br />Publish with confidence.
+            Know your market.<br />Co-author your book with AI.
           </h2>
           <p className="text-white/70 text-base leading-relaxed max-w-sm">
-            Amazon market data, AI-powered insights, and book outlines — all in one place for indie authors.
+            Validate your niche, build your outline, and co-author your manuscript — all in one place.
           </p>
 
           {/* Mini feature list */}
           <div className="mt-10 space-y-3">
             {[
-              "Real BSR & sales estimates",
-              "Google + YouTube trend signals",
-              "AI-generated book outlines",
+              "Live bestseller & trend data",
+              "AI-powered niche validation",
+              "Outline generator + AI Book Copilot",
             ].map((item) => (
               <div key={item} className="flex items-center gap-3">
                 <div
@@ -152,17 +152,15 @@ export default function LoginForm({ initialMode = "login" }: { initialMode?: "lo
       >
         {/* Mobile logo */}
         <div className="lg:hidden mb-8">
-          <div className="rounded-xl overflow-hidden shadow-md inline-block">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/images/Logo-1.png"
-              alt="PubInsights"
-              width={64}
-              height={64}
-              loading="eager"
-              className="w-auto h-16 block"
-            />
-          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/Logo-1.png"
+            alt="PubInsights"
+            width={48}
+            height={48}
+            loading="eager"
+            className="w-auto h-12 block"
+          />
         </div>
 
         {/* Auth card */}

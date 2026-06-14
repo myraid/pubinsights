@@ -1,40 +1,63 @@
 ---
-name: Logo and color scheme update (2026-03-28)
-description: New square Logo-1.png introduced; brand palette updated to match; logo usage patterns established for all contexts
+name: Logo and color scheme update (2026-06-14)
+description: AuthorOS-Logo.png AO monogram integration; brand palette; logo lockup pattern (mark + wordmark) for all contexts
 type: project
 ---
 
-On 2026-03-28 the brand palette was updated to match the new square logo (`/public/images/Logo-1.png` — vivid purple `#9900CC` background with white neural lightbulb icon and "Publisher Insights" stacked text).
+As of 2026-06-14 the active logo is `/public/images/AuthorOS-Logo.png` — an "AO" monogram on a light lavender background.
 
-## Updated palette (globals.css and all BRAND consts)
+## Active palette (globals.css and all BRAND consts)
 
 | Token | Hex | Notes |
 |---|---|---|
-| `--brand-deep` | `#7000A0` | Deeper than before (was `#8400B8`), used for hover/dark states and headings |
-| `--brand-primary` | `#9900CC` | Unchanged — exact logo purple |
-| `--brand-bg` | `#F5EEFF` | Unchanged |
-| `--brand-gray` | `#6E6E6E` | Unchanged |
-| `--brand-accent` | `#BB00EE` | Brighter than before (was `#AA00DD`), used for badges/highlights |
+| `--brand-deep` | `#7000A0` | Headings, wordmark color on light backgrounds |
+| `--brand-primary` | `#9900CC` | Primary buttons, active nav |
+| `--brand-bg` | `#F5EEFF` | Page/section backgrounds |
+| `--brand-gray` | `#6E6E6E` | Body text, muted labels |
+| `--brand-accent` | `#BB00EE` | Badges, highlights, hover |
 
-The Shadcn `--accent` HSL token was also updated to match `#BB00EE` (288 100% 47%).
+## Logo lockup pattern (CURRENT — replaces old stamp-wrapper pattern)
 
-## Logo usage patterns
+The AO monogram is a mark, not a self-contained stamp. It must always appear in a **lockup**: mark + "AuthorOS" wordmark in Playfair Display black, same row, vertically centered. Never use the rounded-xl/shadow-md card wrapper — the monogram needs to breathe.
 
-**Light/white backgrounds** (Header nav, LandingPage nav):
-- `src="/images/Logo-1.png"`, `width={240} height={240}`
-- Wrapped in `<div className="rounded-xl overflow-hidden shadow-md flex-shrink-0">` — creates a square stamp with rounded corners and subtle shadow
-- `className="w-auto h-10 md:h-12 block"` — no filter
+**Nav contexts** (LandingPage nav, Header):
+```jsx
+<div className="flex items-center gap-2 flex-shrink-0">
+  <img src="/images/AuthorOS-Logo.png" alt="AuthorOS" width={36} height={36}
+       loading="eager" className="w-auto h-9 block" />
+  <span className="text-xl font-black tracking-tight [font-family:var(--font-playfair,Georgia,serif)]"
+        style={{ color: "#7000A0" }}>
+    AuthorOS
+  </span>
+</div>
+```
 
-**Dark purple gradient panel** (LoginForm left panel):
-- Wrapped in `<div className="bg-white rounded-2xl p-3 inline-block shadow-lg relative z-10">` — white card containing the logo; looks premium against the purple gradient
-- `className="w-auto h-24 block"` — larger size on brand panel, NO `brightness-0 invert`
+**Desktop left panel** (LoginForm purple gradient — wordmark goes white, mark gets slight rounding):
+```jsx
+<div className="flex items-center gap-3 relative z-10">
+  <img src="/images/AuthorOS-Logo.png" alt="AuthorOS" width={56} height={56}
+       loading="eager" className="w-auto h-14 block rounded-xl" />
+  <span className="text-3xl font-black tracking-tight [font-family:var(--font-playfair,Georgia,serif)]"
+        style={{ color: "#FFFFFF" }}>
+    AuthorOS
+  </span>
+</div>
+```
 
-**Mobile logo** (LoginForm right panel, mobile only):
-- Same `rounded-xl overflow-hidden shadow-md inline-block` wrapper as nav
-- `className="w-auto h-16 block"`
+**Mobile logo** (LoginForm mobile, `lg:hidden`):
+```jsx
+<div className="lg:hidden mb-8 flex items-center gap-2">
+  <img src="/images/AuthorOS-Logo.png" alt="AuthorOS" width={40} height={40}
+       loading="eager" className="w-auto h-10 block rounded-lg" />
+  <span className="text-2xl font-black tracking-tight [font-family:var(--font-playfair,Georgia,serif)]"
+        style={{ color: "#7000A0" }}>
+    AuthorOS
+  </span>
+</div>
+```
 
 ## Why:
-The old logo was wide/rectangular; the new logo is square (stamp format). The stamp wrapper pattern (rounded corners + shadow) makes the square feel intentional and polished. The white card on the dark panel prevents color clash between the logo's purple background and the panel gradient.
+The AO monogram is a mark-based logo, not a self-contained badge. It needs a wordmark partner to read as a logo in nav contexts. The old "stamp + white card shadow" pattern was designed for the previous square stamp logo (Logo-1.png) which is now retired. The monogram's lavender background is light enough that it sits cleanly on white nav backgrounds without any wrapper.
 
 ## How to apply:
-Always use the wrapper div pattern — never render the logo bare. Never apply `brightness-0 invert` to Logo-1.png since it already has its own branded purple background.
+Always render as mark + wordmark lockup. Never wrap in rounded-xl shadow-md card. On dark/purple backgrounds, wordmark color flips to white (#FFFFFF). Wordmark always uses `[font-family:var(--font-playfair,Georgia,serif)]` with `font-black tracking-tight`. Keep `loading="eager"` and `alt="AuthorOS"` and eslint-disable comment.

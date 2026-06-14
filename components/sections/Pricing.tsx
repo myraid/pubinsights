@@ -42,11 +42,12 @@ const PLANS: Plan[] = [
     name: "Free",
     price: "$0",
     priceDetail: "per month",
-    description: "Get started with the essentials.",
+    description: "Validate your book idea before you commit.",
     features: [
       { label: "3 market insights per month" },
       { label: "1 book outline per month" },
-      { label: "Amazon & trend data" },
+      { label: "Live competitor analysis" },
+      { label: "Trend & demand signals" },
       { label: "No credit card required" },
     ],
     insightsLimit: 3,
@@ -59,13 +60,12 @@ const PLANS: Plan[] = [
     name: "Creator",
     price: "$9",
     priceDetail: "per month",
-    description: "For authors serious about niche research.",
+    description: "Research deeper and start writing your book.",
     features: [
       { label: "25 market insights per month" },
       { label: "10 book outlines per month" },
-      { label: "Amazon & trend data" },
+      { label: "AI Book Copilot — 1 chapter preview" },
       { label: "Save research to projects" },
-      { label: "Priority support" },
     ],
     insightsLimit: 25,
     outlinesLimit: 10,
@@ -73,6 +73,21 @@ const PLANS: Plan[] = [
     highlight: true,
   },
 ]
+
+// Separate card — not a subscription, shown as a future add-on
+const BOOK_PLAN = {
+  name: "Full Book",
+  price: "$99",
+  priceDetail: "per book",
+  description: "Unlock your entire manuscript with AI-assisted writing.",
+  features: [
+    { label: "All chapters unlocked" },
+    { label: "AI drafts + comment-driven revision" },
+    { label: "Style-matched writing across chapters" },
+    { label: "Export to DOCX" },
+    { label: "Requires Creator subscription" },
+  ],
+}
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
@@ -245,7 +260,7 @@ export default function Pricing() {
       </div>
 
       {/* Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-3xl">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-5xl">
         {PLANS.map((plan) => {
           const isCurrentPlan = currentTier === plan.id
           const isCreator = plan.id === "creator"
@@ -441,6 +456,101 @@ export default function Pricing() {
             </Card>
           )
         })}
+
+        {/* Full Book — one-time purchase card */}
+        <Card
+          className="relative flex flex-col bg-white overflow-hidden"
+          style={{
+            border: "1px dashed rgba(153,0,204,0.3)",
+          }}
+        >
+          <div
+            className="absolute top-0 right-0 flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-bl-xl text-white"
+            style={{
+              background: "linear-gradient(135deg, var(--brand-primary), var(--brand-deep))",
+              fontFamily: "var(--font-dm-sans, system-ui, sans-serif)",
+            }}
+          >
+            Coming Soon
+          </div>
+
+          <CardHeader className="pb-4">
+            <p
+              className="text-xs font-semibold uppercase tracking-widest mb-1"
+              style={{
+                color: "var(--brand-primary)",
+                fontFamily: "var(--font-dm-sans, system-ui, sans-serif)",
+              }}
+            >
+              {BOOK_PLAN.name}
+            </p>
+
+            <div className="flex items-baseline gap-1.5 mb-1">
+              <span
+                className="text-4xl font-bold"
+                style={{
+                  fontFamily: "var(--font-playfair, Georgia, serif)",
+                  color: "var(--brand-deep)",
+                }}
+              >
+                {BOOK_PLAN.price}
+              </span>
+              <span
+                className="text-sm"
+                style={{
+                  color: "var(--brand-gray)",
+                  fontFamily: "var(--font-dm-sans, system-ui, sans-serif)",
+                }}
+              >
+                {BOOK_PLAN.priceDetail}
+              </span>
+            </div>
+
+            <p
+              className="text-sm"
+              style={{
+                color: "var(--brand-gray)",
+                fontFamily: "var(--font-dm-sans, system-ui, sans-serif)",
+              }}
+            >
+              {BOOK_PLAN.description}
+            </p>
+          </CardHeader>
+
+          <CardContent className="flex flex-col flex-1 gap-6">
+            <ul className="space-y-2.5">
+              {BOOK_PLAN.features.map((feature) => (
+                <li key={feature.label} className="flex items-start gap-2.5">
+                  <Check
+                    className="w-4 h-4 flex-shrink-0 mt-0.5"
+                    style={{ color: "var(--brand-primary)" }}
+                  />
+                  <span
+                    className="text-sm leading-snug"
+                    style={{
+                      color: "var(--brand-gray)",
+                      fontFamily: "var(--font-dm-sans, system-ui, sans-serif)",
+                    }}
+                  >
+                    {feature.label}
+                  </span>
+                </li>
+              ))}
+            </ul>
+
+            <div className="flex-1" />
+
+            <Button
+              variant="outline"
+              size="lg"
+              className="w-full"
+              disabled
+              style={{ fontFamily: "var(--font-dm-sans, system-ui, sans-serif)" }}
+            >
+              Coming Soon
+            </Button>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Footer note */}

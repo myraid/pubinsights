@@ -33,18 +33,16 @@ export default function Header() {
         <div className="flex items-center justify-between h-16 md:h-18">
 
           {/* Logo — left anchor */}
-          <div className="flex items-center flex-shrink-0">
-            <div className="rounded-xl overflow-hidden shadow-md flex-shrink-0">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/images/Logo-1.png"
-                alt="Publisher Insights"
-                width={48}
-                height={48}
-                loading="eager"
-                className="w-auto h-10 md:h-12 block"
-              />
-            </div>
+          <div className="flex-shrink-0">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/Logo-1.png"
+              alt="PubInsights"
+              width={40}
+              height={40}
+              loading="eager"
+              className="w-auto h-10 block"
+            />
           </div>
 
           {/* User controls — right anchor */}
