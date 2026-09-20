@@ -4,12 +4,13 @@ import { FieldValue } from 'firebase-admin/firestore'
 import { ContextBuilder } from '@/app/lib/context/context-builder'
 import { reviseSection } from '@/app/lib/agents/revision-agent'
 import { checkAndIncrementUsage, checkChapterAccess } from '@/app/lib/billing/usage'
+import { stripHighlightMarks } from '@/app/lib/html-marks'
 
 export const maxDuration = 120
 
 export async function POST(request: NextRequest) {
   try {
-    const { userId, projectId, manuscriptId, chapterId, sectionId, comments } =
+    const { userId, projectId, manuscriptId, chapterId, sectionId, comments, content } =
       await request.json()
 
     if (!userId || !projectId || !manuscriptId || !chapterId || !sectionId) {
@@ -77,18 +78,18 @@ export async function POST(request: NextRequest) {
       sectionId
     )
 
-    // Call revision agent
-    const result = await reviseSection(ctx)
-
-    // If content unchanged, return early
-    if (result.content === sec.content) {
-      return NextResponse.json({
-        content: sec.content,
-        wordCount: sec.wordCount,
-        changesApplied: [],
-        message: 'No changes needed - the AI determined the content already addresses the feedback.',
+    ctx.currentSection.currentContent = stripHighlightMarks(
+      typeof content === 'string' ? content : (sec.content || '')
+    )
+    ctx.currentSection.comments = comments.map(
+      (c: { selectedText?: string; authorFeedback?: string }) => ({
+        selectedText: c.selectedText || '',
+        authorFeedback: c.authorFeedback || '',
       })
-    }
+    )
+
+    const result = await reviseSection(ctx)
+    const cleanedContent = stripHighlightMarks(result.content)
 
     // Save old content to revisionHistory (cap at 10)
     const revisionEntry = {
@@ -118,9 +119,8 @@ export async function POST(request: NextRequest) {
       }
     )
 
-    // Update section
     await adminDb.doc(sectionPath).update({
-      content: result.content,
+      content: cleanedContent,
       wordCount: result.wordCount,
       revisionCount: (sec.revisionCount || 0) + 1,
       revisionHistory,
@@ -131,7 +131,7 @@ export async function POST(request: NextRequest) {
     console.log(`[revise-section] section=${sec.sectionNumber} changes=${result.changesApplied.length}`)
 
     return NextResponse.json({
-      content: result.content,
+      content: cleanedContent,
       wordCount: result.wordCount,
       changesApplied: result.changesApplied,
     })

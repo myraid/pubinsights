@@ -21,6 +21,7 @@ import {
 } from "@/app/lib/firebase/services"
 import type { Project, ProjectOutline, Manuscript, ChapterDocument, Section, StyleProfile } from "@/app/types/firebase"
 import { toast } from "sonner"
+import { stripHighlightMarks } from "@/app/lib/html-marks"
 import CollapsibleChapterNav from "@/components/book-writer/CollapsibleChapterNav"
 import dynamic from "next/dynamic"
 
@@ -57,6 +58,7 @@ export default function BookWriter() {
   const [generatingSectionId, setGeneratingSectionId] = useState<string | null>(null)
   const [revisingSectionId, setRevisingSectionId] = useState<string | null>(null)
   const [savingSectionId, setSavingSectionId] = useState<string | null>(null)
+  const [lastRevision, setLastRevision] = useState<{ sectionId: string; changes: string[] } | null>(null)
 
   const activeChapter = chapters.find(c => c.id === activeChapterId) || null
 
@@ -140,7 +142,6 @@ export default function BookWriter() {
           const keyTopics = Array.isArray(rawTopics)
             ? (rawTopics as unknown[]).filter(t => typeof t === "string") as string[]
             : []
-
           return {
             Chapter: ch.Chapter,
             Title: ch.Title,
@@ -344,7 +345,7 @@ export default function BookWriter() {
     }
   }
 
-  const handleApplyRevisions = async (sectionId: string) => {
+  const handleApplyRevisions = async (sectionId: string, editorContent?: string) => {
     if (!user || !selectedProject || !activeManuscript || !activeChapterId) return
     const section = sections.find(s => s.id === sectionId)
     if (!section) return
@@ -352,6 +353,7 @@ export default function BookWriter() {
     if (pendingComments.length === 0) return
 
     setRevisingSectionId(sectionId)
+    setLastRevision(null)
     try {
       const res = await fetch('/api/revise-section', {
         method: 'POST',
@@ -363,6 +365,7 @@ export default function BookWriter() {
           chapterId: activeChapterId,
           sectionId,
           comments: pendingComments,
+          content: stripHighlightMarks(editorContent ?? section.content ?? ""),
         }),
       })
       if (!res.ok) {
@@ -370,21 +373,29 @@ export default function BookWriter() {
         throw new Error(e.error)
       }
       const data = await res.json()
+      const changes = data.changesApplied || []
+      const applied = changes.filter((c: string) => !/^Skipped:/i.test(c))
+      const content = stripHighlightMarks(typeof data.content === "string" ? data.content : "")
 
       setSections(prev => prev.map(s => {
         if (s.id !== sectionId) return s
         return {
           ...s,
-          content: data.content,
+          content,
           wordCount: data.wordCount,
           revisionCount: (s.revisionCount || 0) + 1,
           comments: s.comments.map(c =>
-            pendingComments.some(pc => pc.id === c.id) ? { ...c, status: 'resolved' as const } : c
+            pendingComments.some(pc => pc.id === c.id) ? { ...c, status: "resolved" as const } : c
           ),
         }
       }))
 
-      toast.success(`${data.changesApplied.length} revision(s) applied`)
+      setLastRevision({ sectionId, changes })
+      if (applied.length > 0) {
+        toast.success(`${applied.length} revision${applied.length === 1 ? "" : "s"} applied`)
+      } else {
+        toast.info("No wording changed — see the summary above the editor")
+      }
     } catch (e) {
       toast.error(e instanceof Error ? e.message : 'Failed to apply revisions')
     } finally {
@@ -411,10 +422,14 @@ export default function BookWriter() {
       createdAt: { seconds: Math.floor(Date.now() / 1000), nanoseconds: 0 },
     }
     const updatedComments = [...(section.comments || []), newComment]
-    await saveSection(selectedProject.id, activeManuscript.id, activeChapterId, sectionId, { comments: updatedComments })
     setSections(prev => prev.map(s =>
       s.id === sectionId ? { ...s, comments: updatedComments } : s
     ))
+    try {
+      await saveSection(selectedProject.id, activeManuscript.id, activeChapterId, sectionId, { comments: updatedComments })
+    } catch {
+      toast.error("Failed to save comment")
+    }
   }
 
   const handleDeleteComment = async (sectionId: string, commentId: string) => {
@@ -665,30 +680,30 @@ export default function BookWriter() {
 
   // ── Active manuscript: full-screen writing view ──
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-white">
-      {/* Top bar */}
-      <div className="flex items-center gap-3 px-5 py-2.5 border-b border-purple-100 bg-white flex-shrink-0">
+    <div className="fixed inset-0 z-50 flex flex-col" style={{ background: "#FFFCFA", fontFamily: "var(--font-dm-sans, system-ui, sans-serif)" }}>
+      <div className="flex items-center gap-3 px-5 py-2.5 flex-shrink-0" style={{ background: "#F5EEFF", borderBottom: "1px solid rgba(153,0,204,0.14)" }}>
         <button
           onClick={() => setActiveManuscript(null)}
-          className="text-gray-400 hover:text-purple-600 transition-colors"
+          className="transition-colors"
+          style={{ color: "#6E6E6E" }}
           aria-label="Back to project selection"
         >
           <ArrowLeft className="h-4 w-4" />
         </button>
         <div className="min-w-0 flex-1">
           <h3
-            className="text-base font-semibold text-gray-900 truncate"
-            style={{ fontFamily: "var(--font-playfair)" }}
+            className="truncate text-base font-semibold"
+            style={{ fontFamily: "var(--font-playfair, Georgia, serif)", color: "#8400B8" }}
           >
             {activeManuscript.title}
           </h3>
-          <p className="text-xs text-gray-400">
+          <p className="text-xs" style={{ color: "#6E6E6E" }}>
             {activeManuscript.totalWordCount?.toLocaleString() || 0} words
             {" \u00B7 "}
             {activeManuscript.completedChapters}/{activeManuscript.totalChapters} chapters
           </p>
         </div>
-        <Button variant="outline" size="sm" onClick={handleExportDocx} className="text-xs border-purple-200 hover:bg-purple-50 text-purple-700">
+        <Button variant="outline" size="sm" onClick={handleExportDocx} className="text-xs" style={{ borderColor: "rgba(153,0,204,0.3)", color: "#8400B8" }}>
           Export DOCX
         </Button>
       </div>
@@ -809,6 +824,8 @@ export default function BookWriter() {
             generatingSectionId={generatingSectionId}
             revisingSectionId={revisingSectionId}
             savingSectionId={savingSectionId}
+            lastRevision={lastRevision}
+            onDismissChanges={() => setLastRevision(null)}
           />
         )}
       </div>

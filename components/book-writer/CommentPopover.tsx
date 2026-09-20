@@ -1,8 +1,16 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { MessageSquare, X } from "lucide-react"
+import { MessageSquarePlus, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
+
+const BRAND = {
+  deep: "#8400B8",
+  primary: "#9900CC",
+  bg: "#F5EEFF",
+  gray: "#6E6E6E",
+  accent: "#AA00DD",
+} as const
 
 interface CommentPopoverProps {
   position: { top: number; left: number }
@@ -37,19 +45,27 @@ export default function CommentPopover({ position, selectedText, onSubmit, onClo
 
   return (
     <div
-      className="absolute z-50 w-72 bg-white rounded-lg shadow-xl border border-purple-200 p-3"
-      style={{ top: position.top, left: position.left }}
+      className="absolute z-50 w-80 rounded-xl border bg-white p-3.5 shadow-2xl"
+      style={{
+        top: position.top,
+        left: position.left,
+        borderColor: "rgba(153,0,204,0.22)",
+        fontFamily: "var(--font-dm-sans, system-ui, sans-serif)",
+      }}
     >
-      <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-1.5 text-xs text-purple-600 font-medium">
-          <MessageSquare className="h-3.5 w-3.5" />
-          Add Comment
+      <div className="mb-2 flex items-center justify-between">
+        <div className="flex items-center gap-1.5 text-xs font-semibold" style={{ color: BRAND.primary }}>
+          <MessageSquarePlus className="h-3.5 w-3.5" />
+          Comment for AI
         </div>
-        <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+        <button onClick={onClose} className="text-gray-400 hover:text-gray-700" aria-label="Close comment">
           <X className="h-3.5 w-3.5" />
         </button>
       </div>
-      <div className="text-xs text-gray-500 bg-yellow-50 rounded px-2 py-1 mb-2 line-clamp-2 italic">
+      <div
+        className="mb-2.5 line-clamp-3 rounded-md px-2.5 py-1.5 text-xs italic"
+        style={{ background: "#FFF8E8", color: "#92400E", borderLeft: "3px solid #F59E0B" }}
+      >
         &ldquo;{selectedText}&rdquo;
       </div>
       <textarea
@@ -57,22 +73,31 @@ export default function CommentPopover({ position, selectedText, onSubmit, onClo
         value={feedback}
         onChange={(e) => setFeedback(e.target.value)}
         onKeyDown={handleKeyDown}
-        placeholder="What should change? e.g., 'Add more data here'"
-        className="w-full text-sm border border-gray-200 rounded-md p-2 resize-none focus:outline-none focus:ring-1 focus:ring-purple-400"
+        placeholder="Tell the AI what to change in this passage…"
+        className="w-full resize-none rounded-md border border-gray-200 p-2 text-sm focus:outline-none focus:ring-1"
+        style={{ fontFamily: "var(--font-dm-sans, system-ui, sans-serif)" }}
         rows={3}
       />
-      <div className="flex justify-end gap-2 mt-2">
-        <Button variant="ghost" size="sm" onClick={onClose} className="text-xs h-7">
-          Cancel
-        </Button>
-        <Button
-          size="sm"
-          onClick={handleSubmit}
-          disabled={!feedback.trim()}
-          className="text-xs h-7 bg-purple-600 hover:bg-purple-700 text-white"
-        >
-          Add Comment
-        </Button>
+      <div className="mt-2 flex items-center justify-between">
+        <p className="text-[10px] uppercase tracking-wider" style={{ color: BRAND.gray }}>
+          Enter to add
+        </p>
+        <div className="flex gap-2">
+          <Button variant="ghost" size="sm" onClick={onClose} className="h-7 text-xs">
+            Cancel
+          </Button>
+          <Button
+            size="sm"
+            onClick={handleSubmit}
+            disabled={!feedback.trim()}
+            className="h-7 text-xs text-white"
+            style={{ background: BRAND.primary }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = BRAND.deep }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = BRAND.primary }}
+          >
+            Add Comment
+          </Button>
+        </div>
       </div>
     </div>
   )
