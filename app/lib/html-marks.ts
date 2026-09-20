@@ -152,7 +152,7 @@ export function findHtmlRangeForPlainText(
     i++
   }
 
-  let idx = plain.indexOf(target)
+  const idx = plain.indexOf(target)
   if (idx === -1 || idx + target.length - 1 >= map.length) return null
 
   return { startIdx: map[idx].start, endIdx: map[idx + target.length - 1].end }
