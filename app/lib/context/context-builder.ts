@@ -137,7 +137,13 @@ export class ContextBuilder {
       .orderBy('chapterNumber', 'asc')
       .get()
 
-    let previousChapters = completedSnap.docs
+    type PreviousChapter = {
+      chapterNumber: number
+      title: string
+      chapterSummary: string
+    }
+
+    let previousChapters: PreviousChapter[] = completedSnap.docs
       .filter((d: QueryDocumentSnapshot) => d.data().chapterNumber < currentChapter.number)
       .map((d: QueryDocumentSnapshot) => {
         const data = d.data()

@@ -101,7 +101,15 @@ export async function POST(request: NextRequest) {
 
     if (isLastSection) {
       // Assemble chapter content from ordered sections
-      const orderedSections = allSectionsSnap.docs
+      type OrderedSection = {
+        id: string
+        sectionNumber: number
+        title: string
+        content: string
+        approvedSummary: string
+      }
+
+      const orderedSections: OrderedSection[] = allSectionsSnap.docs
         .map((d: QueryDocumentSnapshot) => {
           const data = d.data()
           return {
@@ -112,7 +120,7 @@ export async function POST(request: NextRequest) {
             approvedSummary: (data.approvedSummary || '') as string,
           }
         })
-        .sort((a, b) => a.sectionNumber - b.sectionNumber)
+        .sort((a: OrderedSection, b: OrderedSection) => a.sectionNumber - b.sectionNumber)
 
       const chapterContent = orderedSections.map(s => s.content).join('\n\n')
 
