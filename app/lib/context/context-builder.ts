@@ -85,15 +85,25 @@ export class ContextBuilder {
       sectionPlan: chap.sectionPlan || [],
     }
 
-    // Find current section from plan
+    // Prefer the live section document so updated briefs win over a stale chapter plan
+    const liveSecSnap = await adminDb
+      .collection(`${basePath}/chapters/${chapterId}/sections`)
+      .where('sectionNumber', '==', sectionNumber)
+      .limit(1)
+      .get()
+    const liveSec = liveSecSnap.empty ? null : liveSecSnap.docs[0].data()
+
     const sectionPlanEntry = currentChapter.sectionPlan.find(
       (s: SectionPlanEntry) => s.sectionNumber === sectionNumber
     )
     const currentSection = {
       number: sectionNumber,
-      title: sectionPlanEntry?.title || `Section ${sectionNumber}`,
-      outlineContext: sectionPlanEntry?.outlineContext || '',
-      estimatedWords: sectionPlanEntry?.estimatedWords || 1000,
+      title: liveSec?.title || sectionPlanEntry?.title || `Section ${sectionNumber}`,
+      outlineContext: liveSec?.outlineContext || sectionPlanEntry?.outlineContext || '',
+      estimatedWords: liveSec?.estimatedWords || sectionPlanEntry?.estimatedWords || 1000,
+      authorNotes: typeof liveSec?.authorNotes === 'string' && liveSec.authorNotes.trim()
+        ? liveSec.authorNotes
+        : undefined,
     }
 
     // Read 3: Approved sections in this chapter
