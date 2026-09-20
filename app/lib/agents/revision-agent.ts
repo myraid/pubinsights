@@ -1,5 +1,6 @@
 import anthropic, { HAIKU_MODEL, extractJson } from './anthropic-client'
 import type { WritingContext } from '@/app/lib/context/context-builder'
+import { findHtmlRangeForPlainText, stripHighlightMarks } from '@/app/lib/html-marks'
 
 interface RevisionResult {
   content: string
@@ -37,20 +38,24 @@ interface PassageRevision {
  * Extract ~200 words of context before and after the target text.
  * Works on the raw HTML string.
  */
+function normalizeHtml(html: string): string {
+  return stripHighlightMarks(html).replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim()
+}
+
 function extractPassageWithContext(
   fullContent: string,
   selectedText: string,
   contextWords: number = 200
 ): { before: string; target: string; after: string; startIdx: number; endIdx: number } | null {
-  const idx = fullContent.indexOf(selectedText)
-  if (idx === -1) return null
+  const range = findHtmlRangeForPlainText(fullContent, selectedText)
+  if (!range) return null
 
-  const endIdx = idx + selectedText.length
+  const { startIdx, endIdx } = range
 
   // Walk backwards to find ~contextWords words
-  let beforeStart = idx
+  let beforeStart = startIdx
   let wordCount = 0
-  for (let i = idx - 1; i >= 0 && wordCount < contextWords; i--) {
+  for (let i = startIdx - 1; i >= 0 && wordCount < contextWords; i--) {
     if (fullContent[i] === ' ' || fullContent[i] === '\n') wordCount++
     beforeStart = i
   }
@@ -64,10 +69,10 @@ function extractPassageWithContext(
   }
 
   return {
-    before: fullContent.slice(beforeStart, idx),
-    target: selectedText,
+    before: fullContent.slice(beforeStart, startIdx),
+    target: fullContent.slice(startIdx, endIdx),
     after: fullContent.slice(endIdx, afterEnd),
-    startIdx: idx,
+    startIdx,
     endIdx,
   }
 }
@@ -78,10 +83,11 @@ export async function reviseSection(ctx: WritingContext): Promise<RevisionResult
   const comments = sec.comments || []
 
   if (comments.length === 0) {
-    return { content: sec.currentContent || '', wordCount: countWords(sec.currentContent || ''), changesApplied: [] }
+    const cleaned = stripHighlightMarks(sec.currentContent || '')
+    return { content: cleaned, wordCount: countWords(cleaned), changesApplied: [] }
   }
 
-  let content = sec.currentContent || ''
+  let content = stripHighlightMarks(sec.currentContent || '')
   const changesApplied: string[] = []
 
   // Process each comment independently, in reverse order of position
@@ -130,28 +136,35 @@ export async function reviseSection(ctx: WritingContext): Promise<RevisionResult
 
       const text = response.content[0].type === 'text' ? response.content[0].text : ''
       const parsed = extractJson<PassageRevision>(text)
+      const revised = stripHighlightMarks(parsed.revisedPassage || '')
 
-      // Splice the revised passage back in
-      content = content.slice(0, passage.startIdx) + parsed.revisedPassage + content.slice(passage.endIdx)
-      changesApplied.push(parsed.changeDescription)
+      if (!revised || normalizeHtml(revised) === normalizeHtml(passage.target)) {
+        changesApplied.push(`Skipped: "${comment.authorFeedback}" (no wording change)`)
+        continue
+      }
+
+      content = content.slice(0, passage.startIdx) + revised + content.slice(passage.endIdx)
+      changesApplied.push(parsed.changeDescription || `Revised: "${comment.authorFeedback}"`)
     } catch (err) {
       console.warn(`[revision-agent] Failed to revise comment "${comment.authorFeedback}":`, err)
       changesApplied.push(`Skipped: "${comment.authorFeedback}" (revision failed)`)
     }
   }
 
-  // Handle comments whose selectedText wasn't found
-  const skippedComments = comments.filter(c => !commentPassages.some(cp => cp.comment === c))
-  for (const c of skippedComments) {
-    changesApplied.push(`Skipped: "${c.authorFeedback}" (selected text not found in content)`)
+  const located = new Set(allPassages.map(cp => cp.comment))
+  for (const c of comments) {
+    if (!located.has(c)) {
+      changesApplied.push(`Skipped: "${c.authorFeedback}" (selected text not found in content)`)
+    }
   }
 
   const duration = Date.now() - start
   console.log(`[revision-agent] sec="${sec.title}" changes=${changesApplied.length} duration=${duration}ms model=${HAIKU_MODEL}`)
 
+  const cleaned = stripHighlightMarks(content)
   return {
-    content,
-    wordCount: countWords(content),
+    content: cleaned,
+    wordCount: countWords(cleaned),
     changesApplied,
   }
 }
