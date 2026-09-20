@@ -1,4 +1,3 @@
-import type { QueryDocumentSnapshot } from 'firebase-admin/firestore'
 import { adminDb } from '@/app/lib/firebase/admin'
 import type { StyleProfile, SectionPlanEntry } from '@/app/types/firebase'
 
@@ -115,8 +114,8 @@ export class ContextBuilder {
       .get()
 
     const previousSectionsInChapter = approvedSnap.docs
-      .filter((d: QueryDocumentSnapshot) => d.data().sectionNumber < sectionNumber)
-      .map((d: QueryDocumentSnapshot) => {
+      .filter(d => d.data().sectionNumber < sectionNumber)
+      .map(d => {
         const data = d.data()
         let summary = data.approvedSummary || ''
         if (!summary && data.content) {
@@ -137,15 +136,9 @@ export class ContextBuilder {
       .orderBy('chapterNumber', 'asc')
       .get()
 
-    type PreviousChapter = {
-      chapterNumber: number
-      title: string
-      chapterSummary: string
-    }
-
-    let previousChapters: PreviousChapter[] = completedSnap.docs
-      .filter((d: QueryDocumentSnapshot) => d.data().chapterNumber < currentChapter.number)
-      .map((d: QueryDocumentSnapshot) => {
+    let previousChapters = completedSnap.docs
+      .filter(d => d.data().chapterNumber < currentChapter.number)
+      .map(d => {
         const data = d.data()
         return {
           chapterNumber: data.chapterNumber,

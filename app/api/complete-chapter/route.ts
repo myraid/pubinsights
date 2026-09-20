@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { adminDb } from '@/app/lib/firebase/admin'
-import { FieldValue, type QueryDocumentSnapshot } from 'firebase-admin/firestore'
+import { FieldValue } from 'firebase-admin/firestore'
 import { summarizeChapter } from '@/app/lib/agents/chapter-summarizer-agent'
 import { checkAndIncrementUsage, checkChapterAccess } from '@/app/lib/billing/usage'
 
@@ -61,17 +61,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify all sections are approved
-    type ChapterSection = {
-      id: string
-      sectionNumber: number
-      title: string
-      status: string
-      content: string
-      wordCount: number
-      approvedSummary: string
-    }
-
-    const sections: ChapterSection[] = sectionsSnap.docs.map((d: QueryDocumentSnapshot) => {
+    const sections = sectionsSnap.docs.map(d => {
       const data = d.data()
       return {
         id: d.id,

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { adminDb } from '@/app/lib/firebase/admin'
-import { FieldValue, type QueryDocumentSnapshot } from 'firebase-admin/firestore'
+import { FieldValue } from 'firebase-admin/firestore'
 import { summarizeSection } from '@/app/lib/agents/section-summarizer-agent'
 import { summarizeChapter } from '@/app/lib/agents/chapter-summarizer-agent'
 import { checkAndIncrementUsage, checkChapterAccess } from '@/app/lib/billing/usage'
@@ -101,16 +101,8 @@ export async function POST(request: NextRequest) {
 
     if (isLastSection) {
       // Assemble chapter content from ordered sections
-      type OrderedSection = {
-        id: string
-        sectionNumber: number
-        title: string
-        content: string
-        approvedSummary: string
-      }
-
-      const orderedSections: OrderedSection[] = allSectionsSnap.docs
-        .map((d: QueryDocumentSnapshot) => {
+      const orderedSections = allSectionsSnap.docs
+        .map(d => {
           const data = d.data()
           return {
             id: d.id,
@@ -120,7 +112,7 @@ export async function POST(request: NextRequest) {
             approvedSummary: (data.approvedSummary || '') as string,
           }
         })
-        .sort((a: OrderedSection, b: OrderedSection) => a.sectionNumber - b.sectionNumber)
+        .sort((a, b) => a.sectionNumber - b.sectionNumber)
 
       const chapterContent = orderedSections.map(s => s.content).join('\n\n')
 

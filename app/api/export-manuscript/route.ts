@@ -1,4 +1,3 @@
-import type { QueryDocumentSnapshot } from 'firebase-admin/firestore'
 import { NextRequest, NextResponse } from 'next/server'
 import { adminDb } from '@/app/lib/firebase/admin'
 import { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, NumberFormat } from 'docx'
@@ -44,9 +43,9 @@ export async function POST(req: NextRequest) {
 
     // Build chapter sections
     const chapterSections = chapSnap.docs
-      .filter((d: QueryDocumentSnapshot) => draft || d.data().status === 'complete')
-      .filter((d: QueryDocumentSnapshot) => d.data().content)
-      .map((d: QueryDocumentSnapshot) => {
+      .filter(d => draft || d.data().status === 'complete')
+      .filter(d => d.data().content)
+      .map(d => {
         const ch = d.data()
         return {
           properties: {},
