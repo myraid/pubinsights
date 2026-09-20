@@ -41,3 +41,6 @@ next-env.d.ts
 
 # OpenAI request logs
 logs/
+
+# git worktrees
+.worktrees/
