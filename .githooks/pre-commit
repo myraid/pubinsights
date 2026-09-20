@@ -1,0 +1,5 @@
+#!/bin/sh
+# Runs the same checks Firebase's build runs, so lint and type errors are
+# caught here instead of in CI. Bypass with `git commit --no-verify`.
+set -e
+npm run verify

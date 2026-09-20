@@ -44,3 +44,6 @@ logs/
 
 # git worktrees
 .worktrees/
+
+# git worktrees
+.worktrees/
