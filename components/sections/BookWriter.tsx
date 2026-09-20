@@ -141,11 +141,23 @@ export default function BookWriter() {
             ? (rawTopics as unknown[]).filter(t => typeof t === "string") as string[]
             : []
 
+          const rawSubs = ch["Subsections"] as unknown
+          const subsections = Array.isArray(rawSubs)
+            ? (rawSubs as { title?: unknown; description?: unknown }[])
+                .filter(s => s && typeof s === "object")
+                .map(s => ({
+                  title: typeof s.title === "string" ? s.title : "",
+                  description: typeof s.description === "string" ? s.description : "",
+                }))
+                .filter(s => s.title || s.description)
+            : []
+
           return {
             Chapter: ch.Chapter,
             Title: ch.Title,
             Summary: summary,
             KeyTopics: keyTopics,
+            ...(subsections.length > 0 ? { Subsections: subsections } : {}),
           }
         }),
       }
@@ -638,7 +650,7 @@ export default function BookWriter() {
                         className="w-full text-sm border border-purple-200 rounded-md p-3 resize-none focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-purple-400 placeholder:text-gray-400"
                       />
                       <p className="text-xs text-gray-400 mt-1.5">
-                        Baseline: ~2,500 words per chapter, scaled by the AI to the substance of each chapter (lighter for intros and conclusions, fuller for the meat of the book). Add direction here to shift voice, audience, or overall length.
+                        Baseline: ~2,500 words per chapter, scaled by the AI to the substance of each chapter (lighter for intros and conclusions, fuller for the meat of the book). Use this for voice, audience, and overall length. Book-wide requests (for example, recipes across the book) are allocated to the sections they belong in — they are not copied into every section.
                       </p>
                     </div>
 

@@ -163,12 +163,12 @@ export interface Manuscript {
   totalWordCount: number;
   outlineSnapshot: {
     Title: string;
-    Chapters: { Chapter: number; Title: string; Summary?: string; KeyTopics?: string[] }[];
+    Chapters: { Chapter: number; Title: string; Summary?: string; KeyTopics?: string[]; Subsections?: { title: string; description: string }[] }[];
   };
   styleProfile?: StyleProfile;
   /** Default per-chapter word budget the planner targets when breaking chapters into sections. */
   targetWordsPerChapter?: number;
-  /** Free-form author guidance applied to every chapter plan and section draft. */
+  /** Manuscript-level voice/audience/length. Not a coverage brief to copy into every section. */
   aiContext?: string;
   createdAt: { seconds: number; nanoseconds: number };
   updatedAt: { seconds: number; nanoseconds: number };
