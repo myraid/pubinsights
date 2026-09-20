@@ -15,7 +15,7 @@ interface UnifiedChapterViewProps {
   onGenerateDraft: (sectionId: string, authorNotes?: string) => void
   onSaveContent: (sectionId: string, html: string, wordCount: number) => void
   onApprove: (sectionId: string) => void
-  onApplyRevisions: (sectionId: string) => void
+  onApplyRevisions: (sectionId: string, content?: string) => void
   onMakeChanges: (sectionId: string) => void
   onAddComment: (sectionId: string, comment: { selectedText: string; startOffset: number; endOffset: number; authorFeedback: string }) => void
   onDeleteComment: (sectionId: string, commentId: string) => void
@@ -25,6 +25,8 @@ interface UnifiedChapterViewProps {
   generatingSectionId: string | null
   revisingSectionId: string | null
   savingSectionId: string | null
+  lastRevision?: { sectionId: string; changes: string[] } | null
+  onDismissChanges?: () => void
 }
 
 export default function UnifiedChapterView({
@@ -45,6 +47,8 @@ export default function UnifiedChapterView({
   generatingSectionId,
   revisingSectionId,
   savingSectionId,
+  lastRevision,
+  onDismissChanges,
 }: UnifiedChapterViewProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
 
@@ -60,9 +64,9 @@ export default function UnifiedChapterView({
   if (!chapter) {
     return (
       <div className="flex-1 flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <div className="w-16 h-16 rounded-2xl bg-purple-50 flex items-center justify-center mx-auto">
-            <FileText className="h-8 w-8 text-purple-300" />
+        <div className="space-y-4 text-center" style={{ fontFamily: "var(--font-dm-sans, system-ui, sans-serif)" }}>
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl" style={{ background: "#F5EEFF" }}>
+            <FileText className="h-8 w-8" style={{ color: "#9900CC" }} />
           </div>
           <p className="text-sm text-gray-500">Select a chapter from the sidebar to start writing</p>
         </div>
@@ -73,15 +77,15 @@ export default function UnifiedChapterView({
   if (sections.length === 0) {
     return (
       <div className="flex-1 flex items-center justify-center">
-        <div className="text-center space-y-4 max-w-md">
-          <div className="w-16 h-16 rounded-2xl bg-purple-50 flex items-center justify-center mx-auto">
-            <FileText className="h-8 w-8 text-purple-300" />
+        <div className="text-center space-y-4 max-w-md" style={{ fontFamily: "var(--font-dm-sans, system-ui, sans-serif)" }}>
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl" style={{ background: "#F5EEFF" }}>
+            <FileText className="h-8 w-8" style={{ color: "#9900CC" }} />
           </div>
           <div>
-            <p className="text-base font-medium text-gray-700" style={{ fontFamily: "var(--font-playfair)" }}>
+            <p className="text-base font-medium" style={{ fontFamily: "var(--font-playfair, Georgia, serif)", color: "#8400B8" }}>
               No sections planned yet
             </p>
-            <p className="text-sm text-gray-500 mt-2 leading-relaxed">
+            <p className="mt-2 text-sm leading-relaxed" style={{ color: "#6E6E6E" }}>
               Use &ldquo;Plan Sections&rdquo; in the sidebar to break this chapter into writing sections.
             </p>
           </div>
@@ -91,21 +95,22 @@ export default function UnifiedChapterView({
   }
 
   return (
-    <div className="flex-1 overflow-y-auto bg-gray-50/20" ref={scrollRef}>
-      <div className="px-6 lg:px-12 py-10 space-y-6">
-        {/* Chapter heading */}
-        <div className="mb-8 pb-6 border-b border-purple-100">
-          <p className="text-xs font-semibold text-purple-500 uppercase tracking-widest mb-2">
+    <div className="flex-1 overflow-y-auto" ref={scrollRef} style={{ background: "linear-gradient(180deg, #F5EEFF 0%, #FFFCFA 180px)" }}>
+      <div className="space-y-6 px-6 py-10 lg:px-12">
+        <div className="mb-8 border-b pb-6" style={{ borderColor: "rgba(153,0,204,0.14)" }}>
+          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.22em]" style={{ color: "#9900CC", fontFamily: "var(--font-dm-sans, system-ui, sans-serif)" }}>
             Chapter {chapter.chapterNumber}
           </p>
           <h2
-            className="text-3xl font-bold text-gray-900"
-            style={{ fontFamily: "var(--font-playfair)" }}
+            className="text-3xl font-bold"
+            style={{ fontFamily: "var(--font-playfair, Georgia, serif)", color: "#8400B8" }}
           >
             {chapter.title}
           </h2>
           {chapter.outlineContext?.summary && (
-            <p className="text-sm text-gray-500 mt-3 leading-relaxed max-w-3xl">{chapter.outlineContext.summary}</p>
+            <p className="mt-3 max-w-3xl text-sm leading-relaxed" style={{ color: "#6E6E6E", fontFamily: "var(--font-dm-sans, system-ui, sans-serif)" }}>
+              {chapter.outlineContext.summary}
+            </p>
           )}
         </div>
 
@@ -133,6 +138,8 @@ export default function UnifiedChapterView({
                 generating={generatingSectionId === sec.id}
                 revising={revisingSectionId === sec.id}
                 saving={savingSectionId === sec.id}
+                lastChangesApplied={lastRevision?.sectionId === sec.id ? lastRevision.changes : null}
+                onDismissChanges={onDismissChanges}
               />
             </div>
           )
