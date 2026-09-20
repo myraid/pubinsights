@@ -1,6 +1,6 @@
-import { initializeApp, getApps, cert } from 'firebase-admin/app';
-import { getFirestore } from 'firebase-admin/firestore';
-import { getAuth } from 'firebase-admin/auth';
+import { initializeApp, getApps, cert, type App } from 'firebase-admin/app';
+import { getFirestore, type Firestore } from 'firebase-admin/firestore';
+import { getAuth, type Auth } from 'firebase-admin/auth';
 import { createPrivateKey } from 'crypto';
 
 function parsePrivateKey(raw?: string): string | undefined {
@@ -16,17 +16,34 @@ function parsePrivateKey(raw?: string): string | undefined {
   }
 }
 
-const firebaseAdminConfig = {
-  credential: cert({
-    projectId: process.env.FIREBASE_PROJECT_ID,
-    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-    privateKey: parsePrivateKey(process.env.FIREBASE_PRIVATE_KEY),
-  }),
-};
+function getAdminApp(): App {
+  const existing = getApps();
+  if (existing.length > 0) return existing[0];
+  return initializeApp({
+    credential: cert({
+      projectId: process.env.FIREBASE_PROJECT_ID,
+      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+      privateKey: parsePrivateKey(process.env.FIREBASE_PRIVATE_KEY),
+    }),
+  });
+}
 
-// Initialize Firebase Admin
-const firebaseAdmin = getApps().length === 0 ? initializeApp(firebaseAdminConfig) : getApps()[0];
-const adminDb = getFirestore(firebaseAdmin);
-const adminAuth = getAuth(firebaseAdmin);
+// Initialized on first use, not at import. `next build` evaluates this module
+// while collecting page data, where the service account secrets are not
+// available — constructing credentials there fails the build.
+function lazy<T extends object>(create: () => T): T {
+  let instance: T | undefined;
+  return new Proxy({} as T, {
+    get(_target, prop) {
+      instance ??= create();
+      const value = (instance as Record<string | symbol, unknown>)[prop];
+      return typeof value === 'function' ? value.bind(instance) : value;
+    },
+  });
+}
 
-export { firebaseAdmin, adminDb, adminAuth }; 
+const firebaseAdmin = lazy<App>(getAdminApp);
+const adminDb = lazy<Firestore>(() => getFirestore(getAdminApp()));
+const adminAuth = lazy<Auth>(() => getAuth(getAdminApp()));
+
+export { firebaseAdmin, adminDb, adminAuth };
