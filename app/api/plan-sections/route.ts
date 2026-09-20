@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { adminDb } from '@/app/lib/firebase/admin'
-import { FieldValue } from 'firebase-admin/firestore'
+import { FieldValue, type QueryDocumentSnapshot } from 'firebase-admin/firestore'
 import { planSections } from '@/app/lib/agents/section-planner-agent'
 import { DEFAULT_TARGET_WORDS_PER_CHAPTER } from '@/app/types/firebase'
 import { checkAndIncrementUsage, checkChapterAccess } from '@/app/lib/billing/usage'
@@ -99,7 +99,7 @@ export async function POST(request: NextRequest) {
       .where('chapterNumber', '<', chap.chapterNumber)
       .orderBy('chapterNumber', 'asc')
       .get()
-    const previousChapterTitles = allChapsSnap.docs.map(d => d.data().title)
+    const previousChapterTitles = allChapsSnap.docs.map((d: QueryDocumentSnapshot) => d.data().title)
 
     // Get book title and outline
     const bookTitle = ms.outlineSnapshot?.Title || ms.title
