@@ -9,7 +9,7 @@ interface GenerationLogEntry {
   input: Record<string, unknown>;
   output: Record<string, unknown>;
   model: string;
-  createdAt: FirebaseFirestore.FieldValue;
+  createdAt: FieldValue;
 }
 
 export async function logGeneration(

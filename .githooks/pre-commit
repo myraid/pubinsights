@@ -2,4 +2,13 @@
 # Runs the same checks Firebase's build runs, so lint and type errors are
 # caught here instead of in CI. Bypass with `git commit --no-verify`.
 set -e
+
+# Type inference differs between Node majors: code that compiles on 23 can
+# fail on 20, which is what App Hosting builds with. Warn rather than block.
+want=$(tr -d 'v \n' < .nvmrc 2>/dev/null)
+have=$(node -v 2>/dev/null | sed 's/^v//; s/\..*//')
+if [ -n "$want" ] && [ -n "$have" ] && [ "$want" != "$have" ]; then
+  echo "warning: node v$have, but CI builds on v$want (.nvmrc). Run 'nvm use'." >&2
+fi
+
 npm run verify
