@@ -656,7 +656,7 @@ export const createManuscript = async (
   title: string,
   outlineSnapshot: {
     Title: string;
-    Chapters: { Chapter: number; Title: string; Summary?: string; KeyTopics?: string[] }[];
+    Chapters: { Chapter: number; Title: string; Summary?: string; KeyTopics?: string[]; Subsections?: { title: string; description: string }[] }[];
   },
   options?: {
     aiContext?: string;

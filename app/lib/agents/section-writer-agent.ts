@@ -25,10 +25,10 @@ function buildSystemPrompt(ctx: WritingContext): string {
   }
 
   if (ctx.authorContext) {
-    prompt += `\n\nAUTHOR CONTEXT (manuscript-level instructions — these override defaults for tone, audience, length, voice, or any other direction):\n${ctx.authorContext}`
+    prompt += `\n\nAUTHOR CONTEXT (manuscript-level voice, audience, and length — apply these to HOW you write, not WHAT this section covers):\n${ctx.authorContext}`
   }
 
-  prompt += '\n\nRules:\n- Be substantive and data-rich. No filler, no jargon padding.\n- Aim for the target word count. Modest overshoot (up to ~20%) is fine when the material genuinely needs it; do not pad to hit the number.\n- If author notes conflict with the outline, follow the author notes.\n- Output only HTML. No markdown, no code fences.'
+  prompt += '\n\nRules:\n- Write ONLY the assigned section. The chapter summary is orientation, not this section\'s assignment.\n- The section\'s "Cover" / outlineContext is the primary coverage instruction. Sibling sections have their own briefs — do not write their content here.\n- Do not include recipes, how-to preparations, or other practical exercises unless THIS section\'s outlineContext explicitly asks for them. Book-wide requests (e.g. recipes spread across the book) belong in the sections whose briefs call for them, not in every section.\n- Be substantive and data-rich. No filler, no jargon padding.\n- Aim for the target word count. Modest overshoot (up to ~20%) is fine when the material genuinely needs it; do not pad to hit the number.\n- If author notes conflict with the outline, follow the author notes for voice; still honor this section\'s unique coverage.\n- Output only HTML. No markdown, no code fences.'
 
   return prompt
 }
@@ -52,10 +52,11 @@ function buildUserMessage(ctx: WritingContext): string {
 
   // Current chapter
   msg += `\nCURRENT CHAPTER ${ctx.currentChapter.number}: "${ctx.currentChapter.title}"`
-  msg += `\nSummary: ${ctx.currentChapter.summary}`
-  msg += '\nSection plan:'
+  msg += `\nChapter through-line (do not treat this as the brief for every section): ${ctx.currentChapter.summary}`
+  msg += '\nSection plan (write ONLY your assigned section; sibling briefs are off-limits):'
   for (const s of ctx.currentChapter.sectionPlan) {
-    msg += `\n  ${s.sectionNumber}. ${s.title} (~${s.estimatedWords} words)`
+    const brief = s.outlineContext ? ` — ${s.outlineContext}` : ''
+    msg += `\n  ${s.sectionNumber}. ${s.title} (~${s.estimatedWords} words)${brief}`
   }
 
   // Previous sections in this chapter
@@ -71,8 +72,8 @@ function buildUserMessage(ctx: WritingContext): string {
 
   // Current task
   const sec = ctx.currentSection
-  msg += `\n\nYOUR TASK: Write Section ${sec.number}: "${sec.title}"`
-  msg += `\nCover: ${sec.outlineContext}`
+  msg += `\n\nYOUR TASK: Write Section ${sec.number} only: "${sec.title}"`
+  msg += `\nPRIMARY BRIEF (this is what to cover — not the chapter summary, not sibling sections): ${sec.outlineContext}`
   msg += `\nTarget: ${sec.estimatedWords} words`
 
   if (ctx.previousSectionsInChapter.length > 0) {
@@ -84,7 +85,7 @@ function buildUserMessage(ctx: WritingContext): string {
   }
 
   if (sec.authorNotes) {
-    msg += `\n\nAUTHOR NOTES (these take priority): ${sec.authorNotes}`
+    msg += `\n\nAUTHOR NOTES (voice and emphasis for THIS section — do not use these to import sibling-section topics): ${sec.authorNotes}`
   }
 
   return msg

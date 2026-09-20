@@ -7,6 +7,17 @@ import { checkAndIncrementUsage, checkChapterAccess } from '@/app/lib/billing/us
 
 export const maxDuration = 60
 
+function normalizeSubsections(raw: unknown): { title: string; description: string }[] {
+  if (!Array.isArray(raw)) return []
+  return raw
+    .filter((s): s is { title?: unknown; description?: unknown } => !!s && typeof s === 'object')
+    .map((s) => ({
+      title: typeof s.title === 'string' ? s.title : '',
+      description: typeof s.description === 'string' ? s.description : '',
+    }))
+    .filter((s) => s.title || s.description)
+}
+
 export async function POST(request: NextRequest) {
   try {
     const { userId, projectId, manuscriptId, chapterId } = await request.json()
@@ -96,6 +107,22 @@ export async function POST(request: NextRequest) {
     const currentOutlineChapter = outlineChapters.find(
       (c: { Chapter: number }) => c.Chapter === chap.chapterNumber
     )
+    let outlineSubsections = normalizeSubsections(currentOutlineChapter?.Subsections)
+    if (outlineSubsections.length === 0) {
+      const outlines = projectDoc.data()?.outlines
+      if (Array.isArray(outlines)) {
+        for (const outline of outlines) {
+          const chapters = outline?.outline?.Chapters
+          if (!Array.isArray(chapters)) continue
+          const match = chapters.find((c: { Chapter?: number }) => c.Chapter === chap.chapterNumber)
+          const fromProject = normalizeSubsections(match?.Subsections)
+          if (fromProject.length > 0) {
+            outlineSubsections = fromProject
+            break
+          }
+        }
+      }
+    }
 
     // Per-chapter word target — manuscript-level setting, defaulting to 2500.
     const targetChapterWords =
@@ -120,6 +147,7 @@ export async function POST(request: NextRequest) {
       previousChapterTitles,
       targetChapterWords,
       authorContext,
+      outlineSubsections: outlineSubsections.length > 0 ? outlineSubsections : undefined,
     })
 
     // Create empty section subdocs first (batch commit before chapter update for atomicity)

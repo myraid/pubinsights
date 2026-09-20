@@ -10,8 +10,10 @@ interface PlanSectionsParams {
   previousChapterTitles: string[]
   /** Per-chapter word budget. Drives section count and per-section word targets. */
   targetChapterWords: number
-  /** Optional free-form author guidance applied to every section in the chapter. */
+  /** Manuscript-level voice/audience/length. Must not be treated as each section's coverage brief. */
   authorContext?: string
+  /** Unique subsection briefs from the book outline, if the author defined them. */
+  outlineSubsections?: { title: string; description: string }[]
 }
 
 interface PlannedSection {
@@ -47,9 +49,12 @@ Other rules:
 - Every key topic must be covered by at least one section.
 - First section introduces the chapter's theme. Last section concludes and bridges to what comes next.
 - Section titles must be specific and descriptive (e.g., "The Chemistry of Essential Oils" — NOT "Overview" or "Introduction").
-- "outlineContext" is 2-3 sentences describing exactly what the section should cover. Be concrete.
+- "outlineContext" is 2-3 sentences describing exactly what THIS section should cover. Be concrete.
+- Each outlineContext MUST be unique. Do not copy the chapter summary into every section. Do not reuse the same sentences across sections.
+- Chapter summary and manuscript author context are NOT the writing brief for every section. Summary is the chapter through-line (tone of the arc). Author context is voice, audience, and length — not a coverage assignment to repeat in each outlineContext.
+- Book-wide content requests (recipes, how-tos, exercises, case studies, etc.) must be ALLOCATED: put them only in the section(s) whose unique brief naturally includes that content. Never instruct every section to include the same recipes or how-to blocks.
 
-If the author has provided custom context (e.g., voice, length preference, audience), weight that ABOVE these defaults.
+If the author has provided custom context for voice, length, or audience, weight that ABOVE the length defaults. Do not let it override unique per-section coverage.
 
 Return valid JSON only, no prose, no markdown fences:
 {
@@ -90,7 +95,8 @@ export async function planSections(params: PlanSectionsParams): Promise<PlannedS
   let userMessage = `Book: "${params.bookTitle}"
 Chapter ${params.chapterNumber} of ${params.totalChapters}: "${params.chapterTitle}"
 
-Summary: ${params.chapterSummary || 'No summary provided'}
+CHAPTER SUMMARY (through-line for the chapter as a whole — do not copy this into every section's outlineContext):
+${params.chapterSummary || 'No summary provided'}
 
 Key Topics (${params.keyTopics.length}):
 ${params.keyTopics.map((t, i) => `${i + 1}. ${t}`).join('\n')}
@@ -109,8 +115,15 @@ Adjust up or down based on the chapter's substance. Hard limits: minimum ${Math.
     userMessage += '\n\nThis is the LAST chapter. The closing section should be concluding and forward-looking.'
   }
 
+  if (params.outlineSubsections && params.outlineSubsections.length > 0) {
+    userMessage += `\n\nOUTLINE SUBSECTIONS (these are the author's per-section instructions — honor their distinct coverage. You may merge or split only if the word budget requires it, but each section's outlineContext must stay unique and must not fall back to the chapter summary):\n`
+    userMessage += params.outlineSubsections
+      .map((s, i) => `${i + 1}. ${s.title || 'Untitled'}: ${s.description || 'No description'}`)
+      .join('\n')
+  }
+
   if (params.authorContext) {
-    userMessage += `\n\nAUTHOR CONTEXT (overrides defaults — follow this for tone, length, audience, or any other custom direction):\n${params.authorContext}`
+    userMessage += `\n\nAUTHOR CONTEXT (manuscript-level voice, audience, and length only — not a coverage brief to paste into every section. If it asks for recipes, examples, or other content "across sections," distribute that content to the sections whose unique briefs actually call for it; do not require it in every outlineContext):\n${params.authorContext}`
   }
 
   const response = await anthropic.messages.create({
@@ -130,5 +143,21 @@ Adjust up or down based on the chapter's substance. Hard limits: minimum ${Math.
     `[section-planner] chapter=${params.chapterNumber}/${params.totalChapters} sections=${parsed.sections.length} baseline=${target} planned=${totalEstimated} (${Math.round((totalEstimated / target) * 100)}% of baseline) duration=${duration}ms`
   )
 
-  return parsed.sections
+  return ensureDistinctOutlineContexts(parsed.sections)
+}
+
+function ensureDistinctOutlineContexts(sections: PlannedSection[]): PlannedSection[] {
+  const seen = new Map<string, number>()
+  return sections.map((sec) => {
+    const key = (sec.outlineContext || "").trim().toLowerCase()
+    const count = seen.get(key) || 0
+    seen.set(key, count + 1)
+    if (count === 0 || !sec.title) return sec
+    const extra = `Focus this section specifically on: ${sec.title}.`
+    if ((sec.outlineContext || "").includes(extra)) return sec
+    return {
+      ...sec,
+      outlineContext: `${(sec.outlineContext || "").trim()} ${extra}`.trim(),
+    }
+  })
 }
