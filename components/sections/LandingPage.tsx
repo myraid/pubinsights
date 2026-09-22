@@ -166,6 +166,24 @@ export default function LandingPage() {
         >
           Already have an account?
         </button>
+
+        {/* Product demo — research → outline → chapter, captured from the real app */}
+        <div
+          className="w-full max-w-4xl mt-14 rounded-2xl overflow-hidden border shadow-2xl"
+          style={{ borderColor: "#DDD0EC", background: "#FFFFFF" }}
+        >
+          <video
+            controls
+            playsInline
+            preload="none"
+            poster="/demo/hero-demo-poster.jpg"
+            aria-label="Validating a niche, building an outline, and drafting a chapter in PubInsights"
+            className="block w-full aspect-video object-cover"
+          >
+            <source src="/demo/hero-demo.webm" type="video/webm" />
+            <source src="/demo/hero-demo.mp4" type="video/mp4" />
+          </video>
+        </div>
       </section>
 
       {/* ─── Feature strip ───────────────────────────────────────── */}

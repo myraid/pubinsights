@@ -47,3 +47,6 @@ logs/
 
 # git worktrees
 .worktrees/
+
+# raw demo captures (only the edited output in public/demo is committed)
+recordings/

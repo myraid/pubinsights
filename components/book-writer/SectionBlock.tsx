@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button"
 import CommentPopover from "@/components/book-writer/CommentPopover"
 import type { Section, StyleProfile } from "@/app/types/firebase"
 import { applyCommentHighlights, htmlToPreviewText, stripHighlightMarks } from "@/app/lib/html-marks"
+import { typeHtmlInto, type TypewriterHandle } from "@/app/lib/typewriter"
 
 const BRAND = {
   deep: "#8400B8",
@@ -85,6 +86,9 @@ export default function SectionBlock({
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const lastSavedContent = useRef(stripHighlightMarks(section.content || ""))
   const skipHighlightSave = useRef(false)
+  const typewriter = useRef<TypewriterHandle | null>(null)
+  const animateNextContent = useRef(false)
+  const wasBusy = useRef(false)
   const [manualOverride, setManualOverride] = useState(false)
   const [preGenNotes, setPreGenNotes] = useState("")
   const [drawerOpen, setDrawerOpen] = useState(false)
@@ -105,12 +109,23 @@ export default function SectionBlock({
   const pendingHighlightKey = pendingComments.map(c => `${c.id}:${c.selectedText}`).join("|")
 
   useEffect(() => {
+    typewriter.current?.cancel()
+    typewriter.current = null
     setManualOverride(false)
     setPreGenNotes("")
     setCommentPopover(null)
     setHasSelection(false)
     setLocalNotes(section.authorNotes || "")
   }, [section.id, section.authorNotes])
+
+  useEffect(() => {
+    const busy = generating || revising
+    if (busy) wasBusy.current = true
+    else if (wasBusy.current) {
+      wasBusy.current = false
+      animateNextContent.current = true
+    }
+  }, [generating, revising])
 
   const shouldMountEditor = isFocused && (status === "review" || status === "approved" || manualOverride || generating)
 
@@ -155,6 +170,23 @@ export default function SectionBlock({
 
     skipHighlightSave.current = true
     if (incoming !== current || incoming !== raw || (needles.length === 0 && hasMarks)) {
+      if (animateNextContent.current && incoming.trim()) {
+        // Freshly written by the AI — reveal it as if it were being typed.
+        animateNextContent.current = false
+        typewriter.current?.cancel()
+        // Editability is owned by the isEditable effect below. Touching it here races
+        // that effect: this runs first in the same commit, so any value captured now is
+        // the pre-generation one, and restoring it later leaves the editor read-only.
+        typewriter.current = typeHtmlInto(editor, incoming, {
+          onDone: () => {
+            typewriter.current = null
+            lastSavedContent.current = incoming
+            applyCommentHighlights(editor, needles)
+            skipHighlightSave.current = false
+          },
+        })
+        return // highlights and the save guard are handled in onDone
+      }
       editor.commands.setContent(incoming)
       lastSavedContent.current = incoming
     }
@@ -180,6 +212,10 @@ export default function SectionBlock({
   useEffect(() => {
     return () => {
       if (saveTimer.current) clearTimeout(saveTimer.current)
+      // Snap to the final content before the flush below reads it, or unmounting
+      // mid-animation would persist a half-typed section.
+      typewriter.current?.cancel()
+      typewriter.current = null
       if (editor) {
         const html = stripHighlightMarks(editor.getHTML())
         if (html !== lastSavedContent.current) {
@@ -202,6 +238,13 @@ export default function SectionBlock({
     const left = containerRect ? coords.left - containerRect.left : coords.left
     setCommentPopover({ position: { top, left: Math.min(left, 280) }, selectedText, startOffset: from, endOffset: to })
   }, [editor])
+
+  const handleContextMenu = useCallback((e: React.MouseEvent) => {
+    if (!editor) return
+    if (editor.state.selection.empty) return   // nothing selected: leave the native menu
+    e.preventDefault()
+    handleCommentClick()
+  }, [editor, handleCommentClick])
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -578,7 +621,12 @@ export default function SectionBlock({
         </div>
       )}
 
-      <div className="relative manuscript-editor" ref={editorContainerRef} style={{ background: "#FFFCFA" }}>
+      <div
+        className="relative manuscript-editor"
+        ref={editorContainerRef}
+        onContextMenu={handleContextMenu}
+        style={{ background: "#FFFCFA" }}
+      >
         {revising && (
           <ReviseOverlay comments={pendingComments} sectionTitle={section.title} />
         )}
