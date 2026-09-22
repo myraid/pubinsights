@@ -147,13 +147,15 @@ For authors serious about niche research.
 
 CTA: Get Started
 
-### Full Book — $99/book (Coming Soon, in-app only)
+### Full Book — $99/manuscript
 
 - All chapters unlocked
 - AI drafts + comment-driven revision
 - Style-matched writing across chapters
 - Export to DOCX
 - Requires Creator subscription
+
+CTA: Start Your Book
 
 ---
 

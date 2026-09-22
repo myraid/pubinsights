@@ -78,7 +78,7 @@ const PLANS: Plan[] = [
 const BOOK_PLAN = {
   name: "Full Book",
   price: "$99",
-  priceDetail: "per book",
+  priceDetail: "per manuscript",
   description: "Unlock your entire manuscript with AI-assisted writing.",
   features: [
     { label: "All chapters unlocked" },

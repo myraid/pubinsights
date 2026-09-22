@@ -369,7 +369,7 @@ export default function LandingPage() {
 
       {/* ─── Pricing ─────────────────────────────────────────────── */}
       <section className="py-16 px-4" style={{ background: BRAND.bg }}>
-        <div className="container mx-auto max-w-3xl">
+        <div className="container mx-auto max-w-5xl">
           <div className="text-center mb-12">
             <h2
               className="text-2xl sm:text-3xl font-bold mb-3 [font-family:var(--font-playfair,Georgia,serif)]"
@@ -381,7 +381,7 @@ export default function LandingPage() {
               Start free and upgrade when you&apos;re ready to go deeper.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <PlanCard
               title="Free"
               price="$0"
@@ -410,6 +410,21 @@ export default function LandingPage() {
               ]}
               cta="Get Started"
               highlight
+              onCta={() => { setLoginMode("signup"); setShowLoginForm(true) }}
+            />
+            <PlanCard
+              title="Full Book"
+              price="$99"
+              priceDetail="per manuscript"
+              description="Take one idea all the way to a finished draft."
+              features={[
+                "All chapters unlocked",
+                "AI drafts + comment-driven revision",
+                "Style-matched writing across chapters",
+                "Export to DOCX",
+                "Requires Creator subscription",
+              ]}
+              cta="Start Your Book"
               onCta={() => { setLoginMode("signup"); setShowLoginForm(true) }}
             />
           </div>
