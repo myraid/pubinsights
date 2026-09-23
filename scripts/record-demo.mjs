@@ -45,6 +45,83 @@ function mark(stage) {
 const settle = (page, ms = 800) => page.waitForTimeout(ms)
 
 /**
+ * Pans down in small steps so the recording glides instead of jumping.
+ *
+ * Resolves what actually scrolls first, rather than assuming the window. BookResearch is
+ * an ordinary page and scrolls the document, but the Book Writer chapter view is a flex
+ * column whose middle pane owns the overflow (UnifiedChapterView.tsx), so window.scrollBy
+ * there is a silent no-op: the pan "runs" and the frame never moves. Picks the largest
+ * visibly scrollable box, which is the content pane rather than the chapter sidebar.
+ *
+ * Deliberately slow — the editor can speed a smooth pan up, but it cannot smooth a jerky
+ * one back down.
+ */
+async function panDown(page, distance, { step = 90, delay = 110 } = {}) {
+  const scroller = await page.evaluate(() => {
+    const doc = document.scrollingElement
+    let best = doc && doc.scrollHeight > doc.clientHeight + 4 ? doc : null
+    let bestArea = best ? window.innerWidth * window.innerHeight : 0
+    for (const el of document.querySelectorAll('div')) {
+      if (el.scrollHeight <= el.clientHeight + 4) continue
+      if (!/(auto|scroll)/.test(getComputedStyle(el).overflowY)) continue
+      const r = el.getBoundingClientRect()
+      if (r.width < 300 || r.height < 300) continue
+      const area = r.width * r.height
+      if (area > bestArea) { best = el; bestArea = area }
+    }
+    window.__demoScroller = best
+    return best ? (best === doc ? 'document' : `div.${(best.className || '').split(' ')[0]}`) : null
+  })
+
+  if (!scroller) {
+    console.log('  \u00b7 nothing scrollable here — skipping the pan')
+    return
+  }
+  console.log(`  \u00b7 panning ${distance}px in ${scroller}`)
+
+  // Stops at the bottom rather than burning the rest of the distance on static frames —
+  // these pans sit in near-1x segments, where dead air is expensive.
+  let previous = -1
+  for (let scrolled = 0; scrolled < distance; scrolled += step) {
+    const top = await page.evaluate((y) => {
+      window.__demoScroller.scrollTop += y
+      return window.__demoScroller.scrollTop
+    }, step)
+    if (top === previous) break
+    previous = top
+    await page.waitForTimeout(delay)
+  }
+}
+
+/**
+ * Waits for a locator's text to stop changing, then returns it.
+ *
+ * SectionBlock reveals an AI draft with a typewriter (app/lib/typewriter.ts) that calls
+ * editor.commands.setContent on every tick, and each call wipes any selection made while
+ * it is running. The "draft generated" toast fires when the request resolves, not when
+ * the reveal finishes, so a fixed settle only covers sections short enough to finish
+ * inside it — a longer niche silently outruns it and the commenting step then selects
+ * nothing.
+ */
+async function waitForStableText(page, locator, { quietMs = 1200, timeout = 90_000 } = {}) {
+  const deadline = Date.now() + timeout
+  let previous = null
+  let stableSince = Date.now()
+  while (Date.now() < deadline) {
+    const text = await locator.innerText().catch(() => '')
+    if (text !== previous) {
+      previous = text
+      stableSince = Date.now()
+    } else if (Date.now() - stableSince >= quietMs) {
+      return text
+    }
+    await page.waitForTimeout(200)
+  }
+  console.log('  \u00b7 draft never stopped changing — continuing anyway')
+  return previous ?? ''
+}
+
+/**
  * Narrows to the one visible match. app/page.tsx keeps every section mounted and hides
  * the inactive ones with display:none, so most labels exist several times in the DOM.
  */
@@ -215,6 +292,20 @@ async function main() {
     await settle(page, 5000)
     mark('research-score')
 
+    // Pan the competing titles pulled from Amazon — the evidence behind the score.
+    // Guarded: BookResearch only renders this block when filteredBooks is non-empty,
+    // and a thin niche (or the indie filter) can legitimately leave it out.
+    const competing = visible(page.getByText('Competing Titles', { exact: true }))
+    if (await competing.isVisible().catch(() => false)) {
+      await competing.scrollIntoViewIfNeeded().catch(() => {})
+      await settle(page, 1800)
+      await panDown(page, 1700)
+      await settle(page, 1500)
+    } else {
+      console.log('  \u00b7 competing titles not on screen — skipping the books pan')
+    }
+    mark('research-books')
+
     // Opens a Radix dropdown of existing projects; the save happens on the menu item.
     await visible(page.getByRole('button', { name: /save to project/i })).click()
     await settle(page, 600)
@@ -283,6 +374,13 @@ async function main() {
     await settle(page, 1200)
     mark('sections-planned')
 
+    // Pan the planned chapter so every section and its controls are on camera before
+    // any of them is drafted. The click below scrolls the first section back into view,
+    // so there is no need to pan back up.
+    await panDown(page, 1900)
+    await settle(page, 1800)
+    mark('sections-toured')
+
     await visible(page.getByRole('button', { name: /generate ai draft/i })).click()
 
     // Split the wait from the reveal: everything up to draft-typing is a spinner and
@@ -290,7 +388,10 @@ async function main() {
     await visible(page.locator('[contenteditable="true"] p')).waitFor({ timeout: 180_000 })
     mark('draft-typing')
     await page.getByText(/draft generated/i).waitFor({ timeout: 180_000 }).catch(() => {})
-    await settle(page, 5000)
+    // The toast is not the end of the reveal — let the typewriter actually finish, or
+    // the triple-click below selects text that is about to be replaced.
+    await waitForStableText(page, visible(page.locator('[contenteditable="true"]')))
+    await settle(page, 2500)
     mark('draft-done')
 
     // ── 6. Comment and revise ─────────────────────────────────────────────
@@ -304,14 +405,22 @@ async function main() {
     )
     await paragraph.scrollIntoViewIfNeeded().catch(() => {})
     await settle(page, 1200)
-    await paragraph.click({ clickCount: 3 })
-    await settle(page, 1200)
+
+    // Retry the selection rather than lose the take to one collapsed click — a late
+    // re-render (an autosave round-trip, a highlight reapply) can still clear it.
+    let selected = 0
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      await paragraph.click({ clickCount: 3 })
+      await settle(page, 1200)
+      selected = await page.evaluate(() => (window.getSelection()?.toString() ?? '').length)
+      if (selected >= 40) break
+      console.log(`  \u00b7 selection collapsed (${selected} chars), retry ${attempt}/2`)
+    }
+    if (selected < 40) throw new Error(`Selection collapsed before commenting (${selected} chars)`)
 
     // Pressing the right button lands a real mousedown first, which collapses the
     // triple-click selection to the word under the cursor before contextmenu fires.
     // Dispatch the event instead so the passage we selected is the one commented on.
-    const selected = await page.evaluate(() => (window.getSelection()?.toString() ?? '').length)
-    if (selected < 40) throw new Error(`Selection collapsed before commenting (${selected} chars)`)
     await paragraph.dispatchEvent('contextmenu')
     await settle(page, 1200)
 

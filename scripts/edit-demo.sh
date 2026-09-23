@@ -19,6 +19,7 @@ INPUT="${1:-}"
 OUT_DIR="public/demo"
 NAME="${NAME:-hero-demo}"        # output basename; two cuts share one take
 SPEED="${SPEED:-1.6}"        # playback speed-up applied after trimming
+POSTER_AT="${POSTER_AT:-1}"   # seconds into the CUT to grab the poster from
 TARGET_W=1280
 TARGET_H=720
 
@@ -77,13 +78,15 @@ ffmpeg -y -loglevel error -i "$INPUT" -filter_complex "$filter" -map "[out]" \
 ffmpeg -y -loglevel error -i "$INPUT" -filter_complex "$filter" -map "[out]" \
   -an -c:v libvpx-vp9 -crf 38 -b:v 0 -row-mt 1 "$OUT_DIR/$NAME.webm"
 
-# Poster covers first paint and the reduced-motion case, so take it from a frame
-# that actually shows product rather than a transition.
-ffmpeg -y -loglevel error -i "$OUT_DIR/$NAME.mp4" -ss 1 -frames:v 1 \
+# Poster covers first paint and the reduced-motion case, and it is what every visitor
+# sees before deciding to press play — so it must show product. The default of 1s lands
+# in the login screen for a cut that opens on sign-in; pass POSTER_AT to pick a real
+# moment (the research verdict, say) and check the frame before shipping it.
+ffmpeg -y -loglevel error -i "$OUT_DIR/$NAME.mp4" -ss "$POSTER_AT" -frames:v 1 \
   -q:v 3 "$OUT_DIR/$NAME-poster.jpg"
 
 duration=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$OUT_DIR/$NAME.mp4")
-printf '\nDuration: %.1fs (target 20-30s)\n' "$duration"
+printf '\nDuration: %.1fs (target 55-70s)\n' "$duration"
 ls -lh "$OUT_DIR/$NAME".* | awk '{printf "  %-34s %s\n", $9, $5}'
 
-awk -v d="$duration" 'BEGIN { if (d < 18 || d > 32) print "\nNote: outside the 20-30s hero target — adjust SEGMENTS or SPEED." }'
+awk -v d="$duration" 'BEGIN { if (d < 50 || d > 75) print "\nNote: outside the 55-70s hero target — adjust SEGMENTS or SPEED." }'
