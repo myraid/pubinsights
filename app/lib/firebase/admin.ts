@@ -5,8 +5,13 @@ import { createPrivateKey } from 'crypto';
 
 function parsePrivateKey(raw?: string): string | undefined {
   if (!raw) return undefined;
+  // Strip a surrounding quote pair that survived into the value. .env.local wraps the
+  // key in double quotes and dotenv removes them, but a secret store handed that same
+  // literal string keeps them — and cert() then fails with "Failed to parse private
+  // key". A PEM never starts with a quote, so dropping a matched pair is always safe.
+  const unquoted = raw.replace(/^\s*(['"])([\s\S]*)\1\s*$/, '$2');
   // Normalize escaped newlines
-  const pem = raw.replace(/\\n/g, '\n');
+  const pem = unquoted.replace(/\\n/g, '\n');
   try {
     // Re-export as PKCS#8 PEM — works with OpenSSL 3.x in Node 22+
     return createPrivateKey(pem).export({ type: 'pkcs8', format: 'pem' }) as string;
