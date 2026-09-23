@@ -9,7 +9,7 @@ import {
   Bold, Italic, Heading1, Heading2, List, ListOrdered,
   Undo2, Redo2, Loader2, PenLine, Wand2, MessageSquare,
   Check, Save, ChevronDown, ChevronRight, FileText,
-  Palette, History, Trash2, Sparkles, Quote, Highlighter,
+  Palette, History, Trash2, Sparkles, Quote, Highlighter, RefreshCw,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import CommentPopover from "@/components/book-writer/CommentPopover"
@@ -92,6 +92,7 @@ export default function SectionBlock({
   const [manualOverride, setManualOverride] = useState(false)
   const [preGenNotes, setPreGenNotes] = useState("")
   const [drawerOpen, setDrawerOpen] = useState(false)
+  const [regenerateOpen, setRegenerateOpen] = useState(false)
   const [hasSelection, setHasSelection] = useState(false)
   const [commentPopover, setCommentPopover] = useState<{
     position: { top: number; left: number }
@@ -117,6 +118,13 @@ export default function SectionBlock({
     setHasSelection(false)
     setLocalNotes(section.authorNotes || "")
   }, [section.id, section.authorNotes])
+
+  // Keyed on the section alone, deliberately. The panel's textarea saves through
+  // handleNotesChange, so folding this into the effect above — which also watches
+  // section.authorNotes — closed the panel as soon as the user typed into it.
+  useEffect(() => {
+    setRegenerateOpen(false)
+  }, [section.id])
 
   useEffect(() => {
     const busy = generating || revising
@@ -291,6 +299,10 @@ export default function SectionBlock({
     if (!showChanges || !isFocused) return
     document.getElementById(`revision-summary-${section.id}`)?.scrollIntoView({ behavior: "smooth", block: "center" })
   }, [showChanges, isFocused, section.id, lastChangesApplied])
+
+  // Drives the "Replaces the current draft." warning — a 0-word section has nothing to
+  // lose, so it should carry no warning.
+  const hasDraftContent = countWords(editor ? editor.getHTML() : section.content || "") > 0
 
   const bodyFont = { fontFamily: "var(--font-dm-sans, system-ui, sans-serif)" } as const
   const displayFont = { fontFamily: "var(--font-playfair, Georgia, serif)" } as const
@@ -653,7 +665,53 @@ export default function SectionBlock({
       </div>
 
       {isFocused && isEditable && !generating && !revising && (
-        <div className="flex items-center gap-2 px-4 py-3" style={{ background: BRAND.bg, borderTop: "1px solid rgba(153,0,204,0.12)" }}>
+        <div style={{ background: BRAND.bg, borderTop: "1px solid rgba(153,0,204,0.12)" }}>
+          {regenerateOpen && (
+            <div className="space-y-2 border-b px-4 pt-3 pb-3" style={{ borderColor: "rgba(153,0,204,0.12)" }}>
+              <label className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: BRAND.gray }}>
+                What should the AI focus on? (optional)
+              </label>
+              {/* Same value the Details drawer edits — a second notes field would mean
+                  direction typed there is silently ignored when regenerating. */}
+              <textarea
+                value={localNotes}
+                onChange={(e) => handleNotesChange(e.target.value)}
+                placeholder="Direction for AI generation or revision…"
+                className="min-h-[60px] w-full resize-none rounded-md border bg-white p-2 text-xs"
+                style={{ borderColor: "rgba(153,0,204,0.25)" }}
+                autoFocus
+              />
+              {hasDraftContent && (
+                <p className="text-xs" style={{ color: BRAND.gray }}>Replaces the current draft.</p>
+              )}
+              <div className="flex gap-2">
+                <Button
+                  onClick={() => {
+                    setRegenerateOpen(false)
+                    onGenerateDraft(section.id, localNotes.trim() || undefined)
+                  }}
+                  size="sm"
+                  className="text-xs text-white"
+                  style={{ background: BRAND.primary }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = BRAND.deep }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = BRAND.primary }}
+                >
+                  <RefreshCw className="mr-1.5 h-3.5 w-3.5" />
+                  Regenerate
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setRegenerateOpen(false)}
+                  className="text-xs"
+                  style={{ borderColor: "rgba(153,0,204,0.3)", color: BRAND.deep }}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          )}
+          <div className="flex items-center gap-2 px-4 py-3">
           <Button
             onClick={() => {
               const html = editor
@@ -684,12 +742,23 @@ export default function SectionBlock({
             <Check className="mr-1 h-3 w-3" />
             Approve
           </Button>
+          <Button
+            onClick={() => setRegenerateOpen(o => !o)}
+            size="sm"
+            variant="outline"
+            className="text-xs"
+            style={{ borderColor: "rgba(153,0,204,0.3)", color: BRAND.deep }}
+          >
+            <RefreshCw className="mr-1 h-3 w-3" />
+            Regenerate
+          </Button>
           <div className="flex-1" />
           <span className="text-xs" style={{ color: BRAND.gray }}>
             {editor ? countWords(editor.getHTML()) : section.wordCount} words
             {" · "}
             {saving ? "Saving…" : "Auto-saves"}
           </span>
+          </div>
         </div>
       )}
 

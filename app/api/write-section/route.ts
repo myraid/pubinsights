@@ -105,7 +105,10 @@ export async function POST(request: NextRequest) {
         version: (sec.revisionCount || 0) + 1,
         content: sec.content,
         resolvedComments: [],
-        createdAt: FieldValue.serverTimestamp(),
+        // Firestore rejects serverTimestamp() inside an array, which is where this
+        // entry is headed. Same shape plan-sections uses, and what RevisionEntry
+        // declares.
+        createdAt: { seconds: Math.floor(Date.now() / 1000), nanoseconds: 0 },
       }
 
       let revisionHistory = sec.revisionHistory || []
@@ -144,6 +147,13 @@ export async function POST(request: NextRequest) {
 
       // Generate draft
       const { content, wordCount } = await generateSectionDraft(ctx)
+
+      // An empty draft is a failed one, even though it did not throw. Persisting it
+      // would strand the section in review with nothing to revise and no way back to
+      // generation. Tags are stripped first so markup-only output is caught too.
+      if (!content?.replace(/<[^>]*>/g, '').trim()) {
+        throw new Error('The model returned an empty draft. Try again, or add author notes for more direction.')
+      }
 
       // Update section
       await adminDb.doc(sectionPath).update({

@@ -276,6 +276,11 @@ export default function BookWriter() {
 
   const handleGenerateDraft = async (sectionId: string, authorNotes?: string) => {
     if (!user || !selectedProject || !activeManuscript || !activeChapterId) return
+    // The route refuses to overwrite a section already in review unless regenerate is
+    // set (write-section/route.ts). Derive it from the same status the server checks,
+    // so the two rules cannot drift apart.
+    const previous = sections.find(s => s.id === sectionId)
+    const regenerate = previous?.status === 'review'
     setGeneratingSectionId(sectionId)
     try {
       const res = await fetch('/api/write-section', {
@@ -288,6 +293,7 @@ export default function BookWriter() {
           chapterId: activeChapterId,
           sectionId,
           authorNotes,
+          regenerate,
         }),
       })
       if (!res.ok) {
@@ -304,8 +310,12 @@ export default function BookWriter() {
       else toast.success('Draft generated!')
     } catch (e) {
       toast.error(e instanceof Error ? e.message : 'Failed to generate draft')
+      // Mirror the server's own reset: a failed regenerate leaves the existing draft in
+      // place, so the section stays in review rather than being blanked back to
+      // not_started while Firestore still holds its content.
+      const fallback = previous?.content ? ('review' as const) : ('not_started' as const)
       setSections(prev => prev.map(s =>
-        s.id === sectionId ? { ...s, status: 'not_started' as const } : s
+        s.id === sectionId ? { ...s, status: fallback } : s
       ))
     } finally {
       setGeneratingSectionId(null)
