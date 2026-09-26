@@ -69,7 +69,7 @@ The `/api/insights` route enriches each book with an `is_indie` flag (computed s
 - **Admin SDK**: `app/lib/firebase/admin.ts` — used only in API routes
 - **All Firestore CRUD**: `app/lib/firebase/services.ts` — single file for all reads/writes
 
-**Known data issue**: `addMarketResearchToProject` and `addOutlineToProject` in `services.ts` overwrite the entire `research[]` / `outlines[]` array rather than appending. Each project can only hold one research entry and one outline at a time despite the UI iterating over plurals.
+**Intended behavior — do not "fix"**: `addMarketResearchToProject` and `addOutlineToProject` in `services.ts` deliberately replace the entire `research[]` / `outlines[]` array. A project holds only its latest research entry and latest outline (keeps the doc under Firestore's 1MB limit; full search history lives in `searchHistory`). Do not switch to `arrayUnion` or append.
 
 ### UI Components
 - **Shadcn** (`components/ui/`) — base components (Button, Card, Input, etc.). Use this exclusively — do not mix with Tremor Button/TextInput in the same component.
@@ -136,6 +136,5 @@ Do not reintroduce hardcoded publisher lists.
 
 ## Known Bugs (not yet fixed)
 
-- **`addMarketResearchToProject` and `addOutlineToProject`** in `services.ts` overwrite the entire array instead of appending. Every new search or outline silently deletes all previous ones. Fix: use `arrayUnion` or fetch-then-append before writing.
 - **Outline title bug** in `BookOutline.tsx`: `setTitle('')` is called before `saveOutlineHistory`, so history always saves with an empty title.
 - **No rate limiting** on `/api/amazon-books/search` and `/api/trends` — unauthenticated requests hit paid external APIs.
